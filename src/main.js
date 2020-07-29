@@ -53,12 +53,12 @@ const createListTemplate = (extra, title, id) => {
   if (extra) {
     result += `<section class="films-list--extra">`;
     if (title) {
-      result += `<h2 class="films-list__title">${title}</h2>`
+      result += `<h2 class="films-list__title">${title}</h2>`;
     }
   } else {
     result += `<section class="films-list">`;
     if (title) {
-      result += `<h2 class="films-list__title visually-hidden">${title}</h2>`
+      result += `<h2 class="films-list__title visually-hidden">${title}</h2>`;
     }
   }
 
@@ -97,7 +97,7 @@ const createCardTemplate = () => {
 
 const createDetailsModalTemplate = () => {
   return (
-    `<section class="film-details">
+    `<section class="film-details" style="display: none;">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
@@ -270,7 +270,7 @@ const createDetailsModalTemplate = () => {
 };
 
 const createStatsTemplate = () => {
-  return(
+  return (
     `<p>130 291 movies inside</p>`
   );
 };
@@ -309,3 +309,4 @@ for (let i = 0; i < CARDS_NUMBER_EXTRA; i++) {
 }
 
 render(siteFooterStatsElement, createStatsTemplate(), `beforeend`);
+render(siteFooterElement, createDetailsModalTemplate(), `afterend`);
