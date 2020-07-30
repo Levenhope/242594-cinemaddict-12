@@ -1,7 +1,8 @@
 "use strict";
 
 const CARDS_NUMBER_MAIN = 5;
-const CARDS_NUMBER_EXTRA = 2;
+const CARDS_NUMBER_TOP_RATED = 2;
+const CARDS_NUMBER_COMMENTED = 2;
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -47,27 +48,16 @@ const createListsContainerTemplate = () => {
   );
 };
 
-const createListTemplate = (extra, title, id) => {
-  let result = ``;
-
-  if (extra) {
-    result += `<section class="films-list--extra">`;
-    if (title) {
-      result += `<h2 class="films-list__title">${title}</h2>`;
-    }
-  } else {
-    result += `<section class="films-list">`;
-    if (title) {
-      result += `<h2 class="films-list__title visually-hidden">${title}</h2>`;
-    }
-  }
-
-  result += `<div class="films-list__container" id="${id}"></div></section>`;
-
-  return result;
+const createListTemplate = (isExtraList, title, id) => {
+  return (
+    `<section class="${isExtraList ? "films-list--extra" : "films-list" }">
+      <h2 class="films-list__title">${title}</h2>
+      <div class="films-list__container" id="${id}"></div>
+    </section>`
+  );
 };
 
-const createMoreBtnTemplate = () => {
+const createMoreButtonTemplate = () => {
   return (
     `<button class="films-list__show-more">Show more</button>`
   );
@@ -298,13 +288,13 @@ const siteCommentedListElement = siteMainElement.querySelector(`#commented`);
 for (let i = 0; i < CARDS_NUMBER_MAIN; i++) {
   render(siteMainListElement, createCardTemplate(), `beforeend`);
 }
-render(siteMainListElement, createMoreBtnTemplate(), `afterend`);
+render(siteMainListElement, createMoreButtonTemplate(), `afterend`);
 
-for (let i = 0; i < CARDS_NUMBER_EXTRA; i++) {
+for (let i = 0; i < CARDS_NUMBER_TOP_RATED; i++) {
   render(siteTopListElement, createCardTemplate(), `beforeend`);
 }
 
-for (let i = 0; i < CARDS_NUMBER_EXTRA; i++) {
+for (let i = 0; i < CARDS_NUMBER_COMMENTED; i++) {
   render(siteCommentedListElement, createCardTemplate(), `beforeend`);
 }
 
