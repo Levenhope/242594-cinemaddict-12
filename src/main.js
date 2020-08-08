@@ -5,21 +5,23 @@ import {createNavigationTemplate} from "./view/navigation.js";
 import {createSortTemplate} from "./view/sort.js";
 import {createListsContainerTemplate} from "./view/list-container.js";
 import {createListTemplate} from "./view/list.js";
-import {createCardTemplate} from "./view/card.js";
+import {createCardTemplate} from "./view/film.js";
 import {createMoreButtonTemplate} from "./view/more-button.js";
 import {createStatsTemplate} from "./view/stats.js";
 import {createDetailsModalTemplate} from "./view/detail-modal.js";
 import {getRandomInteger} from "./utils.js";
-import {generateCard} from "./mock/card.js";
+import {generateFilm} from "./mock/film.js";
+import {createEmptyListTemplate} from "./view/empty-list.js";
 
-const CARDS_NUMBER_MAIN = getRandomInteger(0, 20);
-const CARDS_NUMBER_PER_STEP = 5;
-const CARDS_NUMBER_TOP_RATED = 2;
-const CARDS_NUMBER_COMMENTED = 2;
+const FILMS_NUMBER_MAIN = getRandomInteger(0, 20);
+const FILMS_NUMBER_PER_STEP = 5;
+const FILMS_NUMBER_TOP_RATED = 2;
+const FILMS_NUMBER_COMMENTED = 2;
 
-const cardsMain = new Array(CARDS_NUMBER_MAIN).fill().map(generateCard);
-const cardsTopRated = new Array(CARDS_NUMBER_TOP_RATED).fill().map(generateCard);
-const cardsCommented = new Array(CARDS_NUMBER_COMMENTED).fill().map(generateCard);
+const filmsMain = new Array(FILMS_NUMBER_MAIN).fill().map(generateFilm);
+const filmsTopRated = new Array(FILMS_NUMBER_TOP_RATED).fill().map(generateFilm);
+const filmsCommented = new Array(FILMS_NUMBER_COMMENTED).fill().map(generateFilm);
+const filmModal = generateFilm();
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -38,26 +40,50 @@ render(siteMainElement, createListsContainerTemplate(), `beforeend`);
 
 const siteListsContainerElement = siteMainElement.querySelector(`.films`);
 
-render(siteListsContainerElement, createListTemplate(false, `All movies. Upcoming`, `allfilms`), `beforeend`);
-render(siteListsContainerElement, createListTemplate(true, `Top rated`, `toprated`), `beforeend`);
-render(siteListsContainerElement, createListTemplate(true, `Most commented`, `commented`), `beforeend`);
+if (FILMS_NUMBER_MAIN > 0) {
+  render(siteListsContainerElement, createListTemplate(false, `All movies. Upcoming`, `allfilms`), `beforeend`);
+  render(siteListsContainerElement, createListTemplate(true, `Top rated`, `toprated`), `beforeend`);
+  render(siteListsContainerElement, createListTemplate(true, `Most commented`, `commented`), `beforeend`);
 
-const siteMainListElement = siteMainElement.querySelector(`#allfilms`);
-const siteTopListElement = siteMainElement.querySelector(`#toprated`);
-const siteCommentedListElement = siteMainElement.querySelector(`#commented`);
+  const siteMainListElement = siteMainElement.querySelector(`#allfilms`);
+  const siteTopListElement = siteMainElement.querySelector(`#toprated`);
+  const siteCommentedListElement = siteMainElement.querySelector(`#commented`);
 
-for (let i = 0; i < CARDS_NUMBER_MAIN; i++) {
-  render(siteMainListElement, createCardTemplate(cardsMain[i]), `beforeend`);
+  render(siteFooterElement, createDetailsModalTemplate(filmModal), `afterend`);
+
+  for (let i = 0; i < Math.min(filmsMain.length, FILMS_NUMBER_PER_STEP); i++) {
+    render(siteMainListElement, createCardTemplate(filmsMain[i]), `beforeend`);
+  }
+  if (filmsMain.length > FILMS_NUMBER_PER_STEP) {
+    let renderedCardsCount = FILMS_NUMBER_PER_STEP;
+
+    render(siteMainListElement, createMoreButtonTemplate(), `afterend`);
+
+    const moreButton = siteListsContainerElement.querySelector(`.films-list__show-more`);
+
+    moreButton.addEventListener(`click`, (e) => {
+      e.preventDefault();
+      filmsMain
+        .slice(renderedCardsCount, renderedCardsCount + FILMS_NUMBER_PER_STEP)
+        .forEach((film) => render(siteMainListElement, createCardTemplate(film), `beforeend`));
+
+      renderedCardsCount += FILMS_NUMBER_PER_STEP;
+
+      if (renderedCardsCount >= filmsMain.length) {
+        moreButton.remove();
+      }
+    });
+  }
+
+  for (let i = 0; i < FILMS_NUMBER_TOP_RATED; i++) {
+    render(siteTopListElement, createCardTemplate(filmsTopRated[i]), `beforeend`);
+  }
+
+  for (let i = 0; i < FILMS_NUMBER_COMMENTED; i++) {
+    render(siteCommentedListElement, createCardTemplate(filmsCommented[i]), `beforeend`);
+  }
+} else {
+  render(siteListsContainerElement, createEmptyListTemplate(), `beforeend`);
 }
-render(siteMainListElement, createMoreButtonTemplate(), `afterend`);
 
-for (let i = 0; i < CARDS_NUMBER_TOP_RATED; i++) {
-  render(siteTopListElement, createCardTemplate(cardsTopRated[i]), `beforeend`);
-}
-
-for (let i = 0; i < CARDS_NUMBER_COMMENTED; i++) {
-  render(siteCommentedListElement, createCardTemplate(cardsCommented[i]), `beforeend`);
-}
-
-render(siteFooterStatsElement, createStatsTemplate(), `beforeend`);
-render(siteFooterElement, createDetailsModalTemplate(), `afterend`);
+render(siteFooterStatsElement, createStatsTemplate(FILMS_NUMBER_MAIN), `beforeend`);
