@@ -28,7 +28,7 @@ const mainFilmsNavigationMap = {
 export const generateNavigation = (filmsMain) => {
   return Object.entries(mainFilmsNavigationMap).map(([id, params]) => {
     return {
-      id: id,
+      id,
       title: params.itemTitle,
       number: params.countEntries(filmsMain),
     };

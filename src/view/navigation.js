@@ -4,7 +4,7 @@ const createNavigationItemTemplate = (navigation, isActive) => {
   return (
     `<a href="#${id}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">
       ${title}
-      ${number !== 0 && id !== `all` ? `<span class="main-navigation__item-count">${number}</span>`: ``}
+      ${number !== 0 && id !== `all` ? `<span class="main-navigation__item-count">${number}</span>` : ``}
     </a>`
   );
 };

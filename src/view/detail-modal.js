@@ -1,13 +1,13 @@
 import {getReadableDate} from "../utils.js";
 
 export const createDetailsModalTemplate = (film) => {
-  const {poster, title, originalTitle, rating, date, duration, genres, description, comments, director, writers, actors, country, age} = film;
+  const {poster, title, originalTitle, rating, date, duration, genres, description, director, writers, actors, country, age} = film;
 
   const createGenresListTemple = () => {
     let result = ``;
 
-    for(let genre of genres) {
-      result += `<span class="film-details__genre">${genre}</span>`
+    for (let genre of genres) {
+      result += `<span class="film-details__genre">${genre}</span>`;
     }
 
     return result;

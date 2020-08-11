@@ -4,14 +4,14 @@ import {getRandomDate, getRandomText, getRandomInteger, getRandomNumber} from ".
 const generateDuration = () => {
   const randomHours = getRandomInteger(0, 4);
   const randomMinutes = getRandomInteger(0, 60);
-  return (randomHours + 'h ' + randomMinutes + 'm');
+  return (randomHours + `h ` + randomMinutes + `m`);
 };
 
 const generateInfoList = (arr, maxCount, isJoined = false) => {
   const itemsCount = getRandomInteger(1, maxCount);
   const itemsList = [];
 
-  for(let i = 0; i < itemsCount; i++) {
+  for (let i = 0; i < itemsCount; i++) {
     itemsList.push(arr[getRandomInteger(0, arr.length - 1)]);
   }
 
