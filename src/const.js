@@ -1,4 +1,5 @@
 const POSTERS_DIRECTORY_PATH = `./images/posters/`;
+const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
 
 export const POSTERS = [
   POSTERS_DIRECTORY_PATH + `the-dance-of-life.jpg`,
@@ -55,4 +56,11 @@ export const AGES = [
   `12+`,
   `16+`,
   `18+`
+];
+
+export const EMOJIS = [
+  EMOJIS_DIRECTORY_PATH + `angry.png`,
+  EMOJIS_DIRECTORY_PATH + `puke.png`,
+  EMOJIS_DIRECTORY_PATH + `sleeping.png`,
+  EMOJIS_DIRECTORY_PATH + `smile.png`,
 ];

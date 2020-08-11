@@ -1,12 +1,14 @@
+import {getFullYear} from "../utils.js";
+
 export const createCardTemplate = (film) => {
-  const {poster, title, rating, year, duration, genres, description, comments} = film;
+  const {poster, title, rating, date, duration, genres, description, comments} = film;
 
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${year}</span>
+          <span class="film-card__year">${getFullYear(date)}</span>
           <span class="film-card__duration">${duration}</span>
           <span class="film-card__genre">${genres[0]}</span>
         </p>

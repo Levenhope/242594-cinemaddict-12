@@ -1,27 +1,10 @@
-import {POSTERS, TITLES, GENRES, DESPRIPTION, NAMES, COUNTRIES, AGES} from "../const.js";
-import {getRandomInteger, getRandomNumber} from "../utils.js";
-
-const generateDate = () => {
-  const currentDate = new Date();
-  return (getRandomInteger(currentDate.getFullYear(), 1895));
-};
+import {POSTERS, TITLES, GENRES, NAMES, COUNTRIES, AGES} from "../const.js";
+import {getRandomDate, getRandomText, getRandomInteger, getRandomNumber} from "../utils.js";
 
 const generateDuration = () => {
   const randomHours = getRandomInteger(0, 4);
   const randomMinutes = getRandomInteger(0, 60);
   return (randomHours + 'h ' + randomMinutes + 'm');
-};
-
-const generateDescription = () => {
-  const sentencesArray = DESPRIPTION.split(/[.]+\s|[.]/).filter(n => n);
-  const sentencesCount = getRandomInteger(1, 5);
-  let description = ``;
-
-  for(let i = 0; i < sentencesCount; i++) {
-    description += sentencesArray[getRandomInteger(0, sentencesArray.length - 1)] + `. `;
-  }
-
-  return description;
 };
 
 const generateInfoList = (arr, maxCount, isJoined = false) => {
@@ -43,21 +26,26 @@ export const generateFilm = () => {
   const director = NAMES[getRandomInteger(0, NAMES.length - 1)];
   const country = COUNTRIES[getRandomInteger(0, COUNTRIES.length - 1)];
   const age = AGES[getRandomInteger(0, AGES.length - 1)];
+  const date = getRandomDate(new Date(1895, 1, 1));
+  const description = getRandomText(1, 5);
 
   return {
     poster,
     title,
     originalTitle: title,
     rating,
-    year: generateDate(),
+    date,
     duration: generateDuration(),
     genres: generateInfoList(GENRES, 3),
-    description: generateDescription(),
+    description,
     comments,
     director,
     writers: generateInfoList(NAMES, NAMES.length, true),
     actors: generateInfoList(NAMES, NAMES.length, true),
     country,
-    age
+    age,
+    isInWatchlist: Boolean(getRandomInteger(0, 1)),
+    isInHistory: Boolean(getRandomInteger(0, 1)),
+    isInFavorites: Boolean(getRandomInteger(0, 1))
   };
 };

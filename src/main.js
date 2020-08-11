@@ -11,17 +11,23 @@ import {createStatsTemplate} from "./view/stats.js";
 import {createDetailsModalTemplate} from "./view/detail-modal.js";
 import {getRandomInteger} from "./utils.js";
 import {generateFilm} from "./mock/film.js";
+import {generateComment} from "./mock/comment.js";
 import {createEmptyListTemplate} from "./view/empty-list.js";
+import {generateNavigation} from "./mock/navigation.js";
+import {generateCommentItemTemplate} from "./view/comment.js";
+import {generateCommentsTemplate} from "./view/comments.js";
 
 const FILMS_NUMBER_MAIN = getRandomInteger(0, 20);
 const FILMS_NUMBER_PER_STEP = 5;
 const FILMS_NUMBER_TOP_RATED = 2;
 const FILMS_NUMBER_COMMENTED = 2;
+const FILM_COMMENTS_NUMBER = getRandomInteger(0, 7);
 
 const filmsMain = new Array(FILMS_NUMBER_MAIN).fill().map(generateFilm);
 const filmsTopRated = new Array(FILMS_NUMBER_TOP_RATED).fill().map(generateFilm);
 const filmsCommented = new Array(FILMS_NUMBER_COMMENTED).fill().map(generateFilm);
-const filmModal = generateFilm();
+const filmComments = new Array(FILM_COMMENTS_NUMBER).fill().map(generateComment);
+const navigation = generateNavigation(filmsMain);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -33,7 +39,7 @@ const render = (container, template, place) => {
 };
 
 render(siteHeaderElement, createProfileTemplate(), `beforeend`);
-render(siteMainElement, createNavigationTemplate(), `beforeend`);
+render(siteMainElement, createNavigationTemplate(navigation), `beforeend`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
 
 render(siteMainElement, createListsContainerTemplate(), `beforeend`);
@@ -49,9 +55,23 @@ if (FILMS_NUMBER_MAIN > 0) {
   const siteTopListElement = siteMainElement.querySelector(`#toprated`);
   const siteCommentedListElement = siteMainElement.querySelector(`#commented`);
 
-  render(siteFooterElement, createDetailsModalTemplate(filmModal), `afterend`);
+
+  render(siteFooterElement, createDetailsModalTemplate(filmsMain[0]), `afterend`);
+
+  const siteDetailModalBottomElement = document.querySelector(`.form-details__bottom-container`);
+
+  render(siteDetailModalBottomElement, generateCommentsTemplate(FILM_COMMENTS_NUMBER), `beforeend`);
+
+  const siteDetailModalCommentsListElement = siteDetailModalBottomElement.querySelector(`.film-details__comments-list`);
+
+  for (let i = 0; i < FILM_COMMENTS_NUMBER; i++) {
+    render(siteDetailModalCommentsListElement, generateCommentItemTemplate(filmComments[i]), `beforeend`);
+  }
 
   for (let i = 0; i < Math.min(filmsMain.length, FILMS_NUMBER_PER_STEP); i++) {
+    if (i === 0) {
+      filmsMain[i].comments = FILM_COMMENTS_NUMBER;
+    }
     render(siteMainListElement, createCardTemplate(filmsMain[i]), `beforeend`);
   }
   if (filmsMain.length > FILMS_NUMBER_PER_STEP) {
