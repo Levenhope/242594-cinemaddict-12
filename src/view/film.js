@@ -1,7 +1,7 @@
 import {getFullYear} from "../utils.js";
 
 export const createCardTemplate = (film) => {
-  const {poster, title, rating, date, duration, genres, description, comments} = film;
+  const {poster, title, rating, date, duration, genres, description, commentsNumber} = film;
 
   return (
     `<article class="film-card">
@@ -14,7 +14,7 @@ export const createCardTemplate = (film) => {
         </p>
         <img src="${poster}" alt="" class="film-card__poster" onclick="document.querySelector('.film-details').classList.remove('visually-hidden')">
         <p class="film-card__description">${description.length > 140 ? description.substring(0, 140) + `...` : description}</p>
-        <a class="film-card__comments">${comments} comments</a>
+        <a class="film-card__comments">${commentsNumber} comments</a>
         <form class="film-card__controls">
           <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
           <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>

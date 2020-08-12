@@ -2,14 +2,14 @@ const POSTERS_DIRECTORY_PATH = `./images/posters/`;
 const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
 
 export const POSTERS = [
-  POSTERS_DIRECTORY_PATH + `the-dance-of-life.jpg`,
-  POSTERS_DIRECTORY_PATH + `sagebrush-trail.jpg`,
-  POSTERS_DIRECTORY_PATH + `the-man-with-the-golden-arm.jpg`,
-  POSTERS_DIRECTORY_PATH + `santa-claus-conquers-the-martians.jpg`,
-  POSTERS_DIRECTORY_PATH + `popeye-meets-sinbad.png`,
-  POSTERS_DIRECTORY_PATH + `the-great-flamarion.jpg`,
-  POSTERS_DIRECTORY_PATH + `made-for-each-other.png`,
-];
+  `the-dance-of-life.jpg`,
+  `sagebrush-trail.jpg`,
+  `the-man-with-the-golden-arm.jpg`,
+  `santa-claus-conquers-the-martians.jpg`,
+  `popeye-meets-sinbad.png`,
+  `the-great-flamarion.jpg`,
+  `made-for-each-other.png`,
+].map((filename) => `${POSTERS_DIRECTORY_PATH}${filename}`);
 
 export const TITLES = [
   `The Dance of Life`,
@@ -59,8 +59,8 @@ export const AGES = [
 ];
 
 export const EMOJIS = [
-  EMOJIS_DIRECTORY_PATH + `angry.png`,
-  EMOJIS_DIRECTORY_PATH + `puke.png`,
-  EMOJIS_DIRECTORY_PATH + `sleeping.png`,
-  EMOJIS_DIRECTORY_PATH + `smile.png`,
-];
+  `angry.png`,
+  `puke.png`,
+  `sleeping.png`,
+  `smile.png`,
+].map((filename) => `${EMOJIS_DIRECTORY_PATH}${filename}`);

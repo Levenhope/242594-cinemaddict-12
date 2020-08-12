@@ -9,7 +9,6 @@ import {createCardTemplate} from "./view/film.js";
 import {createMoreButtonTemplate} from "./view/more-button.js";
 import {createStatsTemplate} from "./view/stats.js";
 import {createDetailsModalTemplate} from "./view/detail-modal.js";
-import {getRandomInteger} from "./utils.js";
 import {generateFilm} from "./mock/film.js";
 import {generateComment} from "./mock/comment.js";
 import {createEmptyListTemplate} from "./view/empty-list.js";
@@ -17,11 +16,11 @@ import {generateNavigation} from "./mock/navigation.js";
 import {generateCommentItemTemplate} from "./view/comment.js";
 import {generateCommentsTemplate} from "./view/comments.js";
 
-const FILMS_NUMBER_MAIN = getRandomInteger(0, 20);
+const FILMS_NUMBER_MAIN = 17;
 const FILMS_NUMBER_PER_STEP = 5;
 const FILMS_NUMBER_TOP_RATED = 2;
 const FILMS_NUMBER_COMMENTED = 2;
-const FILM_COMMENTS_NUMBER = getRandomInteger(0, 7);
+const FILM_COMMENTS_NUMBER = 7;
 
 const filmsMain = new Array(FILMS_NUMBER_MAIN).fill().map(generateFilm);
 const filmsTopRated = new Array(FILMS_NUMBER_TOP_RATED).fill().map(generateFilm);
@@ -70,7 +69,7 @@ if (FILMS_NUMBER_MAIN > 0) {
 
   for (let i = 0; i < Math.min(filmsMain.length, FILMS_NUMBER_PER_STEP); i++) {
     if (i === 0) {
-      filmsMain[i].comments = FILM_COMMENTS_NUMBER;
+      filmsMain[i].commentsNumber = FILM_COMMENTS_NUMBER;
     }
     render(siteMainListElement, createCardTemplate(filmsMain[i]), `beforeend`);
   }

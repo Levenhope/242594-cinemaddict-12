@@ -22,7 +22,7 @@ export const generateFilm = () => {
   const poster = POSTERS[getRandomInteger(0, POSTERS.length - 1)];
   const title = TITLES[getRandomInteger(0, TITLES.length - 1)];
   const rating = getRandomNumber(0, 10).toFixed(2);
-  const comments = getRandomInteger(0, 5);
+  const commentsNumber = getRandomInteger(0, 5);
   const director = NAMES[getRandomInteger(0, NAMES.length - 1)];
   const country = COUNTRIES[getRandomInteger(0, COUNTRIES.length - 1)];
   const age = AGES[getRandomInteger(0, AGES.length - 1)];
@@ -38,7 +38,7 @@ export const generateFilm = () => {
     duration: generateDuration(),
     genres: generateInfoList(GENRES, 3),
     description,
-    comments,
+    commentsNumber,
     director,
     writers: generateInfoList(NAMES, NAMES.length, true),
     actors: generateInfoList(NAMES, NAMES.length, true),
