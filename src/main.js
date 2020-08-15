@@ -71,13 +71,13 @@ const renderCard = (place, film) => {
     siteBodyElement.removeChild(detailModalComponent.getElement());
   };
 
-  for(let cardClickable of cardClickables) {
+  for (let cardClickable of cardClickables) {
     cardClickable.addEventListener(`click`, () => {
       openModal();
     });
   }
 
-  detailModalComponent.getElement().querySelector('.film-details__close-btn').addEventListener(`click`, (evt) => {
+  detailModalComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, (evt) => {
     evt.preventDefault();
     closeModal();
   });

@@ -39,6 +39,3 @@ export default class NavigationView {
     this._element = null;
   }
 }
-
-
-
