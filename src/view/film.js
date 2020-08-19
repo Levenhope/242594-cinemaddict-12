@@ -1,4 +1,5 @@
 import {getFullYear, createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 export default class BoardView {
   constructor(film) {
@@ -19,11 +20,11 @@ export default class BoardView {
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description.length > 140 ? description.substring(0, 140) + `...` : description}</p>
-          <a class="film-card__comments">${commentsNumber} comments</a>
+          <a class="film-card__comments">${commentsNumber} ${LANG.COMMENTS}</a>
           <form class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">${LANG.ADD} ${LANG.TO} ${LANG.WATCHLIST}</button>
+            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">${LANG.MARK} ${LANG.AS} ${LANG.WATCHED}</button>
+            <button class="film-card__controls-item button film-card__controls-item--favorite">${LANG.MARK} ${LANG.AS} ${LANG.FAVORITES}</button>
           </form>
       </article>`
     );

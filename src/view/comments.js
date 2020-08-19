@@ -1,4 +1,5 @@
 import {createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 export default class CommentsView {
   constructor(commentsCount) {
@@ -9,14 +10,14 @@ export default class CommentsView {
   getTemplate() {
     return (
       `<section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._commentCount}</span></h3>
+        <h3 class="film-details__comments-title">${LANG.COMMENTS} <span class="film-details__comments-count">${this._commentCount}</span></h3>
         <ul class="film-details__comments-list">
           
         </ul>
         <div class="film-details__new-comment">
           <div for="add-emoji" class="film-details__add-emoji-label"></div>
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="${LANG.COMMENT_INPUT_PLACEHOLDER}" name="comment"></textarea>
           </label>
           <div class="film-details__emoji-list">
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">

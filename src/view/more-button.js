@@ -1,4 +1,5 @@
 import {createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 export default class MoreButtonView {
   constructor() {
@@ -7,7 +8,7 @@ export default class MoreButtonView {
 
   getTemplate() {
     return (
-      `<button class="films-list__show-more">Show more</button>`
+      `<button class="films-list__show-more">${LANG.SHOW_MORE}</button>`
     );
   }
 

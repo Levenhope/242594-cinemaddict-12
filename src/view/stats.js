@@ -1,4 +1,5 @@
 import {createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 export default class StatsView {
   constructor(number) {
@@ -8,7 +9,7 @@ export default class StatsView {
 
   getTemplate() {
     return (
-      `<p>${this._number} movies inside</p>`
+      `<p>${this._number} ${LANG.FILMS_STATS_MESSAGE}</p>`
     );
   }
 

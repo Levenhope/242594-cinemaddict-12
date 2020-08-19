@@ -1,14 +1,5 @@
 import {getReadableDate, createElement} from "../utils.js";
-
-const createGenresListTemplate = (genres) => {
-  let result = ``;
-
-  for (let genre of genres) {
-    result += `<span class="film-details__genre">${genre}</span>`;
-  }
-
-  return result;
-};
+import {LANG} from "../lang.js";
 
 export default class DetailModalView {
   constructor(film) {
@@ -24,7 +15,7 @@ export default class DetailModalView {
         <form class="film-details__inner" action="" method="get">
           <div class="form-details__top-container">
             <div class="film-details__close">
-              <button class="film-details__close-btn" type="button">close</button>
+              <button class="film-details__close-btn" type="button">${LANG.CLOSE}</button>
             </div>
             <div class="film-details__info-wrap">
               <div class="film-details__poster">
@@ -35,7 +26,7 @@ export default class DetailModalView {
                 <div class="film-details__info-head">
                   <div class="film-details__title-wrap">
                     <h3 class="film-details__title">${title}</h3>
-                    <p class="film-details__title-original">Original: ${originalTitle}</p>
+                    <p class="film-details__title-original">${LANG.ORIGINAL_TITLE}: ${originalTitle}</p>
                   </div>
                   <div class="film-details__rating">
                     <p class="film-details__total-rating">${rating}</p>
@@ -43,33 +34,33 @@ export default class DetailModalView {
                 </div>
                 <table class="film-details__table">
                   <tr class="film-details__row">
-                    <td class="film-details__term">Director</td>
+                    <td class="film-details__term">${LANG.DIRECTOR}</td>
                     <td class="film-details__cell">${director}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">Writers</td>
+                    <td class="film-details__term">${LANG.WRITERS}</td>
                     <td class="film-details__cell">${writers}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">Actors</td>
+                    <td class="film-details__term">${LANG.ACTORS}</td>
                     <td class="film-details__cell">${actors}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">Release Date</td>
+                    <td class="film-details__term">${LANG.RELEASE_DATE}</td>
                     <td class="film-details__cell">${getReadableDate(date)}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">Runtime</td>
+                    <td class="film-details__term">${LANG.RUNTIME}</td>
                     <td class="film-details__cell">${duration}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">Country</td>
+                    <td class="film-details__term">${LANG.COUNTRY}</td>
                     <td class="film-details__cell">${country}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">Genres</td>
+                    <td class="film-details__term">${LANG.GENRES}</td>
                     <td class="film-details__cell">
-                      ${createGenresListTemplate(genres)}
+                      ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``)}
                     </td>
                   </tr>
                 </table>
@@ -80,11 +71,11 @@ export default class DetailModalView {
             </div>
             <section class="film-details__controls">
               <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-              <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+              <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${LANG.ADD} ${LANG.TO} ${LANG.WATCHLIST}</label>
               <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-              <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
+              <label for="watched" class="film-details__control-label film-details__control-label--watched">${LANG.ALREADY} ${LANG.WATCHED}</label>
               <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-              <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+              <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${LANG.ADD} ${LANG.TO} ${LANG.FAVORITES}</label>
             </section>
           </div>
           <div class="form-details__bottom-container">
@@ -107,4 +98,3 @@ export default class DetailModalView {
     this._element = null;
   }
 }
-

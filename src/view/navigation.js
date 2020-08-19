@@ -1,4 +1,5 @@
 import {createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 const createNavigationItemTemplate = (navigation, isActive) => {
   const {title, number, id} = navigation;
@@ -22,7 +23,7 @@ export default class NavigationView {
         <div class="main-navigation__items">
           ${this._navigationItems.map((navItem, index) => createNavigationItemTemplate(navItem, index === 0)).join(``)}
         </div>
-        <a href="#stats" class="main-navigation__additional">Stats</a>
+        <a href="#stats" class="main-navigation__additional">${LANG.STATS}</a>
       </nav>`
     );
   }

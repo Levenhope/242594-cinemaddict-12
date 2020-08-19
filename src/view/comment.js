@@ -1,4 +1,5 @@
 import {createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 export default class CommentItemView {
   constructor(comment) {
@@ -18,7 +19,7 @@ export default class CommentItemView {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${date}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button class="film-details__comment-delete">${LANG.DELETE}</button>
           </p>
         </div>
    </li>`
@@ -37,4 +38,3 @@ export default class CommentItemView {
     this._element = null;
   }
 }
-

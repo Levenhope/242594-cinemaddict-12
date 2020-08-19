@@ -15,6 +15,7 @@ import {generateFilm} from "./mock/film.js";
 import {generateComment} from "./mock/comment.js";
 import {generateNavigation} from "./mock/navigation.js";
 import {renderElement} from "./utils.js";
+import {LANG} from "./lang.js";
 
 const FILMS_NUMBER_MAIN = 17;
 const FILMS_NUMBER_PER_STEP = 5;
@@ -38,9 +39,9 @@ renderElement(siteMainElement, new FilmListsContainerView().getElement());
 
 const siteListsContainerElement = siteMainElement.querySelector(`.films`);
 
-renderElement(siteListsContainerElement, new FilmListView(false, `All movies. Upcoming`, `allfilms`).getElement());
-renderElement(siteListsContainerElement, new FilmListView(true, `Top rated`, `toprated`).getElement());
-renderElement(siteListsContainerElement, new FilmListView(true, `Most commented`, `commented`).getElement());
+renderElement(siteListsContainerElement, new FilmListView(false, LANG.ALL_MOVIES_TITLE, `allfilms`).getElement());
+renderElement(siteListsContainerElement, new FilmListView(true, LANG.TOP_RATED_TITLE, `toprated`).getElement());
+renderElement(siteListsContainerElement, new FilmListView(true, LANG.MOST_COMMENTED, `commented`).getElement());
 
 const siteMainListsContainerElement = siteMainElement.querySelector(`.films-list`);
 const siteMainListElement = siteMainElement.querySelector(`#allfilms`);

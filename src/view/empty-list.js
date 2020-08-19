@@ -1,4 +1,5 @@
 import {createElement} from "../utils.js";
+import {LANG} from "../lang.js";
 
 export default class EmptyListView {
   constructor() {
@@ -8,7 +9,7 @@ export default class EmptyListView {
   getTemplate() {
     return (
       `<section class="films-list">
-        <h2 class="films-list__title">There are no movies in our database</h2>
+        <h2 class="films-list__title">${LANG.EMPTY_LIST_MESSAGE}</h2>
       </section>`
     );
   }
