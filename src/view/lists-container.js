@@ -1,16 +1,13 @@
 import {createElement} from "../utils.js";
-import {LANG} from "../lang.js";
 
-export default class EmptyListView {
+export default class FilmListsContainerView {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
     return (
-      `<section class="films-list">
-        <h2 class="films-list__title">${LANG.EMPTY_LIST_MESSAGE}</h2>
-      </section>`
+      `<section class="films"></section>`
     );
   }
 
