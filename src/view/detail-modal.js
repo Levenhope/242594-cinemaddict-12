@@ -1,11 +1,12 @@
 import AbstractView from "./abstract.js";
-import {getReadableDate} from "../utils.js";
+import {getReadableDate} from "../utils/film.js";
 import {LANG} from "../lang.js";
 
 export default class DetailModalView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+    this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -84,5 +85,15 @@ export default class DetailModalView extends AbstractView {
         </form>
       </section>`
     );
+  }
+
+  _closeButtonClickHandler(e) {
+    e.preventDefault();
+    this._callback.click();
+  }
+
+  setCloseButtonClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
   }
 }

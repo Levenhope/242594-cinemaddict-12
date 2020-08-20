@@ -1,5 +1,6 @@
 import {POSTERS, TITLES, GENRES, NAMES, COUNTRIES, AGES} from "../const.js";
-import {getRandomDate, getRandomText, getRandomInteger, getRandomNumber} from "../utils.js";
+import {getRandomDate, getRandomText} from "../utils/film.js";
+import {getRandomInteger, getRandomNumber} from "../utils/common.js";
 
 const generateDuration = () => {
   const randomHours = getRandomInteger(0, 4);

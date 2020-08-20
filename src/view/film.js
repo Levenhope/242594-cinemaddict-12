@@ -1,11 +1,11 @@
 import AbstractView from "./abstract.js";
-import {getFullYear} from "../utils.js";
 import {LANG} from "../lang.js";
 
-export default class BoardView extends AbstractView {
+export default class CardView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+    this._innerElementsClickHandler = this._innerElementsClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -15,7 +15,7 @@ export default class BoardView extends AbstractView {
         <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
-            <span class="film-card__year">${getFullYear(date)}</span>
+            <span class="film-card__year">${date.getFullYear()}</span>
             <span class="film-card__duration">${duration}</span>
             <span class="film-card__genre">${genres[0]}</span>
           </p>
@@ -29,5 +29,17 @@ export default class BoardView extends AbstractView {
           </form>
       </article>`
     );
+  }
+
+  _innerElementsClickHandler(e) {
+    e.preventDefault();
+    this._callback.click();
+  }
+
+  setInnerElementsClickHandler(callback) {
+    this._callback.click = callback;
+    for (let clickable of this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)) {
+      clickable.addEventListener(`click`, this._innerElementsClickHandler);
+    }
   }
 }
