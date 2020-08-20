@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
 const createNavigationItemTemplate = (navigation, isActive) => {
@@ -11,12 +11,11 @@ const createNavigationItemTemplate = (navigation, isActive) => {
   );
 };
 
-export default class NavigationView {
+export default class NavigationView extends AbstractView {
   constructor(navigationItems) {
+    super();
     this._navigationItems = navigationItems;
-    this._element = null;
   }
-
   getTemplate() {
     return (
       `<nav class="main-navigation">
@@ -26,17 +25,5 @@ export default class NavigationView {
         <a href="#stats" class="main-navigation__additional">${LANG.STATS}</a>
       </nav>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

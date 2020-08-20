@@ -1,10 +1,10 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
-export default class CommentItemView {
+export default class CommentItemView extends AbstractView {
   constructor(comment) {
+    super();
     this._comment = comment;
-    this._element = null;
   }
 
   getTemplate() {
@@ -24,17 +24,5 @@ export default class CommentItemView {
         </div>
    </li>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

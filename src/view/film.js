@@ -1,10 +1,11 @@
-import {getFullYear, createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
+import {getFullYear} from "../utils.js";
 import {LANG} from "../lang.js";
 
-export default class BoardView {
+export default class BoardView extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
@@ -28,17 +29,5 @@ export default class BoardView {
           </form>
       </article>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

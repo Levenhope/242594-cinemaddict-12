@@ -1,11 +1,11 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-export default class FilmsListView {
+export default class FilmsListView extends AbstractView {
   constructor(isExtraList, title, id) {
+    super();
     this._isExtraList = isExtraList;
     this._title = title;
     this._id = id;
-    this._element = null;
   }
 
   getTemplate() {
@@ -15,17 +15,5 @@ export default class FilmsListView {
         <div class="films-list__container" id="${this._id}"></div>
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
