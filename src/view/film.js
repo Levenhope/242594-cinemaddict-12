@@ -1,7 +1,7 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
-export default class CardView extends AbstractView {
+export default class FilmView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
