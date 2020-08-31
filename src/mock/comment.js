@@ -1,6 +1,6 @@
 import {NAMES, EMOJIS} from "../const.js";
 import {getRandomDate, getRandomText} from "../utils/film.js";
-import {getRandomInteger} from "../utils/common.js"
+import {getRandomInteger} from "../utils/common.js";
 
 export const generateComment = () => {
   const name = NAMES[getRandomInteger(0, NAMES.length - 1)];
