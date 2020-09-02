@@ -1,15 +1,16 @@
-import {getReadableDate, createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
+import {getReadableDate} from "../utils/film.js";
 import {LANG} from "../lang.js";
 
-export default class DetailModalView {
+export default class DetailModalView extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+    this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
   }
 
   getTemplate() {
     const {poster, title, originalTitle, rating, date, duration, genres, description, director, writers, actors, country, age} = this._film;
-
     return (
       `<section class="film-details">
         <form class="film-details__inner" action="" method="get">
@@ -86,15 +87,13 @@ export default class DetailModalView {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _closeButtonClickHandler(e) {
+    e.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setCloseButtonClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
   }
 }

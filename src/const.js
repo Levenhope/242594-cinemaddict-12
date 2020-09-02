@@ -1,3 +1,8 @@
+export const FILMS_NUMBER_MAIN = 17;
+export const FILMS_NUMBER_TOP_RATED = 2;
+export const FILMS_NUMBER_COMMENTED = 2;
+export const FILMS_NUMBER_PER_STEP = 5;
+
 const POSTERS_DIRECTORY_PATH = `./images/posters/`;
 const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
 

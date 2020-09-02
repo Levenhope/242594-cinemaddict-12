@@ -1,9 +1,10 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
-export default class MoreButtonView {
+export default class MoreButtonView extends AbstractView {
   constructor() {
-    this._element = null;
+    super();
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
@@ -12,16 +13,14 @@ export default class MoreButtonView {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(e) {
+    e.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 }
 
