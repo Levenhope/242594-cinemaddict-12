@@ -1,11 +1,7 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
-export default class SortView {
-  constructor() {
-    this._element = null;
-  }
-
+export default class SortView extends AbstractView {
   getTemplate() {
     return (
       `<ul class="sort">
@@ -14,18 +10,6 @@ export default class SortView {
         <li><a href="#" class="sort__button">${LANG.SORT_BY} ${LANG.RATING}</a></li>
       </ul>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
