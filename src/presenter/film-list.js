@@ -1,18 +1,16 @@
 import FilmListView from "../view/list.js";
 import FilmView from "../view/film.js";
 import MoreButtonView from "../view/more-button.js";
-import DetailModalView from "../view/detail-modal.js";
-import CommentItemView from "../view/comment.js";
-import CommentsView from "../view/comments.js";
 import EmptyListView from "../view/empty-list.js";
 import {render, remove} from "../utils/render.js";
-import {generateComment} from "../mock/comment";
 import {FILMS_NUMBER_MAIN, FILMS_NUMBER_PER_STEP} from "../const.js";
-import {LANG} from "../lang";
+import {LANG} from "../lang.js";
+import DetailModalPresenter from "./detail-modal.js";
 
 export default class FilmListPresenter {
   constructor(filmListContainer) {
     this._filmListContainer = filmListContainer;
+    this._listedFilms = null;
 
     this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;
     this._mainFilmListComponent = new FilmListView(false, LANG.ALL_MOVIES_TITLE);
@@ -34,26 +32,27 @@ export default class FilmListPresenter {
 
   _renderFilm(parent, film) {
     const cardComponent = new FilmView(film);
-    const detailModalComponent = new DetailModalView(film);
-    const siteBodyElement = document.querySelector(`body`);
-    const siteDetailModalBottomElement = detailModalComponent.getElement().querySelector(`.form-details__bottom-container`);
+    const detailModalPresenter = new DetailModalPresenter(film);
 
-    render(siteDetailModalBottomElement, new CommentsView(film.commentsNumber));
-
-    const siteDetailModalCommentsListElement = detailModalComponent.getElement().querySelector(`.film-details__comments-list`);
-
-    const filmComments = new Array(film.commentsNumber).fill().map(generateComment);
-
-    for (let i = 0; i < film.commentsNumber; i++) {
-      render(siteDetailModalCommentsListElement, new CommentItemView(filmComments[i]));
-    }
+    detailModalPresenter.init();
 
     cardComponent.setInnerElementsClickHandler(() => {
-      siteBodyElement.appendChild(detailModalComponent.getElement());
+      detailModalPresenter.show();
     });
 
-    detailModalComponent.setCloseButtonClickHandler(() => {
-      siteBodyElement.removeChild(detailModalComponent.getElement());
+    cardComponent.setFavoriteClickHandler(() => {
+      cardComponent.isInFavorites = !cardComponent.isInFavorites;
+      this._handleFilmChange(cardComponent);
+    });
+
+    cardComponent.setHistoryClickHandler(() => {
+      cardComponent.isInHistory = !cardComponent.isInHistory;
+      this._handleFilmChange(cardComponent);
+    });
+
+    cardComponent.setWatchlistClickHandler(() => {
+      cardComponent.isInWatchlist = !cardComponent.isInWatchlist;
+      this._handleFilmChange(cardComponent);
     });
 
     render(parent.getElement().querySelector(`.films-list__container`), cardComponent);
