@@ -48,7 +48,7 @@ export default class FilmListPresenter {
     this._moreButtonComponent.setClickHandler(() => {
       this._listedFilms
         .slice(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_NUMBER_PER_STEP)
-        .forEach((film) => render(this._mainFilmListComponent.getElement().querySelector(`.films-list__container`), new FilmView(film)));
+        .forEach((film) => this._renderFilm(this._mainFilmListComponent, film));
 
       this._renderedFilmsCount += FILMS_NUMBER_PER_STEP;
 

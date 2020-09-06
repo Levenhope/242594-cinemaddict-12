@@ -7,30 +7,31 @@ export default class FilmPresetner {
     this._film = film;
     this._parent = parent;
 
-    this._cardComponent = new FilmView(this._film);
+    this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film);
-    this._updatedCardComponent = null;
+    this._updatedFilmComponent = null;
   }
 
   init() {
-
+    this._detailModalPresenter = new DetailModalPresenter(this._film);
+    this._detailModalPresenter.init();
     this.setInnerToggles();
 
-    render(this._parent.getElement().querySelector(`.films-list__container`), this._cardComponent);
+    render(this._parent.getElement().querySelector(`.films-list__container`), this._filmComponent);
 
   }
 
-  _update() {
-    this._updatedCardComponent = new FilmView(this._film);
+  update() {
+    this._updatedFilmComponent = new FilmView(this._film);
+    replace(this._updatedFilmComponent, this._filmComponent);
+    this._filmComponent = this._updatedFilmComponent;
     this._detailModalPresenter = new DetailModalPresenter(this._film);
-    replace(this._updatedCardComponent, this._cardComponent);
-    this._cardComponent = this._updatedCardComponent;
-    this.setInnerToggles();
     this._detailModalPresenter.init();
+    this.setInnerToggles();
   }
 
   setInnerToggles() {
-    this._cardComponent.setInnerElementsClickHandler(() => {
+    this._filmComponent.setInnerElementsClickHandler(() => {
       this._detailModalPresenter.show();
     });
     this._setWatchlistToggleHandler();
@@ -39,23 +40,23 @@ export default class FilmPresetner {
   }
 
   _setWatchlistToggleHandler() {
-    this._cardComponent.setWatchlistClickHandler(() => {
+    this._filmComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
-      this._update();
+      this.update();
     });
   }
 
   _setFavoriteToggleHandler() {
-    this._cardComponent.setFavoriteClickHandler(() => {
+    this._filmComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
-      this._update();
+      this.update();
     });
   }
 
   _setHistoryToggleHandler() {
-    this._cardComponent.setHistoryClickHandler(() => {
+    this._filmComponent.setHistoryClickHandler(() => {
       this._film.isInHistory = !this._film.isInHistory;
-      this._update();
+      this.update();
     });
   }
 }
