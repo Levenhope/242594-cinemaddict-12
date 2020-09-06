@@ -10,6 +10,7 @@ export const LANG = {
   GENRES: `Genres`,
   ADD: `Add`,
   TO: `to`,
+  IN: `in`,
   WATCHLIST: `watchlist`,
   ALREADY: `Already`,
   WATCHED: `watched`,

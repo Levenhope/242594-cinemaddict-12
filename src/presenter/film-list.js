@@ -2,10 +2,13 @@ import FilmListView from "../view/list.js";
 import FilmView from "../view/film.js";
 import MoreButtonView from "../view/more-button.js";
 import EmptyListView from "../view/empty-list.js";
-import {render, remove} from "../utils/render.js";
+import {render, remove, replace} from "../utils/render.js";
 import {FILMS_NUMBER_MAIN, FILMS_NUMBER_PER_STEP} from "../const.js";
 import {LANG} from "../lang.js";
-import DetailModalPresenter from "./detail-modal.js";
+import FilmPresenter from "./film.js";
+import BoardPresenter from "../../../242594-taskmanager-12/src/presenter/board";
+import MainMenuView from "../../../242594-taskmanager-12/src/view/main-menu";
+import FilterView from "../../../242594-taskmanager-12/src/view/filter";
 
 export default class FilmListPresenter {
   constructor(filmListContainer) {
@@ -30,32 +33,9 @@ export default class FilmListPresenter {
     this._renderFilmList();
   }
 
-  _renderFilm(parent, film) {
-    const cardComponent = new FilmView(film);
-    const detailModalPresenter = new DetailModalPresenter(film);
-
-    detailModalPresenter.init();
-
-    cardComponent.setInnerElementsClickHandler(() => {
-      detailModalPresenter.show();
-    });
-
-    cardComponent.setFavoriteClickHandler(() => {
-      cardComponent.isInFavorites = !cardComponent.isInFavorites;
-      this._handleFilmChange(cardComponent);
-    });
-
-    cardComponent.setHistoryClickHandler(() => {
-      cardComponent.isInHistory = !cardComponent.isInHistory;
-      this._handleFilmChange(cardComponent);
-    });
-
-    cardComponent.setWatchlistClickHandler(() => {
-      cardComponent.isInWatchlist = !cardComponent.isInWatchlist;
-      this._handleFilmChange(cardComponent);
-    });
-
-    render(parent.getElement().querySelector(`.films-list__container`), cardComponent);
+  _renderFilm(parent, boardFilm) {
+    const filmPresenter = new FilmPresenter(parent, boardFilm);
+    filmPresenter.init();
   }
 
   _renderFilms(parent, from = 0, to = 2) {
