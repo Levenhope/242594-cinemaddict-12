@@ -2,23 +2,23 @@ import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
 import {render, replace} from "../utils/render.js";
 
-export default class FilmPresetner {
-  constructor(parent, film) {
+export default class FilmPresenter {
+  constructor(film) {
     this._film = film;
-    this._parent = parent;
+    this._parent = null;
 
     this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film);
     this._updatedFilmComponent = null;
   }
 
-  init() {
+  init(parent) {
+    this._parent = parent;
     this._detailModalPresenter = new DetailModalPresenter(this._film);
-    this._detailModalPresenter.init();
+    this._detailModalPresenter.init(this._filmComponent);
     this.setInnerToggles();
 
     render(this._parent.getElement().querySelector(`.films-list__container`), this._filmComponent);
-
   }
 
   update() {
@@ -26,7 +26,7 @@ export default class FilmPresetner {
     replace(this._updatedFilmComponent, this._filmComponent);
     this._filmComponent = this._updatedFilmComponent;
     this._detailModalPresenter = new DetailModalPresenter(this._film);
-    this._detailModalPresenter.init();
+    this._detailModalPresenter.init(this._filmComponent);
     this.setInnerToggles();
   }
 

@@ -1,14 +1,10 @@
+import FilmPresenter from "./film.js";
 import FilmListView from "../view/list.js";
-import FilmView from "../view/film.js";
 import MoreButtonView from "../view/more-button.js";
 import EmptyListView from "../view/empty-list.js";
-import {render, remove, replace} from "../utils/render.js";
+import {render, remove} from "../utils/render.js";
 import {FILMS_NUMBER_MAIN, FILMS_NUMBER_PER_STEP} from "../const.js";
 import {LANG} from "../lang.js";
-import FilmPresenter from "./film.js";
-import BoardPresenter from "../../../242594-taskmanager-12/src/presenter/board";
-import MainMenuView from "../../../242594-taskmanager-12/src/view/main-menu";
-import FilterView from "../../../242594-taskmanager-12/src/view/filter";
 
 export default class FilmListPresenter {
   constructor(filmListContainer) {
@@ -33,13 +29,13 @@ export default class FilmListPresenter {
     this._renderFilmList();
   }
 
-  _renderFilm(parent, boardFilm) {
-    const filmPresenter = new FilmPresenter(parent, boardFilm);
-    filmPresenter.init();
+  _renderFilm(boardFilm, parent) {
+    const filmPresenter = new FilmPresenter(boardFilm);
+    filmPresenter.init(parent);
   }
 
   _renderFilms(parent, from = 0, to = 2) {
-    this._listedFilms.slice(from, to).forEach((boardFilm) => this._renderFilm(parent, boardFilm));
+    this._listedFilms.slice(from, to).forEach((boardFilm) => this._renderFilm(boardFilm, parent));
   }
 
   _renderMoreButton() {

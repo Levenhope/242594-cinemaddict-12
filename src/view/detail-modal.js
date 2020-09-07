@@ -8,10 +8,9 @@ export default class DetailModalView extends AbstractView {
     super();
     this._film = film;
     this._controlsSection = null;
-    this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
   }
 
-  pasteControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
+  getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
     return (
       `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
       <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${isInWatchlist ? LANG.ALREADY + ` ` + LANG.IN : LANG.ADD + ` ` + LANG.TO} ${LANG.WATCHLIST}</label>
@@ -84,7 +83,7 @@ export default class DetailModalView extends AbstractView {
               </div>
             </div>
             <section class="film-details__controls">
-              ${this.pasteControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
+              ${this.getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
             </section>
           </div>
           <div class="form-details__bottom-container">
@@ -95,20 +94,16 @@ export default class DetailModalView extends AbstractView {
     );
   }
 
-  updateControlsSection(isInWatchlist, isInHistory, isInFavorites) {
+  updateControlsSection(...properties) {
     this._controlsSection = this.getElement().querySelector('.film-details__controls');
     this._controlsSection.innerHTML = ``;
-    this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.pasteControlsTemplate(isInWatchlist, isInHistory, isInFavorites));
-  }
-
-  _closeButtonClickHandler(e) {
-    e.preventDefault();
-    this._callback.click();
+    this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
   }
 
   setCloseButtonClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, function(){
+      callback();
+    });
   }
 
   setFavoriteClickHandler(callback) {

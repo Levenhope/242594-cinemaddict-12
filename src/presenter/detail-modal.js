@@ -14,9 +14,9 @@ export default class DetailModalPresenter {
     this._filmComments = new Array(this._film.commentsNumber).fill().map(generateComment);
   }
 
-  init() {
+  init(filmComponent) {
     this._setCommentsList();
-    this._initCloseHandler();
+    this._initCloseHandler(filmComponent);
     this._initToggles();
   }
 
@@ -31,16 +31,17 @@ export default class DetailModalPresenter {
     for (let i = 0; i < this._film.commentsNumber; i++) {
       render(this._commentsListElement, new CommentItemView(this._filmComments[i]));
     }
-
   }
 
   show() {
       this._detailModalContainer.appendChild(this._detailModalComponent.getElement());
   }
 
-  _initCloseHandler() {
+  _initCloseHandler(filmComponent) {
     this._detailModalComponent.setCloseButtonClickHandler(() => {
       this._detailModalContainer.removeChild(this._detailModalComponent.getElement());
+      filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      filmComponent.restoreHandlers();
     });
   }
 
@@ -71,10 +72,8 @@ export default class DetailModalPresenter {
     });
   }
 
-  update(isInWatchlist, isInHistory, isInFavorites) {
-    this._detailModalComponent.updateControlsSection(isInWatchlist, isInHistory, isInFavorites);
+  update(...properties) {
+    this._detailModalComponent.updateControlsSection(...properties);
     this._initToggles();
-    this._initCloseHandler();
   }
-
 }
