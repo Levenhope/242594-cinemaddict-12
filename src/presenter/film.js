@@ -5,8 +5,8 @@ import {render, replace} from "../utils/render.js";
 export default class FilmPresenter {
   constructor(film) {
     this._film = film;
-    this._parent = null;
 
+    this._parent = null;
     this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film);
     this._updatedFilmComponent = null;

@@ -8,10 +8,11 @@ export default class DetailModalPresenter {
   constructor(film){
     this._film = film;
     this._detailModalContainer = document.querySelector(`body`);
-    this._detailModalComponent = null;
+    this._detailModalComponent = new DetailModalView(this._film);
     this._commentsContainer = null;
     this._commentsListElement = null;
     this._filmComments = new Array(this._film.commentsNumber).fill().map(generateComment);
+    this._newComment = {};
   }
 
   init(filmComponent) {
@@ -21,16 +22,24 @@ export default class DetailModalPresenter {
   }
 
   _setCommentsList() {
-    this._detailModalComponent = new DetailModalView(this._film);
     this._commentsContainer = this._detailModalComponent.getElement().querySelector(`.form-details__bottom-container`);
+    this._commentsComponent = new CommentsView(this._film.commentsNumber);
 
-    render(this._commentsContainer, new CommentsView(this._film.commentsNumber));
+    render(this._commentsContainer, this._commentsComponent);
 
     this._commentsListElement = this._detailModalComponent.getElement().querySelector(`.film-details__comments-list`);
 
     for (let i = 0; i < this._film.commentsNumber; i++) {
       render(this._commentsListElement, new CommentItemView(this._filmComments[i]));
     }
+    this._commentsComponent.setEmojiClickHandler((e) => {
+      const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
+      chosenEmojiContainer.innerHTML = ``;
+      let emoji = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
+      emoji = emoji.substr(6, emoji.length + 1);
+      chosenEmojiContainer.insertAdjacentHTML("beforeend", `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">`);
+      this._newComment.emoji = emoji;
+    });
   }
 
   show() {
