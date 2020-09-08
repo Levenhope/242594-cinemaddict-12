@@ -2,14 +2,21 @@ import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
 import {render, replace} from "../utils/render.js";
 
+const MODE = {
+  DEFAULT: `DEFAULT`,
+  MODAL: `MODAL`
+};
+
 export default class FilmPresenter {
-  constructor(film) {
+  constructor(film, changeMode) {
     this._film = film;
+    this._changeMode = changeMode;
 
     this._parent = null;
     this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film);
     this._updatedFilmComponent = null;
+    this._mode = MODE.DEFAULT;
   }
 
   init(parent) {
@@ -30,9 +37,18 @@ export default class FilmPresenter {
     this.setInnerToggles();
   }
 
+  hideModal() {
+    this._detailModalPresenter.hide();
+    this._mode = MODE.DEFAULT;
+  }
+
   setInnerToggles() {
     this._filmComponent.setInnerElementsClickHandler(() => {
+      this._changeMode();
+      this._detailModalPresenter = new DetailModalPresenter(this._film);
+      this._detailModalPresenter.init(this._filmComponent);
       this._detailModalPresenter.show();
+      this._mode = MODE.MODAL;
     });
     this._setWatchlistToggleHandler();
     this._setFavoriteToggleHandler();

@@ -17,6 +17,9 @@ export default class FilmListPresenter {
     this._commentedFilmListComponent = new FilmListView(true, LANG.MOST_COMMENTED);
     this._moreButtonComponent = new MoreButtonView();
     this._emptyListComponent = new EmptyListView();
+    this._filmPresenter = {};
+
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(listedFilms) {
@@ -29,9 +32,15 @@ export default class FilmListPresenter {
     this._renderFilmList();
   }
 
+  _handleModeChange() {
+    Object.values(this._filmPresenter).forEach((presenter) => presenter.hideModal());
+  }
+
   _renderFilm(boardFilm, parent) {
-    const filmPresenter = new FilmPresenter(boardFilm);
+    const filmPresenter = new FilmPresenter(boardFilm, this._handleModeChange);
     filmPresenter.init(parent);
+
+    this._filmPresenter[boardFilm.id] = filmPresenter;
   }
 
   _renderFilms(parent, from = 0, to = 2) {

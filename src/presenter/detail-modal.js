@@ -1,5 +1,5 @@
 import DetailModalView from "../view/detail-modal.js";
-import {render} from "../utils/render.js";
+import {render, remove} from "../utils/render.js";
 import CommentsView from "../view/comments.js";
 import {generateComment} from "../mock/comment.js";
 import CommentItemView from "../view/comment.js";
@@ -46,9 +46,13 @@ export default class DetailModalPresenter {
       this._detailModalContainer.appendChild(this._detailModalComponent.getElement());
   }
 
+  hide() {
+    remove(this._detailModalComponent);
+  }
+
   _initCloseHandler(filmComponent) {
     this._detailModalComponent.setCloseButtonClickHandler(() => {
-      this._detailModalContainer.removeChild(this._detailModalComponent.getElement());
+      this.hide();
       filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       filmComponent.restoreHandlers();
     });
