@@ -5,7 +5,7 @@ import {generateComment} from "../mock/comment.js";
 import CommentItemView from "../view/comment.js";
 
 export default class DetailModalPresenter {
-  constructor(film){
+  constructor(film) {
     this._film = film;
     this._detailModalContainer = document.querySelector(`body`);
     this._detailModalComponent = new DetailModalView(this._film);
@@ -37,13 +37,13 @@ export default class DetailModalPresenter {
       chosenEmojiContainer.innerHTML = ``;
       let emoji = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
       emoji = emoji.substr(6, emoji.length + 1);
-      chosenEmojiContainer.insertAdjacentHTML("beforeend", `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">`);
+      chosenEmojiContainer.insertAdjacentHTML(`beforeend`, `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">`);
       this._newComment.emoji = emoji;
     });
   }
 
   show() {
-      this._detailModalContainer.appendChild(this._detailModalComponent.getElement());
+    this._detailModalContainer.appendChild(this._detailModalComponent.getElement());
   }
 
   hide() {

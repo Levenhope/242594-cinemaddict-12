@@ -14,7 +14,7 @@ export default class FilmView extends AbstractView {
       `<button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchlist ? `film-card__controls-item--active` : ``}">${LANG.ADD} ${LANG.TO} ${LANG.WATCHLIST}</button>
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInHistory ? `film-card__controls-item--active` : ``}">${LANG.MARK} ${LANG.AS} ${LANG.WATCHED}</button>
       <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavorites ? `film-card__controls-item--active` : ``}">${LANG.MARK} ${LANG.AS} ${LANG.FAVORITES}</button>`
-    )
+    );
   }
 
   getTemplate() {
@@ -49,27 +49,27 @@ export default class FilmView extends AbstractView {
 
   setFavoriteClickHandler(callback) {
     this._callback.favorites = callback;
-    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setHistoryClickHandler(callback) {
     this._callback.history = callback;
-    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setWatchlistClickHandler(callback) {
     this._callback.watchlist = callback;
-    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   updateControlsSection(...properties) {
-    this._controlsSection = this.getElement().querySelector('.film-card__controls');
+    this._controlsSection = this.getElement().querySelector(`.film-card__controls`);
     this._controlsSection.innerHTML = ``;
     this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
   }

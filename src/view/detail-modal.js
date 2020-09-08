@@ -18,7 +18,7 @@ export default class DetailModalView extends AbstractView {
       <label for="watched" class="film-details__control-label film-details__control-label--watched">${isInHistory ? LANG.ALREADY : LANG.ADD + ` ` + LANG.TO} ${LANG.WATCHED}</label>
       <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
       <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${isInFavorites ? LANG.ALREADY + ` ` + LANG.IN : LANG.ADD + ` ` + LANG.TO} ${LANG.FAVORITES}</label>`
-    )
+    );
   }
 
   getTemplate() {
@@ -95,31 +95,31 @@ export default class DetailModalView extends AbstractView {
   }
 
   updateControlsSection(...properties) {
-    this._controlsSection = this.getElement().querySelector('.film-details__controls');
+    this._controlsSection = this.getElement().querySelector(`.film-details__controls`);
     this._controlsSection.innerHTML = ``;
     this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
   }
 
   setCloseButtonClickHandler(callback) {
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setFavoriteClickHandler(callback) {
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setHistoryClickHandler(callback) {
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setWatchlistClickHandler(callback) {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, function(){
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, function () {
       callback();
     });
   }

@@ -34,8 +34,8 @@ export default class CommentsView extends AbstractView {
   }
 
   setEmojiClickHandler(callback) {
-    for(let label of this.getElement().querySelectorAll(`.film-details__emoji-label`)) {
-      label.addEventListener(`click`, function(e){
+    for (let label of this.getElement().querySelectorAll(`.film-details__emoji-label`)) {
+      label.addEventListener(`click`, function (e) {
         callback(e);
       });
     }
