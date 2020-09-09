@@ -61,9 +61,9 @@ export const AGES = [
   `18+`
 ];
 
-export const EMOJIS = [
-  `angry`,
-  `puke`,
-  `sleeping`,
-  `smile`,
-];
+export const EMOJIS = {
+  angry: `angry.png`,
+  puke: `puke.png`,
+  sleeping: `sleeping.png`,
+  smile: `smile.png`
+};

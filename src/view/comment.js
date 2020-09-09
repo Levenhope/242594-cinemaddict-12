@@ -22,7 +22,7 @@ export default class CommentItemView extends AbstractView {
             <button class="film-details__comment-delete">${LANG.DELETE}</button>
           </p>
         </div>
-   </li>`
+      </li>`
     );
   }
 }
