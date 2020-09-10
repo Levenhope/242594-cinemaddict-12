@@ -1,4 +1,5 @@
 import FilmView from "../view/film.js";
+import NavigationView from "../view/navigation.js";
 import DetailModalPresenter from "./detail-modal.js";
 import {render, replace} from "../utils/render.js";
 
@@ -32,8 +33,10 @@ export default class FilmPresenter {
     this._updatedFilmComponent = new FilmView(this._film);
     replace(this._updatedFilmComponent, this._filmComponent);
     this._filmComponent = this._updatedFilmComponent;
+
     this._detailModalPresenter = new DetailModalPresenter(this._film);
     this._detailModalPresenter.init(this._filmComponent);
+
     this.setInnerToggles();
   }
 

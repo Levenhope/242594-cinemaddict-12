@@ -26,4 +26,6 @@ export default class NavigationView extends AbstractView {
       </nav>`
     );
   }
+
+
 }
