@@ -1,5 +1,4 @@
 import FilmView from "../view/film.js";
-import NavigationView from "../view/navigation.js";
 import DetailModalPresenter from "./detail-modal.js";
 import {render, replace} from "../utils/render.js";
 

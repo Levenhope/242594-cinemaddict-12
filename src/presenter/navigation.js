@@ -33,19 +33,19 @@ export default class NavigationPresenter {
       },
       watchlist: {
         itemTitle: LANG.WATCHLIST_CAP,
-          countEntries(films) {
+        countEntries(films) {
           return films.filter((film) => film.isInWatchlist).length;
         }
       },
       history: {
         itemTitle: LANG.HISTORY_CAP,
-          countEntries(films) {
+        countEntries(films) {
           return films.filter((film) => film.isInHistory).length;
         }
       },
       favorites: {
         itemTitle: LANG.FAVORITES_CAP,
-          countEntries(films) {
+        countEntries(films) {
           return films.filter((film) => film.isInFavorites).length;
         }
       }
@@ -61,5 +61,5 @@ export default class NavigationPresenter {
         number: params.countEntries(films),
       };
     });
-  };
+  }
 }
