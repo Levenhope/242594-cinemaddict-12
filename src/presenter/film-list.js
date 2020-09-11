@@ -1,18 +1,15 @@
+import FilmPresenter from "./film.js";
 import FilmListView from "../view/list.js";
-import FilmView from "../view/film.js";
 import MoreButtonView from "../view/more-button.js";
-import DetailModalView from "../view/detail-modal.js";
-import CommentItemView from "../view/comment.js";
-import CommentsView from "../view/comments.js";
 import EmptyListView from "../view/empty-list.js";
 import {render, remove} from "../utils/render.js";
-import {generateComment} from "../mock/comment";
 import {FILMS_NUMBER_MAIN, FILMS_NUMBER_PER_STEP} from "../const.js";
-import {LANG} from "../lang";
+import {LANG} from "../lang.js";
 
 export default class FilmListPresenter {
   constructor(filmListContainer) {
     this._filmListContainer = filmListContainer;
+    this._listedFilms = null;
 
     this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;
     this._mainFilmListComponent = new FilmListView(false, LANG.ALL_MOVIES_TITLE);
@@ -20,6 +17,9 @@ export default class FilmListPresenter {
     this._commentedFilmListComponent = new FilmListView(true, LANG.MOST_COMMENTED);
     this._moreButtonComponent = new MoreButtonView();
     this._emptyListComponent = new EmptyListView();
+    this._filmPresenter = {};
+
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(listedFilms) {
@@ -32,35 +32,19 @@ export default class FilmListPresenter {
     this._renderFilmList();
   }
 
-  _renderFilm(parent, film) {
-    const cardComponent = new FilmView(film);
-    const detailModalComponent = new DetailModalView(film);
-    const siteBodyElement = document.querySelector(`body`);
-    const siteDetailModalBottomElement = detailModalComponent.getElement().querySelector(`.form-details__bottom-container`);
+  _handleModeChange() {
+    Object.values(this._filmPresenter).forEach((presenter) => presenter.hideModal());
+  }
 
-    render(siteDetailModalBottomElement, new CommentsView(film.commentsNumber));
+  _renderFilm(boardFilm, parent) {
+    const filmPresenter = new FilmPresenter(boardFilm, this._handleModeChange);
+    filmPresenter.init(parent);
 
-    const siteDetailModalCommentsListElement = detailModalComponent.getElement().querySelector(`.film-details__comments-list`);
-
-    const filmComments = new Array(film.commentsNumber).fill().map(generateComment);
-
-    for (let i = 0; i < film.commentsNumber; i++) {
-      render(siteDetailModalCommentsListElement, new CommentItemView(filmComments[i]));
-    }
-
-    cardComponent.setInnerElementsClickHandler(() => {
-      siteBodyElement.appendChild(detailModalComponent.getElement());
-    });
-
-    detailModalComponent.setCloseButtonClickHandler(() => {
-      siteBodyElement.removeChild(detailModalComponent.getElement());
-    });
-
-    render(parent.getElement().querySelector(`.films-list__container`), cardComponent);
+    this._filmPresenter[boardFilm.id] = filmPresenter;
   }
 
   _renderFilms(parent, from = 0, to = 2) {
-    this._listedFilms.slice(from, to).forEach((boardFilm) => this._renderFilm(parent, boardFilm));
+    this._listedFilms.slice(from, to).forEach((boardFilm) => this._renderFilm(boardFilm, parent));
   }
 
   _renderMoreButton() {
@@ -69,7 +53,7 @@ export default class FilmListPresenter {
     this._moreButtonComponent.setClickHandler(() => {
       this._listedFilms
         .slice(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_NUMBER_PER_STEP)
-        .forEach((film) => render(this._mainFilmListComponent.getElement().querySelector(`.films-list__container`), new FilmView(film)));
+        .forEach((film) => this._renderFilm(film, this._mainFilmListComponent));
 
       this._renderedFilmsCount += FILMS_NUMBER_PER_STEP;
 

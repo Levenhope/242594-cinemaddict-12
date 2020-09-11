@@ -20,6 +20,7 @@ const generateInfoList = (arr, maxCount, isJoined = false) => {
 };
 
 export const generateFilm = () => {
+  const id = Date.now() + Math.floor(Math.random() * 10000);
   const poster = POSTERS[getRandomInteger(0, POSTERS.length - 1)];
   const title = TITLES[getRandomInteger(0, TITLES.length - 1)];
   const rating = getRandomNumber(0, 10).toFixed(2);
@@ -31,6 +32,7 @@ export const generateFilm = () => {
   const description = getRandomText(1, 5);
 
   return {
+    id,
     poster,
     title,
     originalTitle: title,

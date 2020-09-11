@@ -1,5 +1,6 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
+import {EMOJIS, EMOJIS_DIRECTORY_PATH} from "../const.js";
 
 export default class CommentsView extends AbstractView {
   constructor(commentsCount) {
@@ -15,30 +16,28 @@ export default class CommentsView extends AbstractView {
           
         </ul>
         <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
+          <div class="film-details__add-emoji-label"></div>
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="${LANG.COMMENT_INPUT_PLACEHOLDER}" name="comment"></textarea>
           </label>
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
+            ${Object.entries(EMOJIS).reduce((accumulator, [emojiName, fileName]) => accumulator + `
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiName}" value="${emojiName}">
+              <label class="film-details__emoji-label" for="emoji-${emojiName}">
+                <img src="${EMOJIS_DIRECTORY_PATH + fileName}" width="30" height="30" alt="emoji-${emojiName}">
+              </label>
+            `, ``)}
           </div>
         </div>
       </section>`
     );
+  }
+
+  setEmojiClickHandler(callback) {
+    for (let label of this.getElement().querySelectorAll(`.film-details__emoji-label`)) {
+      label.addEventListener(`click`, function (e) {
+        callback(e);
+      });
+    }
   }
 }

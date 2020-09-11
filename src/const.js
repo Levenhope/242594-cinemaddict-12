@@ -1,10 +1,8 @@
 export const FILMS_NUMBER_MAIN = 17;
-export const FILMS_NUMBER_TOP_RATED = 2;
-export const FILMS_NUMBER_COMMENTED = 2;
 export const FILMS_NUMBER_PER_STEP = 5;
 
 const POSTERS_DIRECTORY_PATH = `./images/posters/`;
-const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
+export const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
 
 export const POSTERS = [
   `the-dance-of-life.jpg`,
@@ -63,9 +61,9 @@ export const AGES = [
   `18+`
 ];
 
-export const EMOJIS = [
-  `angry.png`,
-  `puke.png`,
-  `sleeping.png`,
-  `smile.png`,
-].map((filename) => `${EMOJIS_DIRECTORY_PATH}${filename}`);
+export const EMOJIS = {
+  angry: `angry.png`,
+  puke: `puke.png`,
+  sleeping: `sleeping.png`,
+  smile: `smile.png`
+};
