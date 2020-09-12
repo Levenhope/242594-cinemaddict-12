@@ -1,6 +1,6 @@
 import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
-import {render, replace} from "../utils/render.js";
+import {render, replace, remove} from "../utils/render.js";
 
 const MODE = {
   DEFAULT: `DEFAULT`,
@@ -8,20 +8,18 @@ const MODE = {
 };
 
 export default class FilmPresenter {
-  constructor(film, changeMode) {
+  constructor(film, parent, changeMode) {
     this._film = film;
+    this._parent = parent;
     this._changeMode = changeMode;
 
-    this._parent = null;
     this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film);
     this._updatedFilmComponent = null;
     this._mode = MODE.DEFAULT;
   }
 
-  init(parent) {
-    this._parent = parent;
-    this._detailModalPresenter = new DetailModalPresenter(this._film);
+  init() {
     this._detailModalPresenter.init(this._filmComponent);
     this.setInnerToggles();
 
@@ -37,6 +35,10 @@ export default class FilmPresenter {
     this._detailModalPresenter.init(this._filmComponent);
 
     this.setInnerToggles();
+  }
+
+  destroy() {
+    remove(this._filmComponent);
   }
 
   hideModal() {

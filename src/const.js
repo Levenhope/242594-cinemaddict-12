@@ -67,3 +67,8 @@ export const EMOJIS = {
   sleeping: `sleeping.png`,
   smile: `smile.png`
 };
+
+export const UPDATE_TYPE = {
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
