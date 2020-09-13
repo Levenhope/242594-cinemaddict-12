@@ -27,13 +27,23 @@ export default class FilmListPresenter {
     render(this._filmListContainer, this._mainFilmListComponent);
 
     this._filmsModel.addObserver(this._handleModelEvent);
-    this._navigationModel.addObserver(this._handleModelEvent);
+    //this._navigationModel.addObserver(this._handleModelEvent);
 
     this._renderFilmList();
   }
 
+  destroy() {
+    this._clearBoard({resetRenderedFilmsCount: true});
+
+    remove(this._mainFilmListComponent);
+    remove(this._moreButtonComponent);
+
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    //this._navigationModel.removeObserver(this._handleModelEvent);
+  }
+
   _renderFilm(boardFilm, parent) {
-    const filmPresenter = new FilmPresenter(boardFilm, parent, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(boardFilm, parent, this._handleModeChange, this._handleModelEvent);
     filmPresenter.init();
 
     this._filmPresenter[boardFilm.id] = filmPresenter;
@@ -73,7 +83,6 @@ export default class FilmListPresenter {
     } else {
       this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)), this._mainFilmListComponent);
 
-
       if (filmsCount > FILMS_NUMBER_PER_STEP) {
         this._renderMoreButton();
       }
@@ -98,6 +107,7 @@ export default class FilmListPresenter {
       case UPDATE_TYPE.MINOR:
         this._clearBoard();
         this._renderFilmList();
+        this._navigationModel.updateCounters();
         break;
       case UPDATE_TYPE.MAJOR:
         this._clearBoard({resetRenderedFilmsCount: true});

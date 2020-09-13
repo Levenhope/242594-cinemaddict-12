@@ -22,7 +22,7 @@ export default class NavigationPresenter {
     this._currentFilter = this._navigationModel.getFilter();
     const prevNavigationComponent = this._navigationComponent;
 
-    const filmsNavigationMap = this._createNavigationMap();
+    const filmsNavigationMap = this._navigationModel.getCounters();
     const navigationList = this._generateNavigation(this._filmsModel.getItems(), filmsNavigationMap);
 
     this._navigationComponent = new NavigationView(navigationList, this._currentFilter);
@@ -38,47 +38,17 @@ export default class NavigationPresenter {
   }
 
   _handleModelEvent() {
+    console.log('handle model nav');
     this.init();
   }
 
 
   _handleFilterTypeChange(filter) {
-    console.log(filter);
     if (this._currentFilter === filter) {
       return;
     }
 
     this._navigationModel.setFilter(UPDATE_TYPE.MAJOR, filter);
-  }
-
-  _createNavigationMap() {
-    const navigationMap = {
-      all: {
-        itemTitle: LANG.ALL_MOVIES,
-        countEntries(films) {
-          return films.filter((film) => film).length;
-        }
-      },
-      watchlist: {
-        itemTitle: LANG.WATCHLIST_CAP,
-        countEntries(films) {
-          return films.filter((film) => film.isInWatchlist).length;
-        }
-      },
-      history: {
-        itemTitle: LANG.HISTORY_CAP,
-        countEntries(films) {
-          return films.filter((film) => film.isInHistory).length;
-        }
-      },
-      favorites: {
-        itemTitle: LANG.FAVORITES_CAP,
-        countEntries(films) {
-          return films.filter((film) => film.isInFavorites).length;
-        }
-      }
-    };
-    return navigationMap;
   }
 
   _generateNavigation(films, filmsMap) {

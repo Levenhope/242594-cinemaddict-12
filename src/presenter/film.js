@@ -1,6 +1,7 @@
 import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
 import {render, replace, remove} from "../utils/render.js";
+import {UPDATE_TYPE} from "../const.js";
 
 const MODE = {
   DEFAULT: `DEFAULT`,
@@ -8,14 +9,15 @@ const MODE = {
 };
 
 export default class FilmPresenter {
-  constructor(film, parent, changeMode) {
+  constructor(film, parent, changeMode, changeData) {
     this._film = film;
     this._parent = parent;
     this._changeMode = changeMode;
+    this._changeData = changeData;
 
     this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film);
-    this._updatedFilmComponent = null;
+    //this._updatedFilmComponent = null;
     this._mode = MODE.DEFAULT;
   }
 
@@ -24,17 +26,6 @@ export default class FilmPresenter {
     this.setInnerToggles();
 
     render(this._parent.getElement().querySelector(`.films-list__container`), this._filmComponent);
-  }
-
-  update() {
-    this._updatedFilmComponent = new FilmView(this._film);
-    replace(this._updatedFilmComponent, this._filmComponent);
-    this._filmComponent = this._updatedFilmComponent;
-
-    this._detailModalPresenter = new DetailModalPresenter(this._film);
-    this._detailModalPresenter.init(this._filmComponent);
-
-    this.setInnerToggles();
   }
 
   destroy() {
@@ -62,21 +53,21 @@ export default class FilmPresenter {
   _setWatchlistToggleHandler() {
     this._filmComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
-      this.update();
+      this._changeData(UPDATE_TYPE.MINOR);
     });
   }
 
   _setFavoriteToggleHandler() {
     this._filmComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
-      this.update();
+      this._changeData(UPDATE_TYPE.MINOR);
     });
   }
 
   _setHistoryToggleHandler() {
     this._filmComponent.setHistoryClickHandler(() => {
       this._film.isInHistory = !this._film.isInHistory;
-      this.update();
+      this._changeData(UPDATE_TYPE.MINOR);
     });
   }
 }
