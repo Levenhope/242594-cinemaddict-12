@@ -40,7 +40,7 @@ export default class FilmPresenter {
   setInnerToggles() {
     this._filmComponent.setInnerElementsClickHandler(() => {
       this._changeMode();
-      this._detailModalPresenter = new DetailModalPresenter(this._film);
+      this._detailModalPresenter = new DetailModalPresenter(this._film, this._changeData);
       this._detailModalPresenter.init(this._filmComponent);
       this._detailModalPresenter.show();
       this._mode = MODE.MODAL;

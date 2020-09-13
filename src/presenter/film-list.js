@@ -27,7 +27,7 @@ export default class FilmListPresenter {
     render(this._filmListContainer, this._mainFilmListComponent);
 
     this._filmsModel.addObserver(this._handleModelEvent);
-    //this._navigationModel.addObserver(this._handleModelEvent);
+    this._navigationModel.addObserver(this._handleModelEvent);
 
     this._renderFilmList();
   }
@@ -39,7 +39,7 @@ export default class FilmListPresenter {
     remove(this._moreButtonComponent);
 
     this._filmsModel.removeObserver(this._handleModelEvent);
-    //this._navigationModel.removeObserver(this._handleModelEvent);
+    this._navigationModel.removeObserver(this._handleModelEvent);
   }
 
   _renderFilm(boardFilm, parent) {

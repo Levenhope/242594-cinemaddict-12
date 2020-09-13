@@ -3,10 +3,12 @@ import {render, remove} from "../utils/render.js";
 import CommentsView from "../view/comments.js";
 import {generateComment} from "../mock/comment.js";
 import CommentItemView from "../view/comment.js";
+import {UPDATE_TYPE} from "../const";
 
 export default class DetailModalPresenter {
-  constructor(film) {
+  constructor(film, changeData) {
     this._film = film;
+    this._changeData = changeData;
     this._detailModalContainer = document.querySelector(`body`);
     this._detailModalComponent = new DetailModalView(this._film);
     this._commentsContainer = null;
@@ -88,5 +90,6 @@ export default class DetailModalPresenter {
   update(...properties) {
     this._detailModalComponent.updateControlsSection(...properties);
     this._initToggles();
+    this._changeData(UPDATE_TYPE.MINOR);
   }
 }

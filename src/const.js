@@ -69,6 +69,7 @@ export const EMOJIS = {
 };
 
 export const UPDATE_TYPE = {
+  NAVIGATION: `NAVIGATION`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
 };

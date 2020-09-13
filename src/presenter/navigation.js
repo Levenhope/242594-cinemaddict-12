@@ -1,7 +1,6 @@
 import NavigationView from "../view/navigation.js";
 import {render, replace, remove} from "../utils/render.js";
-import {LANG} from "../lang.js";
-import {CATEGORIES, UPDATE_TYPE} from "../const.js";
+import {UPDATE_TYPE} from "../const.js";
 
 export default class NavigationPresenter {
   constructor(parent, navigationModel, filmsModel) {
@@ -14,7 +13,6 @@ export default class NavigationPresenter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._filmsModel.addObserver(this._handleModelEvent);
     this._navigationModel.addObserver(this._handleModelEvent);
   }
 

@@ -50,6 +50,6 @@ export default class NavigationModel extends Observer {
   }
 
   updateCounters() {
-    this._notify(UPDATE_TYPE.MINOR)
+    this._notify(UPDATE_TYPE.NAVIGATION)
   }
 }
