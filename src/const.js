@@ -72,3 +72,10 @@ export const UPDATE_TYPE = {
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
 };
+
+export const CATEGORIES = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};

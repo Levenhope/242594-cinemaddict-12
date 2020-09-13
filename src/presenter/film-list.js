@@ -3,37 +3,33 @@ import FilmListView from "../view/list.js";
 import MoreButtonView from "../view/more-button.js";
 import EmptyListView from "../view/empty-list.js";
 import {render, remove} from "../utils/render.js";
-import {FILMS_NUMBER_MAIN, FILMS_NUMBER_PER_STEP, UPDATE_TYPE} from "../const.js";
+import {FILMS_NUMBER_PER_STEP, UPDATE_TYPE} from "../const.js";
 import {LANG} from "../lang.js";
+import {filter} from "../utils/filter.js";
 
 export default class FilmListPresenter {
-  constructor(filmListContainer, filmsModel) {
+  constructor(filmListContainer, filmsModel, navigationModel) {
     this._filmListContainer = filmListContainer;
     this._filmsModel = filmsModel;
+    this._navigationModel = navigationModel;
 
     this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;
     this._mainFilmListComponent = new FilmListView(false, LANG.ALL_MOVIES_TITLE);
-    this._topFilmListComponent = new FilmListView(true, LANG.TOP_RATED_TITLE);
-    this._commentedFilmListComponent = new FilmListView(true, LANG.MOST_COMMENTED);
     this._moreButtonComponent = new MoreButtonView();
     this._emptyListComponent = new EmptyListView();
     this._filmPresenter = {};
 
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
   }
 
   init() {
     render(this._filmListContainer, this._mainFilmListComponent);
-    render(this._filmListContainer, this._topFilmListComponent);
-    render(this._filmListContainer, this._commentedFilmListComponent);
 
     this._filmsModel.addObserver(this._handleModelEvent);
+    this._navigationModel.addObserver(this._handleModelEvent);
 
     this._renderFilmList();
-  }
-
-  _handleModeChange() {
-    Object.values(this._filmPresenter).forEach((presenter) => presenter.hideModal());
   }
 
   _renderFilm(boardFilm, parent) {
@@ -51,13 +47,14 @@ export default class FilmListPresenter {
     render(this._mainFilmListComponent, this._moreButtonComponent);
 
     this._moreButtonComponent.setClickHandler(() => {
-      this._filmsModel.getItems()
-        .slice(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_NUMBER_PER_STEP)
-        .forEach((film) => this._renderFilm(film, this._mainFilmListComponent));
+      const filmsCount = this._getFilms().length;
+      const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_NUMBER_PER_STEP);
+      const films = this._getFilms().slice(this._renderedFilmsCount, newRenderedFilmsCount);
 
-      this._renderedFilmsCount += FILMS_NUMBER_PER_STEP;
+      this._renderFilms(films, this._mainFilmListComponent);
+      this._renderedFilmsCount = newRenderedFilmsCount;
 
-      if (this._renderedFilmsCount >= this._filmsModel.getItems().length) {
+      if (this._renderedFilmsCount >= filmsCount) {
         remove(this._moreButtonComponent);
       }
     });
@@ -68,25 +65,35 @@ export default class FilmListPresenter {
   }
 
   _renderFilmList() {
-    const films = this._filmsModel.getItems();
+    const films = this._getFilms();
     const filmsCount = films.length;
 
-    if (FILMS_NUMBER_MAIN < 1) {
+    if (filmsCount < 1) {
       this._renderEmptyList();
     } else {
       this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)), this._mainFilmListComponent);
 
 
-      if (films.length > FILMS_NUMBER_PER_STEP) {
+      if (filmsCount > FILMS_NUMBER_PER_STEP) {
         this._renderMoreButton();
       }
-
-      this._renderFilms(films.slice(0, 2), this._topFilmListComponent);
-      this._renderFilms(films.slice(0, 2), this._commentedFilmListComponent);
     }
   }
 
+  _getFilms() {
+    const categoryName = this._navigationModel.getFilter();
+    const films = this._filmsModel.getItems();
+    const filteredFilms = filter[categoryName](films);
+
+    return filteredFilms;
+  }
+
+  _handleModeChange() {
+    Object.values(this._filmPresenter).forEach((presenter) => presenter.hideModal());
+  }
+
   _handleModelEvent(updateType) {
+    console.log(updateType);
     switch (updateType) {
       case UPDATE_TYPE.MINOR:
         this._clearBoard();
