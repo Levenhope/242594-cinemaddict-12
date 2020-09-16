@@ -25,4 +25,8 @@ export default class CommentItemView extends AbstractView {
       </li>`
     );
   }
+
+  setDeleteClickHandler(callback) {
+    this.getElement().querySelector('.film-details__comment-delete').addEventListener(`click`, callback);
+  }
 }

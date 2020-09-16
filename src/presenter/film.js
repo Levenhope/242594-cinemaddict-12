@@ -16,8 +16,7 @@ export default class FilmPresenter {
     this._changeData = changeData;
 
     this._filmComponent = new FilmView(this._film);
-    this._detailModalPresenter = new DetailModalPresenter(this._film);
-    //this._updatedFilmComponent = null;
+    this._detailModalPresenter = new DetailModalPresenter(this._film, this._changeData);
     this._mode = MODE.DEFAULT;
   }
 

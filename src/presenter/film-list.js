@@ -102,7 +102,6 @@ export default class FilmListPresenter {
   }
 
   _handleModelEvent(updateType) {
-    console.log(updateType);
     switch (updateType) {
       case UPDATE_TYPE.MINOR:
         this._clearBoard();

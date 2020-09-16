@@ -36,7 +36,6 @@ export default class NavigationPresenter {
   }
 
   _handleModelEvent() {
-    console.log('handle model nav');
     this.init();
   }
 
