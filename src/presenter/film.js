@@ -1,6 +1,6 @@
 import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
-import {render, replace, remove} from "../utils/render.js";
+import {render, remove} from "../utils/render.js";
 import {UPDATE_TYPE} from "../const.js";
 
 const MODE = {
@@ -44,6 +44,7 @@ export default class FilmPresenter {
       this._detailModalPresenter.show();
       this._mode = MODE.MODAL;
     });
+
     this._setWatchlistToggleHandler();
     this._setFavoriteToggleHandler();
     this._setHistoryToggleHandler();

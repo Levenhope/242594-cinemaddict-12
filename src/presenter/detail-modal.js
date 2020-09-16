@@ -3,7 +3,7 @@ import {render, remove, replace} from "../utils/render.js";
 import CommentsView from "../view/comments.js";
 import {generateComment} from "../mock/comment.js";
 import CommentItemView from "../view/comment.js";
-import {UPDATE_TYPE, EMOJIS_DIRECTORY_PATH} from "../const";
+import {UPDATE_TYPE, EMOJIS_DIRECTORY_PATH, EMOJIS} from "../const";
 
 export default class DetailModalPresenter {
   constructor(film, changeData) {
@@ -16,7 +16,6 @@ export default class DetailModalPresenter {
     this._commentsListElement = null;
     this._commentsComponent = new CommentsView(this._film.commentsNumber);
     this._filmComments = new Array(this._film.commentsNumber).fill().map(generateComment);
-    this._newComment = {};
     this._renderedComments = [];
   }
 
@@ -41,14 +40,42 @@ export default class DetailModalPresenter {
   }
 
   _setAddFormActions() {
+    let emoji = ``;
+
     this._commentsComponent.setEmojiClickHandler((e) => {
       const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
       chosenEmojiContainer.innerHTML = ``;
-      let emoji = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
-      emoji = emoji.substr(6, emoji.length + 1);
-      chosenEmojiContainer.insertAdjacentHTML(`beforeend`, `<img src="${EMOJIS_DIRECTORY_PATH}${emoji}.png" width="55" height="55" alt="emoji-${emoji}">`);
-      this._newComment.emoji = emoji;
+      let emojiName = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
+      emojiName = emojiName.substr(6, emojiName.length + 1);
+      emoji = EMOJIS_DIRECTORY_PATH + Object.entries(EMOJIS).filter(item => item[0] == emojiName)[0][1];
+      chosenEmojiContainer.insertAdjacentHTML(`beforeend`, `<img src="${emoji}" width="55" height="55" alt="emoji-${emojiName}">`);
     });
+
+    this._commentsComponent.setSubmitHandler((e) => {
+      const commentText = e.target.value;
+
+      if (commentText === ``) {
+        alert(`Text something!`);
+        return;
+      }
+      if (emoji === ``) {
+        alert(`Choose Emoji!`);
+        return;
+      }
+
+      const date = new Date().toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``);
+
+      this._filmComments.push(
+        {
+          name: `You`,
+          date,
+          commentText,
+          emoji
+        }
+      );
+
+      this._handleCommentsUpdate();
+    })
   }
 
   _setDeleteClickHandlers() {
@@ -56,16 +83,19 @@ export default class DetailModalPresenter {
       this._renderedComments[i].setDeleteClickHandler(() => {
         remove(this._renderedComments[i]);
         this._filmComments.splice(i, 1);
-        this._renderedComments.splice(i, 1);
-        this._film.commentsNumber -= 1;
-        this._changeData(UPDATE_TYPE.MINOR);
 
-        const updatedCommentsComponent = new CommentsView(this._film.commentsNumber);
-        replace(updatedCommentsComponent, this._commentsComponent);
-        this._commentsComponent = updatedCommentsComponent;
-        this._setCommentsList();
+        this._handleCommentsUpdate();
       })
     }
+  }
+
+  _handleCommentsUpdate() {
+    this._film.commentsNumber = this._filmComments.length;
+    const updatedCommentsComponent = new CommentsView(this._film.commentsNumber);
+    replace(updatedCommentsComponent, this._commentsComponent);
+    this._commentsComponent = updatedCommentsComponent;
+    this._setCommentsList();
+    this._changeData(UPDATE_TYPE.MINOR);
   }
 
   show() {
