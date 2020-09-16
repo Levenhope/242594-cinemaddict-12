@@ -41,13 +41,15 @@ export default class DetailModalPresenter {
 
   _setAddFormActions() {
     let emoji = ``;
+    const commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
+    const emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
 
     this._commentsComponent.setEmojiClickHandler((e) => {
       const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
       chosenEmojiContainer.innerHTML = ``;
       let emojiName = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
       emojiName = emojiName.substr(6, emojiName.length + 1);
-      emoji = EMOJIS_DIRECTORY_PATH + Object.entries(EMOJIS).filter(item => item[0] == emojiName)[0][1];
+      emoji = EMOJIS_DIRECTORY_PATH + Object.entries(EMOJIS).filter((item) => item[0] === emojiName)[0][1];
       chosenEmojiContainer.insertAdjacentHTML(`beforeend`, `<img src="${emoji}" width="55" height="55" alt="emoji-${emojiName}">`);
     });
 
@@ -55,37 +57,41 @@ export default class DetailModalPresenter {
       const commentText = e.target.value;
 
       if (commentText === ``) {
-        alert(`Text something!`);
+        commentInputElement.classList.remove(`error-animate`);
+        setTimeout(function () {
+          commentInputElement.classList.add(`error-animate`);
+        }, 10);
         return;
       }
       if (emoji === ``) {
-        alert(`Choose Emoji!`);
+        emojisListElement.classList.remove(`error-animate`);
+        setTimeout(function () {
+          emojisListElement.classList.add(`error-animate`);
+        }, 10);
         return;
       }
 
       const date = new Date().toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``);
 
-      this._filmComments.push(
-        {
-          name: `You`,
-          date,
-          commentText,
-          emoji
-        }
-      );
+      this._filmComments.push({
+        name: `You`,
+        date,
+        commentText,
+        emoji
+      });
 
       this._handleCommentsUpdate();
-    })
+    });
   }
 
   _setDeleteClickHandlers() {
-    for(let i = 0; i < this._renderedComments.length; i++) {
+    for (let i = 0; i < this._renderedComments.length; i++) {
       this._renderedComments[i].setDeleteClickHandler(() => {
         remove(this._renderedComments[i]);
         this._filmComments.splice(i, 1);
 
         this._handleCommentsUpdate();
-      })
+      });
     }
   }
 

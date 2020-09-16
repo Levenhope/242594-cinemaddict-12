@@ -30,7 +30,7 @@ export default class NavigationView extends AbstractView {
 
   setFilterTypeChangeHandler(callback) {
     for (let navItem of this.getElement().querySelectorAll(`.main-navigation__item`)) {
-      navItem.addEventListener(`click`, function (e) {
+      navItem.addEventListener(`click`, function () {
         callback(navItem.getAttribute(`data-nav`));
       });
     }
