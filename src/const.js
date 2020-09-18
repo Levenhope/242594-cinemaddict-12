@@ -67,3 +67,16 @@ export const EMOJIS = {
   sleeping: `sleeping.png`,
   smile: `smile.png`
 };
+
+export const UPDATE_TYPE = {
+  NAVIGATION: `NAVIGATION`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export const CATEGORIES = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};

@@ -1,3 +1,4 @@
+import he from "he";
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
@@ -15,7 +16,7 @@ export default class CommentItemView extends AbstractView {
           <img src="${emoji}" width="55" height="55" alt="emoji-smile">
         </span>
         <div>
-          <p class="film-details__comment-text">${commentText}</p>
+          <p class="film-details__comment-text">${he.encode(commentText)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
             <span class="film-details__comment-day">${date}</span>
@@ -24,5 +25,9 @@ export default class CommentItemView extends AbstractView {
         </div>
       </li>`
     );
+  }
+
+  setDeleteClickHandler(callback) {
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, callback);
   }
 }

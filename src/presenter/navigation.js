@@ -1,56 +1,51 @@
 import NavigationView from "../view/navigation.js";
-import {render, replace} from "../utils/render";
-import {LANG} from "../lang.js";
+import {render, replace, remove} from "../utils/render.js";
+import {UPDATE_TYPE} from "../const.js";
 
 export default class NavigationPresenter {
-  constructor(films) {
-    this._films = films;
-    this._filmsNavigationMap = this._createNavigationMap();
-    this._navigationList = this._generateNavigation(this._films, this._filmsNavigationMap);
-    this._navigationComponent = new NavigationView(this._navigationList);
-    this._updatedNavigationComponent = null;
+  constructor(parent, navigationModel, filmsModel) {
+    this._navigationModel = navigationModel;
+    this._filmsModel = filmsModel;
+    this._parent = parent;
+    this._navigationComponent = null;
+    this._currentFilter = null;
+
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+
+    this._navigationModel.addObserver(this._handleModelEvent);
   }
 
-  init(parent) {
-    render(parent, this._navigationComponent);
+  init() {
+    this._currentFilter = this._navigationModel.getFilter();
+    const prevNavigationComponent = this._navigationComponent;
+
+    const filmsNavigationMap = this._navigationModel.getCounters();
+    const navigationList = this._generateNavigation(this._filmsModel.getItems(), filmsNavigationMap);
+
+    this._navigationComponent = new NavigationView(navigationList, this._currentFilter);
+    this._navigationComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+
+    if (prevNavigationComponent === null) {
+      render(this._parent, this._navigationComponent);
+      return;
+    }
+
+    replace(this._navigationComponent, prevNavigationComponent);
+    remove(prevNavigationComponent);
   }
 
-  update() {
-    this._filmsNavigationMap = this._createNavigationMap();
-    this._navigationList = this._generateNavigation(this._films, this._filmsNavigationMap);
-    this._updatedNavigationComponent = new NavigationView(this._navigationList);
-    replace(this._updatedNavigationComponent, this._navigationComponent);
-    this._navigationComponent = this._updatedNavigationComponent;
+  _handleModelEvent() {
+    this.init();
   }
 
-  _createNavigationMap() {
-    const navigationMap = {
-      all: {
-        itemTitle: LANG.ALL_MOVIES,
-        countEntries(films) {
-          return films.filter((film) => film).length;
-        }
-      },
-      watchlist: {
-        itemTitle: LANG.WATCHLIST_CAP,
-        countEntries(films) {
-          return films.filter((film) => film.isInWatchlist).length;
-        }
-      },
-      history: {
-        itemTitle: LANG.HISTORY_CAP,
-        countEntries(films) {
-          return films.filter((film) => film.isInHistory).length;
-        }
-      },
-      favorites: {
-        itemTitle: LANG.FAVORITES_CAP,
-        countEntries(films) {
-          return films.filter((film) => film.isInFavorites).length;
-        }
-      }
-    };
-    return navigationMap;
+
+  _handleFilterTypeChange(filter) {
+    if (this._currentFilter === filter) {
+      return;
+    }
+
+    this._navigationModel.setFilter(UPDATE_TYPE.MAJOR, filter);
   }
 
   _generateNavigation(films, filmsMap) {
