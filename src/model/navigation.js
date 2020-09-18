@@ -14,7 +14,7 @@ export default class NavigationModel extends Observer {
       [CATEGORIES.ALL]: {
         itemTitle: LANG.ALL_MOVIES,
         countEntries(films) {
-          return films.filter((film) => film).length;
+          return films.length;
         }
       },
       [CATEGORIES.WATCHLIST]: {
