@@ -14,8 +14,8 @@ export default class DetailModalPresenter {
     this._detailModalComponent = new DetailModalView(this._film);
     this._commentsContainer = this._detailModalComponent.getElement().querySelector(`.form-details__bottom-container`);
     this._commentsListElement = null;
-    this._commentsComponent = new CommentsView(this._film.commentsNumber);
-    this._filmComments = new Array(this._film.commentsNumber).fill().map(generateComment);
+    this._commentsComponent = new CommentsView(this._film.comments);
+    this._filmComments = this._film.comments.map((item) => {item = item.split(); const commentInfo = generateComment(); item.push(commentInfo); return item;});
     this._renderedComments = [];
   }
 
@@ -28,8 +28,7 @@ export default class DetailModalPresenter {
   _setCommentsList() {
     render(this._commentsContainer, this._commentsComponent);
     this._commentsListElement = this._detailModalComponent.getElement().querySelector(`.film-details__comments-list`);
-
-    for (let i = 0; i < this._film.commentsNumber; i++) {
+    for (let i = 0; i < this._film.comments.length; i++) {
       const commentItemComponent = new CommentItemView(this._filmComments[i]);
       render(this._commentsListElement, commentItemComponent);
       this._renderedComments[i] = commentItemComponent;
@@ -96,8 +95,8 @@ export default class DetailModalPresenter {
   }
 
   _handleCommentsUpdate() {
-    this._film.commentsNumber = this._filmComments.length;
-    const updatedCommentsComponent = new CommentsView(this._film.commentsNumber);
+    this._film.comments = this._filmComments;
+    const updatedCommentsComponent = new CommentsView(this._film.comments);
     replace(updatedCommentsComponent, this._commentsComponent);
     this._commentsComponent = updatedCommentsComponent;
     this._setCommentsList();

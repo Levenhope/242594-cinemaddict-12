@@ -21,7 +21,7 @@ export default class NavigationPresenter {
     const prevNavigationComponent = this._navigationComponent;
 
     const filmsNavigationMap = this._navigationModel.getCounters();
-    const navigationList = this._generateNavigation(this._filmsModel.getItems(), filmsNavigationMap);
+    const navigationList = this._generateNavigation(this._filmsModel.getFilms(), filmsNavigationMap);
 
     this._navigationComponent = new NavigationView(navigationList, this._currentFilter);
     this._navigationComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);

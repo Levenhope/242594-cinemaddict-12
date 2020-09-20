@@ -1,6 +1,7 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
-import {RenderPosition} from "../utils/render";
+import {getReadableDuration} from "../utils/film.js";
+import {RenderPosition} from "../utils/render.js";
 
 export default class FilmView extends AbstractView {
   constructor(film) {
@@ -18,19 +19,19 @@ export default class FilmView extends AbstractView {
   }
 
   getTemplate() {
-    const {id, poster, title, rating, date, duration, genres, description, commentsNumber, isInWatchlist, isInFavorites, isInHistory} = this._film;
+    const {id, poster, title, rating, date, duration, genres, description, comments, isInWatchlist, isInFavorites, isInHistory} = this._film;
     return (
       `<article class="film-card" id="${id}">
         <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${date.getFullYear()}</span>
-            <span class="film-card__duration">${duration}</span>
+            <span class="film-card__duration">${getReadableDuration(duration)}</span>
             <span class="film-card__genre">${genres[0]}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description.length > 140 ? description.substring(0, 140) + `...` : description}</p>
-          <a class="film-card__comments">${commentsNumber} ${LANG.COMMENTS}</a>
+          <a class="film-card__comments">${comments.length} ${LANG.COMMENTS}</a>
           <div class="film-card__controls">
             ${this.getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
           </div>
@@ -70,8 +71,10 @@ export default class FilmView extends AbstractView {
 
   updateControlsSection(...properties) {
     this._controlsSection = this.getElement().querySelector(`.film-card__controls`);
-    this._controlsSection.innerHTML = ``;
-    this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
+    if (this._controlsSection) {
+      this._controlsSection.innerHTML = ``;
+      this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
+    }
   }
 
   restoreHandlers() {

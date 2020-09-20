@@ -2,22 +2,27 @@ import FilmPresenter from "./film.js";
 import FilmListView from "../view/list.js";
 import MoreButtonView from "../view/more-button.js";
 import EmptyListView from "../view/empty-list.js";
+import LoadingView from "../view/loading.js";
 import {render, remove} from "../utils/render.js";
 import {FILMS_NUMBER_PER_STEP, UPDATE_TYPE} from "../const.js";
 import {LANG} from "../lang.js";
 import {filter} from "../utils/filter.js";
 
 export default class FilmListPresenter {
-  constructor(filmListContainer, filmsModel, navigationModel) {
+  constructor(filmListContainer, filmsModel, navigationModel, api) {
     this._filmListContainer = filmListContainer;
     this._filmsModel = filmsModel;
     this._navigationModel = navigationModel;
+    this._api = api;
 
     this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;
     this._mainFilmListComponent = new FilmListView(false, LANG.ALL_MOVIES_TITLE);
     this._moreButtonComponent = new MoreButtonView();
     this._emptyListComponent = new EmptyListView();
+    this._loadingComponent = new LoadingView();
+
     this._filmPresenter = {};
+    this._isLoading = true;
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -74,7 +79,16 @@ export default class FilmListPresenter {
     render(this._filmListContainer, this._emptyListComponent);
   }
 
+  _renderLoading() {
+    render(this._filmListContainer, this._loadingComponent);
+  }
+
   _renderFilmList() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const films = this._getFilms();
     const filmsCount = films.length;
 
@@ -91,7 +105,7 @@ export default class FilmListPresenter {
 
   _getFilms() {
     const categoryName = this._navigationModel.getFilter();
-    const films = this._filmsModel.getItems();
+    const films = this._filmsModel.getFilms();
     const filteredFilms = filter[categoryName](films);
 
     return filteredFilms;
@@ -102,7 +116,14 @@ export default class FilmListPresenter {
   }
 
   _handleModelEvent(updateType) {
+    console.log(updateType);
     switch (updateType) {
+      case UPDATE_TYPE.INIT:
+        this._isLoading = false;
+        this._clearBoard();
+        this._renderFilmList();
+        this._navigationModel.updateCounters();
+        break;
       case UPDATE_TYPE.MINOR:
         this._clearBoard();
         this._renderFilmList();
@@ -121,6 +142,7 @@ export default class FilmListPresenter {
 
     remove(this._moreButtonComponent);
     remove(this._emptyListComponent);
+    remove(this._loadingComponent);
 
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;

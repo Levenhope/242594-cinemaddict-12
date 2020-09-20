@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {getReadableDate} from "../utils/film.js";
+import {getReadableDate, getReadableDuration} from "../utils/film.js";
 import {LANG} from "../lang.js";
 import {RenderPosition} from "../utils/render.js";
 
@@ -33,7 +33,7 @@ export default class DetailModalView extends AbstractView {
             <div class="film-details__info-wrap">
               <div class="film-details__poster">
                 <img class="film-details__poster-img" src="${poster}" alt="">
-                <p class="film-details__age">${age}</p>
+                <p class="film-details__age">${age}+</p>
               </div>
               <div class="film-details__info">
                 <div class="film-details__info-head">
@@ -52,11 +52,11 @@ export default class DetailModalView extends AbstractView {
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.WRITERS}</td>
-                    <td class="film-details__cell">${writers}</td>
+                    <td class="film-details__cell">${writers.join(`, `)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.ACTORS}</td>
-                    <td class="film-details__cell">${actors}</td>
+                    <td class="film-details__cell">${actors.join(`, `)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.RELEASE_DATE}</td>
@@ -64,7 +64,7 @@ export default class DetailModalView extends AbstractView {
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.RUNTIME}</td>
-                    <td class="film-details__cell">${duration}</td>
+                    <td class="film-details__cell">${getReadableDuration(duration)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.COUNTRY}</td>
@@ -96,8 +96,10 @@ export default class DetailModalView extends AbstractView {
 
   updateControlsSection(...properties) {
     this._controlsSection = this.getElement().querySelector(`.film-details__controls`);
-    this._controlsSection.innerHTML = ``;
-    this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
+    if (this._controlsSection) {
+      this._controlsSection.innerHTML = ``;
+      this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
+    }
   }
 
   setCloseButtonClickHandler(callback) {

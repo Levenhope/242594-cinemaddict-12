@@ -1,3 +1,6 @@
+export const AUTHORIZATION = `Basic dfhsdkjfhsdf74r3`;
+export const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
+
 export const FILMS_NUMBER_MAIN = 17;
 export const FILMS_NUMBER_PER_STEP = 5;
 
@@ -71,7 +74,8 @@ export const EMOJIS = {
 export const UPDATE_TYPE = {
   NAVIGATION: `NAVIGATION`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 export const CATEGORIES = {

@@ -34,5 +34,6 @@ export const LANG = {
   FILMS_STATS_MESSAGE: `movies inside`,
   ALL_MOVIES_TITLE: `All movies. Upcoming`,
   TOP_RATED_TITLE: `Top rated`,
-  MOST_COMMENTED: `Most commented`
+  MOST_COMMENTED: `Most commented`,
+  LOADING: `Loading...`
 };

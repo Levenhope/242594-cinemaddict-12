@@ -3,9 +3,9 @@ import {LANG} from "../lang.js";
 import {EMOJIS, EMOJIS_DIRECTORY_PATH} from "../const.js";
 
 export default class CommentsView extends AbstractView {
-  constructor(commentsCount) {
+  constructor(comments) {
     super();
-    this._commentCount = commentsCount;
+    this._commentCount = comments.length;
   }
 
   getTemplate() {
