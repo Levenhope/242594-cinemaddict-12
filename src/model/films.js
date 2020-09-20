@@ -60,6 +60,26 @@ export default class FilmsModel extends Observer {
     return adaptedFilm;
   }
 
+  static adaptCommentToClient(comment) {
+    const adaptedComment = Object.assign(
+      {},
+      comment,
+      {
+        id: comment.id,
+        name: comment.author,
+        date: new Date(comment.date),
+        commentText: comment.comment,
+        emoji: comment.emotion
+      }
+    );
+
+    delete adaptedComment.author;
+    delete adaptedComment.comment;
+    delete adaptedComment.emotion;
+
+    return adaptedComment;
+  }
+
   static adaptToServer(film) {
     const adaptedFilm = Object.assign(
       {},

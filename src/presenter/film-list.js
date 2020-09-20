@@ -48,7 +48,7 @@ export default class FilmListPresenter {
   }
 
   _renderFilm(boardFilm, parent) {
-    const filmPresenter = new FilmPresenter(boardFilm, parent, this._handleModeChange, this._handleModelEvent);
+    const filmPresenter = new FilmPresenter(boardFilm, parent, this._handleModeChange, this._handleModelEvent, this._api);
     filmPresenter.init();
 
     this._filmPresenter[boardFilm.id] = filmPresenter;

@@ -1,20 +1,21 @@
 import he from "he";
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
+import {EMOJIS_DIRECTORY_PATH} from "../const.js";
+import {EMOJIS} from "../const";
 
 export default class CommentItemView extends AbstractView {
   constructor(comment) {
     super();
-    this._commentId = comment[0];
-    this._commentInfo = comment[1];
+    this._comment = comment;
   }
 
   getTemplate() {
-    const {name, date, commentText, emoji} = this._commentInfo;
+    const {id, name, date, commentText, emoji} = this._comment;
     return (
-      `<li class="film-details__comment" id="${this._commentId}">
+      `<li class="film-details__comment" id="${id}">
         <span class="film-details__comment-emoji">
-          <img src="${emoji}" width="55" height="55" alt="emoji">
+          <img src="${EMOJIS_DIRECTORY_PATH}${EMOJIS[emoji]}" width="55" height="55" alt="emoji-${emoji}">
         </span>
         <div>
           <p class="film-details__comment-text">${he.encode(commentText)}</p>
