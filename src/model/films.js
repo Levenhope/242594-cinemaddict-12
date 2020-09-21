@@ -60,26 +60,6 @@ export default class FilmsModel extends Observer {
     return adaptedFilm;
   }
 
-  static adaptCommentToClient(comment) {
-    const adaptedComment = Object.assign(
-      {},
-      comment,
-      {
-        id: comment.id,
-        name: comment.author,
-        date: new Date(comment.date),
-        commentText: comment.comment,
-        emoji: comment.emotion
-      }
-    );
-
-    delete adaptedComment.author;
-    delete adaptedComment.comment;
-    delete adaptedComment.emotion;
-
-    return adaptedComment;
-  }
-
   static adaptToServer(film) {
     const adaptedFilm = Object.assign(
       {},
@@ -92,7 +72,7 @@ export default class FilmsModel extends Observer {
         "film_info.total_rating": film.rating,
         "film_info.release.date": film.date.toISOString(),
         "film_info.runtime": film.duration,
-        "film.film_info.genre": film.genres.split(' '),
+        "film.film_info.genre": film.genres,
         "film_info.description": film.description,
         "film_info.director": film.director,
         "film_info.writers": film.writers,

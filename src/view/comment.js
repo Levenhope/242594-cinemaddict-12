@@ -21,7 +21,7 @@ export default class CommentItemView extends AbstractView {
           <p class="film-details__comment-text">${he.encode(commentText)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
-            <span class="film-details__comment-day">${date}</span>
+            <span class="film-details__comment-day">${date.toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``)}</span>
             <button class="film-details__comment-delete">${LANG.DELETE}</button>
           </p>
         </div>

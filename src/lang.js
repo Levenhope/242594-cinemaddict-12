@@ -35,5 +35,6 @@ export const LANG = {
   ALL_MOVIES_TITLE: `All movies. Upcoming`,
   TOP_RATED_TITLE: `Top rated`,
   MOST_COMMENTED: `Most commented`,
-  LOADING: `Loading...`
+  LOADING: `Loading...`,
+  SERVER_ERROR: `Server error`
 };

@@ -55,6 +55,7 @@ export default class FilmPresenter {
     this._filmComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
       this._changeData(UPDATE_TYPE.MINOR);
+      this._api.updateFilm(this._film);
     });
   }
 
@@ -62,6 +63,7 @@ export default class FilmPresenter {
     this._filmComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
       this._changeData(UPDATE_TYPE.MINOR);
+      this._api.updateFilm(this._film);
     });
   }
 
@@ -69,6 +71,7 @@ export default class FilmPresenter {
     this._filmComponent.setHistoryClickHandler(() => {
       this._film.isInHistory = !this._film.isInHistory;
       this._changeData(UPDATE_TYPE.MINOR);
+      this._api.updateFilm(this._film);
     });
   }
 }

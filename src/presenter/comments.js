@@ -2,7 +2,8 @@ import CommentsView from "../view/comments.js";
 import {remove, render, replace} from "../utils/render.js";
 import CommentItemView from "../view/comment.js";
 import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE} from "../const.js";
-import CommentsModel from "../model/comments";
+import CommentsModel from "../model/comments.js";
+import {LANG} from "../lang.js";
 
 export default class CommentsPresenter {
   constructor(film, api, parentModal, changeData) {
@@ -24,12 +25,11 @@ export default class CommentsPresenter {
   }
 
   _setCommentsList() {
-    render(this._commentsContainer, this._commentsComponent);
-    this._commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
-
     this._api.getComments(this._film.id)
       .then((comments) => {this._commentsModel.setComments(UPDATE_TYPE.MINOR, comments)})
       .then(() => {
+        render(this._commentsContainer, this._commentsComponent);
+        this._commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
         this._filmComments = this._commentsModel.getComments();
         for (let i = 0; i < this._filmComments.length; i++) {
           const commentItemComponent = new CommentItemView(this._filmComments[i]);
@@ -38,6 +38,8 @@ export default class CommentsPresenter {
         }
         this._setDeleteClickHandlers();
         this._setAddFormActions();
+      }).catch(() => {
+        this._commentsContainer.getElement().innerHTML(LANG.SERVER_ERROR);
       });
   }
 
