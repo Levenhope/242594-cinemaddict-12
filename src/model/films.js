@@ -16,8 +16,8 @@ export default class FilmsModel extends Observer {
   }
 
   static adaptToClient(film) {
+    console.log(film);
     const adaptedFilm = Object.assign(
-        {},
         film,
         {
           id: film.id,
@@ -40,19 +40,6 @@ export default class FilmsModel extends Observer {
         }
     );
 
-    delete adaptedFilm.film_info.poster;
-    delete adaptedFilm.film_info.title;
-    delete adaptedFilm.film_info.alternative_title;
-    delete adaptedFilm.film_info.total_rating;
-    delete adaptedFilm.film_info.release.date;
-    delete adaptedFilm.film_info.runtime;
-    delete adaptedFilm.film_info.genre;
-    delete adaptedFilm.film_info.description;
-    delete adaptedFilm.film_info.director;
-    delete adaptedFilm.film_info.writers;
-    delete adaptedFilm.film_info.actors;
-    delete adaptedFilm.film_info.release.release_country;
-    delete adaptedFilm.film_info.age_rating;
     delete adaptedFilm.user_details.watchlist;
     delete adaptedFilm.user_details.already_watched;
     delete adaptedFilm.user_details.favorite;
@@ -62,42 +49,16 @@ export default class FilmsModel extends Observer {
 
   static adaptToServer(film) {
     const adaptedFilm = Object.assign(
-        {},
         film,
         {
-          "id": film.id,
-          "film_info.poster": film.poster,
-          "film_info.title": film.title,
-          "film_info.alternative_title": film.originalTitle,
-          "film_info.total_rating": film.rating,
-          "film_info.release.date": film.date.toISOString(),
-          "film_info.runtime": film.duration,
-          "film.film_info.genre": film.genres,
-          "film_info.description": film.description,
-          "film_info.director": film.director,
-          "film_info.writers": film.writers,
-          "film_info.actors": film.actors,
-          "film_info.release.release_country": film.country,
-          "film_info.age_rating": film.age,
-          "user_details.watchlist": film.isInWatchlist,
-          "user_details.already_watched": film.isInHistory,
-          "user_details.favorite": film.isInFavorites
+          user_details: {
+            watchlist: film.isInWatchlist,
+            already_watched: film.isInHistory,
+            favorite: film.isInFavorites
+          }
         }
     );
 
-    delete adaptedFilm.poster;
-    delete adaptedFilm.title;
-    delete adaptedFilm.originalTitle;
-    delete adaptedFilm.rating;
-    delete adaptedFilm.date;
-    delete adaptedFilm.duration;
-    delete adaptedFilm.genres;
-    delete adaptedFilm.description;
-    delete adaptedFilm.director;
-    delete adaptedFilm.writers;
-    delete adaptedFilm.actors;
-    delete adaptedFilm.country;
-    delete adaptedFilm.age;
     delete adaptedFilm.isInWatchlist;
     delete adaptedFilm.isInHistory;
     delete adaptedFilm.isInFavorites;

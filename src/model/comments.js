@@ -16,7 +16,8 @@ export default class CommentsModel extends Observer {
   }
 
   static adaptCommentToClient(comment) {
-    const adaptedComment = Object.assign({}, comment,
+    const adaptedComment = Object.assign(
+        {},
         {
           id: comment.id,
           name: comment.author,
