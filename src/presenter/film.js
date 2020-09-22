@@ -54,24 +54,27 @@ export default class FilmPresenter {
   _setWatchlistToggleHandler() {
     this._filmComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
-      this._changeData(UPDATE_TYPE.MINOR);
-      this._api.updateFilm(this._film);
+      this._api.updateFilm(this._film).then(() => {
+        this._changeData(UPDATE_TYPE.MINOR);
+      });
     });
   }
 
   _setFavoriteToggleHandler() {
     this._filmComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
-      this._changeData(UPDATE_TYPE.MINOR);
-      this._api.updateFilm(this._film);
+      this._api.updateFilm(this._film).then(() => {
+        this._changeData(UPDATE_TYPE.MINOR);
+      });
     });
   }
 
   _setHistoryToggleHandler() {
     this._filmComponent.setHistoryClickHandler(() => {
       this._film.isInHistory = !this._film.isInHistory;
-      this._changeData(UPDATE_TYPE.MINOR);
-      this._api.updateFilm(this._film);
+      this._api.updateFilm(this._film).then(() => {
+        this._changeData(UPDATE_TYPE.MINOR);
+      });
     });
   }
 }

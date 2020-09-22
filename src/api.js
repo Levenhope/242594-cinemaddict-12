@@ -1,5 +1,6 @@
 import FilmsModel from "./model/films.js";
 import CommentsModel from "./model/comments.js";
+import {UPDATE_TYPE} from "./const";
 
 const Method = {
   GET: `GET`,

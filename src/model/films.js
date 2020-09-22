@@ -16,7 +16,6 @@ export default class FilmsModel extends Observer {
   }
 
   static adaptToClient(film) {
-    console.log(film);
     const adaptedFilm = Object.assign(
         film,
         {
@@ -40,10 +39,6 @@ export default class FilmsModel extends Observer {
         }
     );
 
-    delete adaptedFilm.user_details.watchlist;
-    delete adaptedFilm.user_details.already_watched;
-    delete adaptedFilm.user_details.favorite;
-
     return adaptedFilm;
   }
 
@@ -51,17 +46,14 @@ export default class FilmsModel extends Observer {
     const adaptedFilm = Object.assign(
         film,
         {
-          user_details: {
-            watchlist: film.isInWatchlist,
-            already_watched: film.isInHistory,
-            favorite: film.isInFavorites
+          "user_details": {
+            "watchlist": film.isInWatchlist,
+            "already_watched": film.isInHistory,
+            "favorite": film.isInFavorites,
+            "watching_date": film.user_details.watching_date
           }
         }
     );
-
-    delete adaptedFilm.isInWatchlist;
-    delete adaptedFilm.isInHistory;
-    delete adaptedFilm.isInFavorites;
 
     return adaptedFilm;
   }
