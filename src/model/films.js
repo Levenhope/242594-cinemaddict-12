@@ -17,27 +17,27 @@ export default class FilmsModel extends Observer {
 
   static adaptToClient(film) {
     const adaptedFilm = Object.assign(
-      {},
-      film,
-      {
-        id: film.id,
-        poster: film.film_info.poster,
-        title: film.film_info.title,
-        originalTitle: film.film_info.alternative_title,
-        rating: film.film_info.total_rating,
-        date: new Date(film.film_info.release.date),
-        duration: film.film_info.runtime,
-        genres: film.film_info.genre,
-        description: film.film_info.description,
-        director: film.film_info.director,
-        writers: film.film_info.writers,
-        actors: film.film_info.actors,
-        country: film.film_info.release.release_country,
-        age: film.film_info.age_rating,
-        isInWatchlist: film.user_details.watchlist,
-        isInHistory: film.user_details.already_watched,
-        isInFavorites: film.user_details.favorite
-      }
+        {},
+        film,
+        {
+          id: film.id,
+          poster: film.film_info.poster,
+          title: film.film_info.title,
+          originalTitle: film.film_info.alternative_title,
+          rating: film.film_info.total_rating,
+          date: new Date(film.film_info.release.date),
+          duration: film.film_info.runtime,
+          genres: film.film_info.genre,
+          description: film.film_info.description,
+          director: film.film_info.director,
+          writers: film.film_info.writers,
+          actors: film.film_info.actors,
+          country: film.film_info.release.release_country,
+          age: film.film_info.age_rating,
+          isInWatchlist: film.user_details.watchlist,
+          isInHistory: film.user_details.already_watched,
+          isInFavorites: film.user_details.favorite
+        }
     );
 
     delete adaptedFilm.film_info.poster;
@@ -62,27 +62,27 @@ export default class FilmsModel extends Observer {
 
   static adaptToServer(film) {
     const adaptedFilm = Object.assign(
-      {},
-      film,
-      {
-        "id": film.id,
-        "film_info.poster": film.poster,
-        "film_info.title": film.title,
-        "film_info.alternative_title": film.originalTitle,
-        "film_info.total_rating": film.rating,
-        "film_info.release.date": film.date.toISOString(),
-        "film_info.runtime": film.duration,
-        "film.film_info.genre": film.genres,
-        "film_info.description": film.description,
-        "film_info.director": film.director,
-        "film_info.writers": film.writers,
-        "film_info.actors": film.actors,
-        "film_info.release.release_country": film.country,
-        "film_info.age_rating": film.age,
-        "user_details.watchlist": film.isInWatchlist,
-        "user_details.already_watched": film.isInHistory,
-        "user_details.favorite": film.isInFavorites
-      }
+        {},
+        film,
+        {
+          "id": film.id,
+          "film_info.poster": film.poster,
+          "film_info.title": film.title,
+          "film_info.alternative_title": film.originalTitle,
+          "film_info.total_rating": film.rating,
+          "film_info.release.date": film.date.toISOString(),
+          "film_info.runtime": film.duration,
+          "film.film_info.genre": film.genres,
+          "film_info.description": film.description,
+          "film_info.director": film.director,
+          "film_info.writers": film.writers,
+          "film_info.actors": film.actors,
+          "film_info.release.release_country": film.country,
+          "film_info.age_rating": film.age,
+          "user_details.watchlist": film.isInWatchlist,
+          "user_details.already_watched": film.isInHistory,
+          "user_details.favorite": film.isInFavorites
+        }
     );
 
     delete adaptedFilm.poster;

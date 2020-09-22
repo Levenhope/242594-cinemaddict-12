@@ -116,7 +116,6 @@ export default class FilmListPresenter {
   }
 
   _handleModelEvent(updateType) {
-    console.log(updateType);
     switch (updateType) {
       case UPDATE_TYPE.INIT:
         this._isLoading = false;

@@ -1,13 +1,7 @@
 import DetailModalView from "../view/detail-modal.js";
-import {render, remove, replace} from "../utils/render.js";
-import CommentsView from "../view/comments.js";
-import CommentItemView from "../view/comment.js";
-import {UPDATE_TYPE, EMOJIS_DIRECTORY_PATH, EMOJIS} from "../const";
+import {remove} from "../utils/render.js";
+import {UPDATE_TYPE} from "../const";
 import CommentsPresenter from "./comments";
-import FilmsModel from "../model/films";
-import NavigationModel from "../model/navigation";
-import FilmListPresenter from "./film-list";
-import NavigationPresenter from "./navigation";
 
 export default class DetailModalPresenter {
   constructor(film, changeData, api) {

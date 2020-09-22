@@ -26,7 +26,9 @@ export default class CommentsPresenter {
 
   _setCommentsList() {
     this._api.getComments(this._film.id)
-      .then((comments) => {this._commentsModel.setComments(UPDATE_TYPE.MINOR, comments)})
+      .then((comments) => {
+        this._commentsModel.setComments(UPDATE_TYPE.MINOR, comments);
+      })
       .then(() => {
         render(this._commentsContainer, this._commentsComponent);
         this._commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
