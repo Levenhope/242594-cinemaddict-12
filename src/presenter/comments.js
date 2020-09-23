@@ -1,7 +1,7 @@
 import CommentsView from "../view/comments.js";
 import {remove, render, replace} from "../utils/render.js";
 import CommentItemView from "../view/comment.js";
-import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE} from "../const.js";
+import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE, ERROR_ANIMATION_TIMEOUT, EMOJI_WIDTH, EMOJI_HEIGHT, DEFAULT_USER_NAME, RENDER_POSITION} from "../const.js";
 import CommentsModel from "../model/comments.js";
 import {LANG} from "../lang.js";
 
@@ -56,7 +56,7 @@ export default class CommentsPresenter {
       let emojiName = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
       emojiName = emojiName.substr(6, emojiName.length + 1);
       emoji = EMOJIS_DIRECTORY_PATH + Object.entries(EMOJIS).filter((item) => item[0] === emojiName)[0][1];
-      chosenEmojiContainer.insertAdjacentHTML(`beforeend`, `<img src="${emoji}" width="55" height="55" alt="emoji-${emojiName}">`);
+      chosenEmojiContainer.insertAdjacentHTML(RENDER_POSITION.BEFORE_END, `<img src="${emoji}" width="${EMOJI_WIDTH}" height="${EMOJI_HEIGHT}" alt="emoji-${emojiName}">`);
     });
 
     this._commentsComponent.setSubmitHandler((e) => {
@@ -66,21 +66,21 @@ export default class CommentsPresenter {
         commentInputElement.classList.remove(`error-animate`);
         setTimeout(function () {
           commentInputElement.classList.add(`error-animate`);
-        }, 10);
+        }, ERROR_ANIMATION_TIMEOUT);
         return;
       }
       if (emoji === ``) {
         emojisListElement.classList.remove(`error-animate`);
         setTimeout(function () {
           emojisListElement.classList.add(`error-animate`);
-        }, 10);
+        }, ERROR_ANIMATION_TIMEOUT);
         return;
       }
 
       const date = new Date().toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``);
 
       this._filmComments.push({
-        name: `You`,
+        name: DEFAULT_USER_NAME,
         date,
         commentText,
         emoji

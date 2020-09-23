@@ -4,7 +4,6 @@ import ProfileView from "./view/profile.js";
 import SortView from "./view/sort.js";
 import FilmListsContainerView from "./view/lists-container.js";
 import StatsView from "./view/stats.js";
-//import {generateFilm} from "./mock/film.js";
 import {render} from "./utils/render.js";
 import FilmListPresenter from "./presenter/film-list.js";
 import NavigationPresenter from "./presenter/navigation.js";
@@ -37,7 +36,6 @@ render(siteMainElement, filmsContainerComponent);
 api.getFilms().then((films) => {
   filmsModel.setFilms(UPDATE_TYPE.INIT, films);
   render(siteFooterStatsElement, new StatsView(films.length));
-}).catch((error) => {
-  console.log('error', error);
+}).catch(() => {
   filmsModel.setFilms(UPDATE_TYPE.INIT, []);
 });

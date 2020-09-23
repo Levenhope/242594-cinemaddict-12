@@ -97,7 +97,7 @@ export default class FilmListPresenter {
     } else {
       this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)), this._mainFilmListComponent);
 
-      if (filmsCount > FILMS_NUMBER_PER_STEP) {
+      if (filmsCount > this._renderedFilmsCount) {
         this._renderMoreButton();
       }
     }

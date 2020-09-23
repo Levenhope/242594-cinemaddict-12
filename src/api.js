@@ -19,20 +19,20 @@ export default class Api {
   }
 
   getFilms() {
-    return this._load({url: `movies`})
+    return this._load({uri: `movies`})
       .then(Api.toJSON)
       .then((films) => films.map(FilmsModel.adaptToClient));
   }
 
   getComments(filmId) {
-    return this._load({url: `comments/` + filmId})
+    return this._load({uri: `comments/` + filmId})
       .then(Api.toJSON)
       .then((comments) => comments.map(CommentsModel.adaptCommentToClient));
   }
 
   updateFilm(film) {
     return this._load({
-      url: `movies/${film.id}`,
+      uri: `movies/${film.id}`,
       method: Method.PUT,
       body: JSON.stringify(FilmsModel.adaptToServer(film)),
       headers: new Headers({"Content-Type": `application/json`})
@@ -42,7 +42,7 @@ export default class Api {
   }
 
   _load({
-          url,
+          uri,
           method = Method.GET,
           body = null,
           headers = new Headers()
@@ -50,7 +50,7 @@ export default class Api {
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
-      `${this._endPoint}/${url}`,
+      `${this._endPoint}/${uri}`,
       {method, body, headers}
     )
       .then(Api.checkStatus)

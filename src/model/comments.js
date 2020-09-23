@@ -16,21 +16,12 @@ export default class CommentsModel extends Observer {
   }
 
   static adaptCommentToClient(comment) {
-    const adaptedComment = Object.assign(
-        {},
-        {
-          id: comment.id,
-          name: comment.author,
-          date: new Date(comment.date),
-          commentText: comment.comment,
-          emoji: comment.emotion
-        }
-    );
-
-    delete adaptedComment.author;
-    delete adaptedComment.comment;
-    delete adaptedComment.emotion;
-
-    return adaptedComment;
+    return {
+      id: comment.id,
+      name: comment.author,
+      date: new Date(comment.date),
+      commentText: comment.comment,
+      emoji: comment.emotion
+    };
   }
 }

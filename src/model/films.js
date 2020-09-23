@@ -16,7 +16,7 @@ export default class FilmsModel extends Observer {
   }
 
   static adaptToClient(film) {
-    const adaptedFilm = Object.assign(
+    return Object.assign(
         film,
         {
           id: film.id,
@@ -38,12 +38,10 @@ export default class FilmsModel extends Observer {
           isInFavorites: film.user_details.favorite
         }
     );
-
-    return adaptedFilm;
   }
 
   static adaptToServer(film) {
-    const adaptedFilm = Object.assign(
+    return Object.assign(
         film,
         {
           "user_details": {
@@ -54,7 +52,5 @@ export default class FilmsModel extends Observer {
           }
         }
     );
-
-    return adaptedFilm;
   }
 }

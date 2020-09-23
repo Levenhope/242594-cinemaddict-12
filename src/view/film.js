@@ -1,7 +1,7 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 import {getReadableDuration} from "../utils/film.js";
-import {RenderPosition} from "../utils/render.js";
+import {RENDER_POSITION} from "../const.js";
 
 export default class FilmView extends AbstractView {
   constructor(film) {
@@ -73,7 +73,7 @@ export default class FilmView extends AbstractView {
     this._controlsSection = this.getElement().querySelector(`.film-card__controls`);
     if (this._controlsSection) {
       this._controlsSection.innerHTML = ``;
-      this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
+      this._controlsSection.insertAdjacentHTML(RENDER_POSITION.BEFORE_END, this.getControlsTemplate(...properties));
     }
   }
 

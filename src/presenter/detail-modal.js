@@ -45,21 +45,27 @@ export default class DetailModalPresenter {
   _setWatchlistToggleHandler() {
     this._detailModalComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
-      this.update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      this._api.updateFilm(this._film).then(() => {
+        this.update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      });
     });
   }
 
   _setFavoriteToggleHandler() {
     this._detailModalComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
-      this.update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      this._api.updateFilm(this._film).then(() => {
+        this.update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      });
     });
   }
 
   _setHistoryToggleHandler() {
     this._detailModalComponent.setHistoryClickHandler(() => {
       this._film.isInHistory = !this._film.isInHistory;
-      this.update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      this._api.updateFilm(this._film).then(() => {
+        this.update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+      });
     });
   }
 

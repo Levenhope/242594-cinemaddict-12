@@ -1,7 +1,7 @@
 import AbstractView from "./abstract.js";
 import {getReadableDate, getReadableDuration} from "../utils/film.js";
 import {LANG} from "../lang.js";
-import {RenderPosition} from "../utils/render.js";
+import {RENDER_POSITION} from "../const.js";
 
 export default class DetailModalView extends AbstractView {
   constructor(film) {
@@ -87,7 +87,6 @@ export default class DetailModalView extends AbstractView {
             </section>
           </div>
           <div class="form-details__bottom-container">
-            
           </div>
         </form>
       </section>`
@@ -98,7 +97,7 @@ export default class DetailModalView extends AbstractView {
     this._controlsSection = this.getElement().querySelector(`.film-details__controls`);
     if (this._controlsSection) {
       this._controlsSection.innerHTML = ``;
-      this._controlsSection.insertAdjacentHTML(RenderPosition.beforeEnd, this.getControlsTemplate(...properties));
+      this._controlsSection.insertAdjacentHTML(RENDER_POSITION.BEFORE_END, this.getControlsTemplate(...properties));
     }
   }
 
