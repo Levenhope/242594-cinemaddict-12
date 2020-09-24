@@ -1,11 +1,7 @@
 import AbstractView from "../view/abstract.js";
+import {RENDER_POSITION} from "../const.js";
 
-export const RenderPosition = {
-  afterBegin: `afterbegin`,
-  beforeEnd: `beforeend`
-};
-
-export const render = (container, element, place = RenderPosition.beforeEnd) => {
+export const render = (container, element, place = RENDER_POSITION.BEFORE_END) => {
   if (container instanceof AbstractView) {
     container = container.getElement();
   }
@@ -15,28 +11,20 @@ export const render = (container, element, place = RenderPosition.beforeEnd) => 
   }
 
   switch (place) {
-    case RenderPosition.afterBegin:
+    case RENDER_POSITION.AFTER_BEGIN:
       container.prepend(element);
       break;
-    case RenderPosition.beforeEnd:
+    case RENDER_POSITION.BEFORE_END:
       container.append(element);
       break;
   }
 };
 
-export const renderTemplate = (container, template, place) => {
-  if (container instanceof AbstractView) {
-    container = container.getElement();
-  }
-
-  container.insertAdjacentHTML(place, template);
-};
-
 export const createElement = (template) => {
-  const newElement = document.createElement(`div`); // 1
-  newElement.innerHTML = template; // 2
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
 
-  return newElement.firstChild; // 3
+  return newElement.firstChild;
 };
 
 export const remove = (component) => {

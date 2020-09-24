@@ -1,6 +1,8 @@
 import he from "he";
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
+import {EMOJIS_DIRECTORY_PATH} from "../const.js";
+import {EMOJIS} from "../const";
 
 export default class CommentItemView extends AbstractView {
   constructor(comment) {
@@ -9,17 +11,17 @@ export default class CommentItemView extends AbstractView {
   }
 
   getTemplate() {
-    const {name, date, commentText, emoji} = this._comment;
+    const {id, name, date, commentText, emoji} = this._comment;
     return (
-      `<li class="film-details__comment">
+      `<li class="film-details__comment" id="${id}">
         <span class="film-details__comment-emoji">
-          <img src="${emoji}" width="55" height="55" alt="emoji-smile">
+          <img src="${EMOJIS_DIRECTORY_PATH}${EMOJIS[emoji]}" width="55" height="55" alt="emoji-${emoji}">
         </span>
         <div>
           <p class="film-details__comment-text">${he.encode(commentText)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
-            <span class="film-details__comment-day">${date}</span>
+            <span class="film-details__comment-day">${date.toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``)}</span>
             <button class="film-details__comment-delete">${LANG.DELETE}</button>
           </p>
         </div>

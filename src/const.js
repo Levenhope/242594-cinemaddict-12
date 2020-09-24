@@ -1,65 +1,12 @@
-export const FILMS_NUMBER_MAIN = 17;
+export const AUTHORIZATION = `Basic dfhsdkjfhsdf74r3`;
+export const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
+
 export const FILMS_NUMBER_PER_STEP = 5;
+export const ERROR_ANIMATION_TIMEOUT = 10;
+export const EMOJI_WIDTH = 55;
+export const EMOJI_HEIGHT = 55;
 
-const POSTERS_DIRECTORY_PATH = `./images/posters/`;
 export const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
-
-export const POSTERS = [
-  `the-dance-of-life.jpg`,
-  `sagebrush-trail.jpg`,
-  `the-man-with-the-golden-arm.jpg`,
-  `santa-claus-conquers-the-martians.jpg`,
-  `popeye-meets-sinbad.png`,
-  `the-great-flamarion.jpg`,
-  `made-for-each-other.png`,
-].map((filename) => `${POSTERS_DIRECTORY_PATH}${filename}`);
-
-export const TITLES = [
-  `The Dance of Life`,
-  `Sagebrush trail`,
-  `The Man with the Golden Arm`,
-  `Santa Claus Conquers the Martians`,
-  `Popeye the Sailor Meets Sindbad the Sailor`,
-  `The Great Flamarion`,
-  `Made for Each Other`
-];
-
-export const GENRES = [
-  `Musical`,
-  `Western`,
-  `Drama`,
-  `Comedy`,
-  `Cartoon`,
-  `Mystery`
-];
-
-export const DESPRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
-
-export const NAMES = [
-  `Anthony Mann`,
-  `Anne Wigton`,
-  `Heinz Herald`,
-  `Richard Weil`,
-  `Erich von Stroheim`,
-  `Mary Beth Hughes`,
-  `Dan Duryea`
-];
-
-export const COUNTRIES = [
-  `Russia`,
-  `USA`,
-  `France`,
-  `Italy`,
-  `Germany`
-];
-
-export const AGES = [
-  `0+`,
-  `6+`,
-  `12+`,
-  `16+`,
-  `18+`
-];
 
 export const EMOJIS = {
   angry: `angry.png`,
@@ -71,7 +18,8 @@ export const EMOJIS = {
 export const UPDATE_TYPE = {
   NAVIGATION: `NAVIGATION`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 export const CATEGORIES = {
@@ -80,3 +28,10 @@ export const CATEGORIES = {
   HISTORY: `history`,
   FAVORITES: `favorites`
 };
+
+export const RENDER_POSITION = {
+  AFTER_BEGIN: `afterbegin`,
+  BEFORE_END: `beforeend`
+};
+
+export const DEFAULT_USER_NAME = `You`;
