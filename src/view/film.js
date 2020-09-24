@@ -27,7 +27,7 @@ export default class FilmView extends AbstractView {
           <p class="film-card__info">
             <span class="film-card__year">${date.getFullYear()}</span>
             <span class="film-card__duration">${getReadableDuration(duration)}</span>
-            <span class="film-card__genre">${genres[0]}</span>
+            <span class="film-card__genre">${genres.length > 0 ? genres[0] : ``}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description.length > 140 ? description.substring(0, 140) + `...` : description}</p>

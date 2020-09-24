@@ -5,6 +5,8 @@ export const FILMS_NUMBER_PER_STEP = 5;
 export const ERROR_ANIMATION_TIMEOUT = 10;
 export const EMOJI_WIDTH = 55;
 export const EMOJI_HEIGHT = 55;
+export const EMOJI_WIDTH_SMALL = 30;
+export const EMOJI_HEIGHT_SMALL = 30;
 
 export const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
 
