@@ -1,12 +1,7 @@
 import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
 import {render, remove} from "../utils/render.js";
-import {UPDATE_TYPE} from "../const.js";
-
-const MODE = {
-  DEFAULT: `DEFAULT`,
-  MODAL: `MODAL`
-};
+import {UPDATE_TYPE, MODE} from "../const.js";
 
 export default class FilmPresenter {
   constructor(film, parent, changeMode, changeData, api) {

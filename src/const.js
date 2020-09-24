@@ -17,6 +17,11 @@ export const EMOJIS = {
   smile: `smile.png`
 };
 
+export const MODE = {
+  DEFAULT: `DEFAULT`,
+  MODAL: `MODAL`
+};
+
 export const UPDATE_TYPE = {
   NAVIGATION: `NAVIGATION`,
   MINOR: `MINOR`,
