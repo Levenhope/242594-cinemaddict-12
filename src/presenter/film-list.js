@@ -66,14 +66,14 @@ export default class FilmListPresenter {
     const filteredFilms = filter[categoryName](films);
 
     if (this._defaultFilmList === null) {
-      this._defaultFilmList = filteredFilms;
+      this._defaultFilmList = films;
     }
 
     switch (this._currentSortType) {
       case SORT_TYPE.DATE:
-        return filteredFilms.sort(sortDate);
+        return filteredFilms.slice().sort(sortDate);
       case SORT_TYPE.RATING:
-        return filteredFilms.sort(sortRating);
+        return filteredFilms.slice().sort(sortRating);
       case SORT_TYPE.DEFAULT:
         return filter[categoryName](this._defaultFilmList);
     }
