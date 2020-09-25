@@ -4,6 +4,7 @@ import CommentItemView from "../view/comment.js";
 import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE, ERROR_ANIMATION_TIMEOUT, EMOJI_WIDTH, EMOJI_HEIGHT, DEFAULT_USER_NAME, RENDER_POSITION} from "../const.js";
 import CommentsModel from "../model/comments.js";
 import {LANG} from "../lang.js";
+import moment from "moment";
 
 export default class CommentsPresenter {
   constructor(film, api, parentModal, changeData) {
@@ -41,7 +42,7 @@ export default class CommentsPresenter {
         this._setDeleteClickHandlers();
         this._setAddFormActions();
       }).catch(() => {
-        this._commentsContainer.getElement().innerHTML(LANG.SERVER_ERROR);
+        this._commentsContainer.prepend(`${LANG.SERVER_ERROR}`);
       });
   }
 
@@ -77,11 +78,9 @@ export default class CommentsPresenter {
         return;
       }
 
-      const date = new Date().toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``);
-
       this._filmComments.push({
         name: DEFAULT_USER_NAME,
-        date,
+        date: new Date(),
         commentText,
         emoji
       });

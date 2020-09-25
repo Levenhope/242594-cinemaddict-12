@@ -3,6 +3,7 @@ import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 import {EMOJIS_DIRECTORY_PATH} from "../const.js";
 import {EMOJIS} from "../const";
+import moment from "moment";
 
 export default class CommentItemView extends AbstractView {
   constructor(comment) {
@@ -21,7 +22,7 @@ export default class CommentItemView extends AbstractView {
           <p class="film-details__comment-text">${he.encode(commentText)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
-            <span class="film-details__comment-day">${date.toLocaleString(`en-US`, {hour12: false, day: `2-digit`, month: `2-digit`, year: `2-digit`, hour: `numeric`, minute: `numeric`}).split(`,`).join(``)}</span>
+            <span class="film-details__comment-day">${moment(date).format('L h:mm').humanize()}</span>
             <button class="film-details__comment-delete">${LANG.DELETE}</button>
           </p>
         </div>
