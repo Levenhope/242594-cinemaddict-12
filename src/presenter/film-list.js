@@ -75,8 +75,10 @@ export default class FilmListPresenter {
       case SORT_TYPE.RATING:
         return filteredFilms.sort(sortRating);
       case SORT_TYPE.DEFAULT:
-        return filter[categoryName](this._defaultFilmList)
+        return filter[categoryName](this._defaultFilmList);
     }
+
+    return filteredFilms;
   }
 
   _renderFilm(boardFilm, parent) {
