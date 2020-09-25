@@ -25,7 +25,7 @@ export default class Api {
   }
 
   getComments(filmId) {
-    return this._load({uri: `comments/` + filmId})
+    return this._load({uri: `comments/${filmId}`})
       .then(Api.toJSON)
       .then((comments) => comments.map(CommentsModel.adaptCommentToClient));
   }

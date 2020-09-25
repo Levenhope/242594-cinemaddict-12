@@ -1,6 +1,6 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
-import {EMOJIS, EMOJIS_DIRECTORY_PATH} from "../const.js";
+import {EMOJIS, EMOJIS_DIRECTORY_PATH, EMOJI_WIDTH_SMALL, EMOJI_HEIGHT_SMALL} from "../const.js";
 
 export default class CommentsView extends AbstractView {
   constructor(comments) {
@@ -24,7 +24,7 @@ export default class CommentsView extends AbstractView {
             ${Object.entries(EMOJIS).reduce((accumulator, [emojiName, fileName]) => accumulator + `
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiName}" value="${emojiName}">
               <label class="film-details__emoji-label" for="emoji-${emojiName}">
-                <img src="${EMOJIS_DIRECTORY_PATH + fileName}" width="30" height="30" alt="emoji-${emojiName}">
+                <img src="${EMOJIS_DIRECTORY_PATH}${fileName}" width="${EMOJI_WIDTH_SMALL}" height="${EMOJI_HEIGHT_SMALL}" alt="emoji-${emojiName}">
               </label>
             `, ``)}
           </div>

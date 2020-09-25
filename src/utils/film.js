@@ -5,7 +5,5 @@ export const getReadableDate = (date) => {
 };
 
 export const getReadableDuration = (minutes) => {
-  const durationHours = Math.floor(minutes / 60);
-  const durationMinutes = minutes % 60;
-  return (durationHours < 1 ? `` : durationHours + `h`) + (durationMinutes > 0 ? durationMinutes + `m` : ``);
+  return `${Math.floor(minutes / 60)}h${minutes % 60}m`;
 };
