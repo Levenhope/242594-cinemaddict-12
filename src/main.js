@@ -23,14 +23,13 @@ const filmsContainerComponent = new FilmListsContainerView();
 const filmsModel = new FilmsModel();
 const navigationModel = new NavigationModel();
 
-const filmListPresenter = new FilmListPresenter(filmsContainerComponent, filmsModel, navigationModel, api);
 const navigationPresenter = new NavigationPresenter(siteMainElement, navigationModel, filmsModel);
+const filmListPresenter = new FilmListPresenter(siteMainElement, filmsContainerComponent, filmsModel, navigationModel, api);
 
-filmListPresenter.init();
 navigationPresenter.init();
+filmListPresenter.init();
 
 render(siteHeaderElement, new ProfileView());
-render(siteMainElement, new SortView());
 render(siteMainElement, filmsContainerComponent);
 
 api.getFilms().then((films) => {
