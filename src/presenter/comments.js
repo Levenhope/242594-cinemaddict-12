@@ -4,7 +4,6 @@ import CommentItemView from "../view/comment.js";
 import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE, ERROR_ANIMATION_TIMEOUT, EMOJI_WIDTH, EMOJI_HEIGHT, DEFAULT_USER_NAME, RENDER_POSITION} from "../const.js";
 import CommentsModel from "../model/comments.js";
 import {LANG} from "../lang.js";
-import moment from "moment";
 
 export default class CommentsPresenter {
   constructor(film, api, parentModal, changeData) {

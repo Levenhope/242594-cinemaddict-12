@@ -61,7 +61,7 @@ export default class DetailModalView extends AbstractView {
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.RELEASE_DATE}</td>
-                    <td class="film-details__cell">${moment(date).format('d MMMM YYYY')}</td>
+                    <td class="film-details__cell">${moment(date).format(`d MMMM YYYY`)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.RUNTIME}</td>
