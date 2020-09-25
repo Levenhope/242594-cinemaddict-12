@@ -29,6 +29,12 @@ export const UPDATE_TYPE = {
   INIT: `INIT`
 };
 
+export const SORT_TYPE = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
+
 export const CATEGORIES = {
   ALL: `all`,
   WATCHLIST: `watchlist`,

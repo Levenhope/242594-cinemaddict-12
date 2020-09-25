@@ -1,6 +1,7 @@
 import NavigationView from "../view/navigation.js";
 import {render, replace, remove} from "../utils/render.js";
 import {UPDATE_TYPE} from "../const.js";
+import {RENDER_POSITION} from "../const";
 
 export default class NavigationPresenter {
   constructor(parent, navigationModel, filmsModel) {
@@ -27,7 +28,7 @@ export default class NavigationPresenter {
     this._navigationComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevNavigationComponent === null) {
-      render(this._parent, this._navigationComponent);
+      render(this._parent, this._navigationComponent, RENDER_POSITION.AFTER_BEGIN);
       return;
     }
 
