@@ -1,20 +1,123 @@
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
+import {getMostWatchedGenre, countWatchedFilmsInDateRange, getCurrentDate, getGenreStatistics} from "../utils/statistic.js";
 import moment from "moment";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-export default class StatisticView extends AbstractView {
-  constructor(filmsModel) {
+const renderGenresChart = (statisticCtx, films, dateFrom) => {
+  const BAR_HEIGHT = 50;
+  const genreStatistics = getGenreStatistics(films);
+
+  statisticCtx.height = BAR_HEIGHT * Object.values(genreStatistics).length;
+
+  return new Chart(statisticCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: Object.keys(genreStatistics),
+      datasets: [{
+        data: Object.values(genreStatistics),
+        backgroundColor: `#ffe800`,
+        hoverBackgroundColor: `#ffe800`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20
+          },
+          color: `#ffffff`,
+          anchor: 'start',
+          align: 'start',
+          offset: 40,
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 20
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 24
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    }
+  });
+};
+
+export default class StatisticView extends SmartView {
+  constructor(films) {
     super();
 
-    this._filmsModel = filmsModel;
+    this._data = {
+      films,
+      dateFrom: null,
+      dateTo: getCurrentDate()
+    };
+    this._genresChart = null;
+    this._dateChangeHandler = this._dateChangeHandler.bind(this);
+    this._setCharts();
+  }
 
-    this._userFilms = this._filmsModel.filter((film) => film.isInHistory);
-    this._totalDuration = this._userFilms.reduce((total, item) => {return total + item.duration}, 0);
-    this._topGenre = this._getMostWatchedGenre();
+  removeElement() {
+    super.removeElement();
+
+    if (this._genresChart !== null) {
+      this._genresChart = null;
+    }
+  }
+
+  restoreHandlers() {
+    this._setCharts();
+  }
+
+  _setCharts() {
+    if (this._genresChart !== null) {
+      this._genresChart = null;
+    }
+
+    const {films, dateFrom} = this._data;
+    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+    this._genresChart = renderGenresChart(statisticCtx, films, dateFrom);
+  }
+
+  _dateChangeHandler(dateFrom) {
+    if (!dateFrom) {
+      return;
+    }
+
+    this.updateData({
+      dateFrom
+    });
   }
 
   getTemplate() {
+    const userFilms = this._data.films.filter((film) => film.isInHistory);
+    const userWatchedFilmsDuration = userFilms.reduce((total, item) => {return total + item.duration}, 0);
+
     return (
       `<section class="statistic">
         <p class="statistic__rank">
@@ -45,15 +148,15 @@ export default class StatisticView extends AbstractView {
         <ul class="statistic__text-list">
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">You watched</h4>
-            <p class="statistic__item-text">${this._userFilms.length} <span class="statistic__item-description">movies</span></p>
+            <p class="statistic__item-text">${userFilms.length} <span class="statistic__item-description">movies</span></p>
           </li>
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">Total duration</h4>
-            <p class="statistic__item-text">${moment.duration(this._totalDuration, "minutes").hours()} <span class="statistic__item-description">h</span> ${moment.duration(this._totalDuration, "minutes").minutes()}<span class="statistic__item-description">m</span></p>
+            <p class="statistic__item-text">${moment.duration(userWatchedFilmsDuration, "m").hours()} <span class="statistic__item-description">h</span> ${moment.duration(userWatchedFilmsDuration, "m").minutes()}<span class="statistic__item-description">m</span></p>
           </li>
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">Top genre</h4>
-            <p class="statistic__item-text">${this._topGenre}</p>
+            <p class="statistic__item-text">${getMostWatchedGenre(userFilms)}</p>
           </li>
         </ul>
     
@@ -63,31 +166,5 @@ export default class StatisticView extends AbstractView {
     
       </section>`
     );
-  }
-
-  _getMostWatchedGenre() {
-    let genreStatistics = {};
-    let mostWatchedViews = 0;
-    let mostWatchedGenre = ``;
-
-    const userFilmsGenres = this._userFilms.reduce((allGenres, item) => {
-      for(let genre of item.genres) {
-        allGenres.push(genre);
-      }
-      return allGenres;
-    }, []);
-
-    userFilmsGenres.forEach((genre) => {
-      return genreStatistics[genre] = ( genreStatistics[genre] || 0 ) + 1;
-    });
-
-    for (let genre in genreStatistics) {
-      if (genreStatistics[genre] > mostWatchedViews) {
-        mostWatchedViews = genreStatistics[genre];
-        mostWatchedGenre = genre;
-      }
-    }
-
-   return mostWatchedGenre;
   }
 }
