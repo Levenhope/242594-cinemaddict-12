@@ -1,10 +1,17 @@
 import AbstractView from "./abstract.js";
+import moment from "moment";
+import Chart from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default class StatisticView extends AbstractView {
   constructor(filmsModel) {
     super();
 
     this._filmsModel = filmsModel;
+
+    this._userFilms = this._filmsModel.filter((film) => film.isInHistory);
+    this._totalDuration = this._userFilms.reduce((total, item) => {return total + item.duration}, 0);
+    this._topGenre = this._getMostWatchedGenre();
   }
 
   getTemplate() {
@@ -38,15 +45,15 @@ export default class StatisticView extends AbstractView {
         <ul class="statistic__text-list">
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">You watched</h4>
-            <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+            <p class="statistic__item-text">${this._userFilms.length} <span class="statistic__item-description">movies</span></p>
           </li>
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">Total duration</h4>
-            <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+            <p class="statistic__item-text">${moment.duration(this._totalDuration, "minutes").hours()} <span class="statistic__item-description">h</span> ${moment.duration(this._totalDuration, "minutes").minutes()}<span class="statistic__item-description">m</span></p>
           </li>
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">Top genre</h4>
-            <p class="statistic__item-text">Sci-Fi</p>
+            <p class="statistic__item-text">${this._topGenre}</p>
           </li>
         </ul>
     
@@ -56,5 +63,31 @@ export default class StatisticView extends AbstractView {
     
       </section>`
     );
+  }
+
+  _getMostWatchedGenre() {
+    let genreStatistics = {};
+    let mostWatchedViews = 0;
+    let mostWatchedGenre = ``;
+
+    const userFilmsGenres = this._userFilms.reduce((allGenres, item) => {
+      for(let genre of item.genres) {
+        allGenres.push(genre);
+      }
+      return allGenres;
+    }, []);
+
+    userFilmsGenres.forEach((genre) => {
+      return genreStatistics[genre] = ( genreStatistics[genre] || 0 ) + 1;
+    });
+
+    for (let genre in genreStatistics) {
+      if (genreStatistics[genre] > mostWatchedViews) {
+        mostWatchedViews = genreStatistics[genre];
+        mostWatchedGenre = genre;
+      }
+    }
+
+   return mostWatchedGenre;
   }
 }
