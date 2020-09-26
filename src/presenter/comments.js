@@ -40,6 +40,8 @@ export default class CommentsPresenter {
         }
         this._setDeleteClickHandlers();
         this._setAddFormActions();
+      }).catch(() => {
+        this._commentsContainer.prepend(`${LANG.SERVER_ERROR}`);
       });
   }
 
