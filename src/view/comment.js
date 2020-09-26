@@ -1,9 +1,9 @@
 import he from "he";
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
-import {EMOJIS_DIRECTORY_PATH} from "../const.js";
+import {EMOJIS_DIRECTORY_PATH, EMOJI_HEIGHT, EMOJI_WIDTH} from "../const.js";
 import {EMOJIS} from "../const";
-import moment from "moment";
+import {getHumanizedTimestamp} from "../utils/comment.js";
 
 export default class CommentItemView extends AbstractView {
   constructor(comment) {
@@ -16,13 +16,13 @@ export default class CommentItemView extends AbstractView {
     return (
       `<li class="film-details__comment" id="${id}">
         <span class="film-details__comment-emoji">
-          <img src="${EMOJIS_DIRECTORY_PATH}${EMOJIS[emoji]}" width="55" height="55" alt="emoji-${emoji}">
+          <img src="${EMOJIS_DIRECTORY_PATH}${EMOJIS[emoji]}" width="${EMOJI_WIDTH}" height="${EMOJI_HEIGHT}" alt="emoji-${emoji}">
         </span>
         <div>
           <p class="film-details__comment-text">${he.encode(commentText)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${name}</span>
-            <span class="film-details__comment-day">${moment(date).format(`L h:mm`).humanize()}</span>
+            <span class="film-details__comment-day">${getHumanizedTimestamp(date)}</span>
             <button class="film-details__comment-delete">${LANG.DELETE}</button>
           </p>
         </div>

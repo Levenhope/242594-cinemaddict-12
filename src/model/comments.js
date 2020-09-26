@@ -24,4 +24,14 @@ export default class CommentsModel extends Observer {
       emoji: comment.emotion
     };
   }
+
+  static adaptCommentToServer(comment) {
+    return {
+      id: comment.id,
+      author: comment.name,
+      date: comment.date.toISOString(),
+      comment: comment.commentText,
+      emotion: comment.emoji
+    };
+  }
 }
