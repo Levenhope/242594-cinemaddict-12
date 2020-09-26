@@ -1,7 +1,8 @@
 import AbstractView from "./abstract.js";
-import {getReadableDate, getReadableDuration} from "../utils/film.js";
+import {getReadableDuration} from "../utils/film.js";
 import {LANG} from "../lang.js";
 import {RENDER_POSITION} from "../const.js";
+import moment from "moment";
 
 export default class DetailModalView extends AbstractView {
   constructor(film) {
@@ -60,7 +61,7 @@ export default class DetailModalView extends AbstractView {
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.RELEASE_DATE}</td>
-                    <td class="film-details__cell">${getReadableDate(date)}</td>
+                    <td class="film-details__cell">${moment(date).format(`d MMMM YYYY`)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">${LANG.RUNTIME}</td>

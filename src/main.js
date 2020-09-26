@@ -1,7 +1,6 @@
 "use strict";
 
 import ProfileView from "./view/profile.js";
-import SortView from "./view/sort.js";
 import FilmListsContainerView from "./view/lists-container.js";
 import StatsView from "./view/stats.js";
 import {render} from "./utils/render.js";
