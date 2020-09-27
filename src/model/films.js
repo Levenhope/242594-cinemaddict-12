@@ -35,7 +35,8 @@ export default class FilmsModel extends Observer {
           age: film.film_info.age_rating,
           isInWatchlist: film.user_details.watchlist,
           isInHistory: film.user_details.already_watched,
-          isInFavorites: film.user_details.favorite
+          isInFavorites: film.user_details.favorite,
+          watchingDate: film.user_details.watching_date
         }
     );
   }
@@ -48,7 +49,7 @@ export default class FilmsModel extends Observer {
             "watchlist": film.isInWatchlist,
             "already_watched": film.isInHistory,
             "favorite": film.isInFavorites,
-            "watching_date": film.user_details.watching_date
+            "watching_date": film.watchingDate
           }
         }
     );

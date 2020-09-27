@@ -1,6 +1,5 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
-import {getReadableDuration} from "../utils/film.js";
 import {RENDER_POSITION} from "../const.js";
 import moment from "moment";
 
@@ -27,7 +26,10 @@ export default class FilmView extends AbstractView {
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${moment(date).format(`YYYY`)}</span>
-            <span class="film-card__duration">${getReadableDuration(duration)}</span>
+            <span class="film-card__duration">
+              ${moment.duration(duration, `m`).hours()}${LANG.HOURS_SHORT}
+              ${moment.duration(duration, `m`).minutes()}${LANG.MINUTES_SHORT}
+            </span>
             <span class="film-card__genre">${genres.length > 0 ? genres[0] : ``}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">

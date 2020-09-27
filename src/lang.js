@@ -36,5 +36,14 @@ export const LANG = {
   TOP_RATED_TITLE: `Top rated`,
   MOST_COMMENTED: `Most commented`,
   LOADING: `Loading...`,
-  SERVER_ERROR: `Server error`
+  SERVER_ERROR: `Server error`,
+  YOUR_RANK: `Your rank`,
+  RANK_SCI_FIGHTER: `Sci-Fighter`,
+  SHOW_STATS: `Show stats`,
+  YOU_WATCHED: `You watched`,
+  TOTAL_DURATION: `Total duration`,
+  TOP_GENRE: `Top genre`,
+  MOVIES: `movies`,
+  HOURS_SHORT: `h`,
+  MINUTES_SHORT: `m`
 };

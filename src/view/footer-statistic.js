@@ -1,7 +1,7 @@
 import AbstractView from "./abstract.js";
 import {LANG} from "../lang.js";
 
-export default class StatsView extends AbstractView {
+export default class FooterStatisticView extends AbstractView {
   constructor(number) {
     super();
     this._number = number;

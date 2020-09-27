@@ -47,4 +47,27 @@ export const RENDER_POSITION = {
   BEFORE_END: `beforeend`
 };
 
+export const STATISTICS_FILTERS = [
+  {
+    name: `All time`,
+    value: `all-time`
+  },
+  {
+    name: `Today`,
+    value: `today`
+  },
+  {
+    name: `Week`,
+    value: `week`
+  },
+  {
+    name: `Month`,
+    value: `month`
+  },
+  {
+    name: `Year`,
+    value: `year`
+  }
+];
+
 export const DEFAULT_USER_NAME = `You`;

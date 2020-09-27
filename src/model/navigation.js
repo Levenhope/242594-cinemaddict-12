@@ -9,6 +9,11 @@ export default class NavigationModel extends Observer {
     this._activeCategory = CATEGORIES.ALL;
   }
 
+  setFilter(updateType, category) {
+    this._activeCategory = category;
+    this._notify(updateType, category);
+  }
+
   getCounters() {
     const navigationMap = {
       [CATEGORIES.ALL]: {
@@ -38,11 +43,6 @@ export default class NavigationModel extends Observer {
     };
 
     return navigationMap;
-  }
-
-  setFilter(updateType, category) {
-    this._activeCategory = category;
-    this._notify(updateType, category);
   }
 
   getFilter() {

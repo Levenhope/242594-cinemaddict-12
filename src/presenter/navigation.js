@@ -4,15 +4,17 @@ import {UPDATE_TYPE} from "../const.js";
 import {RENDER_POSITION} from "../const";
 
 export default class NavigationPresenter {
-  constructor(parent, navigationModel, filmsModel) {
+  constructor(parent, navigationModel, filmsModel, handleNavigationEvent) {
     this._navigationModel = navigationModel;
     this._filmsModel = filmsModel;
     this._parent = parent;
     this._navigationComponent = null;
     this._currentFilter = null;
+    this._handleNavigationEvent = handleNavigationEvent;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._handleStatisticButtonClick = this._handleStatisticButtonClick.bind(this);
 
     this._navigationModel.addObserver(this._handleModelEvent);
   }
@@ -26,6 +28,7 @@ export default class NavigationPresenter {
 
     this._navigationComponent = new NavigationView(navigationList, this._currentFilter);
     this._navigationComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._navigationComponent.setStatisticButtonClickHandler(this._handleStatisticButtonClick);
 
     if (prevNavigationComponent === null) {
       render(this._parent, this._navigationComponent, RENDER_POSITION.AFTER_BEGIN);
@@ -36,19 +39,6 @@ export default class NavigationPresenter {
     remove(prevNavigationComponent);
   }
 
-  _handleModelEvent() {
-    this.init();
-  }
-
-
-  _handleFilterTypeChange(filter) {
-    if (this._currentFilter === filter) {
-      return;
-    }
-
-    this._navigationModel.setFilter(UPDATE_TYPE.MAJOR, filter);
-  }
-
   _generateNavigation(films, filmsMap) {
     return Object.entries(filmsMap).map(([id, params]) => {
       return {
@@ -57,5 +47,23 @@ export default class NavigationPresenter {
         number: params.countEntries(films),
       };
     });
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleFilterTypeChange(filter) {
+    if (this._currentFilter === filter) {
+      return;
+    }
+
+    this._handleNavigationEvent(filter);
+    this._navigationModel.setFilter(UPDATE_TYPE.MAJOR, filter);
+  }
+
+  _handleStatisticButtonClick(statistic) {
+    this._currentFilter = null;
+    this._handleNavigationEvent(statistic);
   }
 }

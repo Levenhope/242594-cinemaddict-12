@@ -9,11 +9,11 @@ import {FILMS_NUMBER_PER_STEP, UPDATE_TYPE, SORT_TYPE} from "../const.js";
 import {LANG} from "../lang.js";
 import {filter} from "../utils/filter.js";
 import {sortDate, sortRating} from "../utils/sort.js";
+import FilmListsContainerView from "../view/lists-container";
 
 export default class FilmListPresenter {
-  constructor(siteMainElement, filmListContainer, filmsModel, navigationModel, api) {
-    this._siteMainElement = siteMainElement;
-    this._filmListContainer = filmListContainer;
+  constructor(parent, filmsModel, navigationModel, api) {
+    this._parent = parent;
     this._filmsModel = filmsModel;
     this._navigationModel = navigationModel;
     this._api = api;
@@ -24,7 +24,8 @@ export default class FilmListPresenter {
     this._moreButtonComponent = new MoreButtonView();
     this._emptyListComponent = new EmptyListView();
     this._loadingComponent = new LoadingView();
-    this._sortComponent = new SortView();
+    this._filmsContainerComponent = new FilmListsContainerView();
+    this._sortComponent = null;
 
     this._filmPresenter = {};
     this._isLoading = true;
@@ -38,7 +39,8 @@ export default class FilmListPresenter {
 
   init() {
     this._renderSort();
-    render(this._filmListContainer, this._mainFilmListComponent);
+    render(this._parent, this._filmsContainerComponent);
+    render(this._filmsContainerComponent, this._mainFilmListComponent);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._navigationModel.addObserver(this._handleModelEvent);
@@ -53,6 +55,8 @@ export default class FilmListPresenter {
 
     remove(this._mainFilmListComponent);
     remove(this._moreButtonComponent);
+    remove(this._sortComponent);
+    remove(this._filmsContainerComponent);
 
     this._filmsModel.removeObserver(this._handleModelEvent);
     this._navigationModel.removeObserver(this._handleModelEvent);
@@ -93,7 +97,8 @@ export default class FilmListPresenter {
   }
 
   _renderSort() {
-    render(this._siteMainElement, this._sortComponent);
+    this._sortComponent = new SortView();
+    render(this._parent, this._sortComponent);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
@@ -115,11 +120,11 @@ export default class FilmListPresenter {
   }
 
   _renderEmptyList() {
-    render(this._filmListContainer, this._emptyListComponent);
+    render(this._filmsContainerComponent, this._emptyListComponent);
   }
 
   _renderLoading() {
-    render(this._filmListContainer, this._loadingComponent);
+    render(this._filmsContainerComponent, this._loadingComponent);
   }
 
   _renderFilmList() {
