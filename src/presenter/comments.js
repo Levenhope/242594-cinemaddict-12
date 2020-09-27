@@ -1,9 +1,10 @@
 import CommentsView from "../view/comments.js";
-import {remove, render, replace} from "../utils/render.js";
+import {render, replace} from "../utils/render.js";
 import CommentItemView from "../view/comment.js";
-import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE, ERROR_ANIMATION_TIMEOUT, EMOJI_WIDTH, EMOJI_HEIGHT, DEFAULT_USER_NAME, RENDER_POSITION} from "../const.js";
+import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE, EMOJI_WIDTH, EMOJI_HEIGHT, RENDER_POSITION} from "../const.js";
 import CommentsModel from "../model/comments.js";
 import {LANG} from "../lang.js";
+import {showErrorAnimation} from "../utils/comment.js";
 
 export default class CommentsPresenter {
   constructor(film, api, parentModal, changeData) {
@@ -18,6 +19,8 @@ export default class CommentsPresenter {
     this._commentsComponent = new CommentsView(this._commentsIdList);
     this._commentsListElement = null;
     this._filmComments = null;
+    this._commentInputElement = null;
+    this._emojisListElement = null;
     this._renderedComments = [];
   }
 
@@ -25,31 +28,49 @@ export default class CommentsPresenter {
     this._setCommentsList();
   }
 
-  _setCommentsList() {
+  _setCommentsList({update = false} = {}) {
     this._api.getComments(this._film.id)
       .then((comments) => {
         this._commentsModel.setComments(UPDATE_TYPE.MINOR, comments);
       })
       .then(() => {
-        render(this._commentsContainer, this._commentsComponent);
+        if (update) {
+          this._film.comments = this._commentsModel.getComments().map((comment) => comment.id);
+          const updatedCommentsComponent = new CommentsView(this._film.comments);
+          replace(updatedCommentsComponent, this._commentsComponent);
+          this._commentsComponent = updatedCommentsComponent;
+        } else {
+          render(this._commentsContainer, this._commentsComponent);
+        }
+
+        this._commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
+        this._emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
         this._commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
+
+        if (update) {
+          this._commentInputElement.setAttribute(`disabled`, `disabled`);
+        }
+
         this._filmComments = this._commentsModel.getComments();
+      }).then(() => {
         for (let i = 0; i < this._filmComments.length; i++) {
           const commentItemComponent = new CommentItemView(this._filmComments[i]);
           render(this._commentsListElement, commentItemComponent);
           this._renderedComments[i] = commentItemComponent;
         }
+
         this._setDeleteClickHandlers();
-        this._setAddFormActions();
-      }).catch(() => {
-        this._commentsContainer.prepend(`${LANG.SERVER_ERROR}`);
+        this._setFormActions();
+
+        if (update) {
+          this._commentInputElement.removeAttribute(`disabled`);
+          this._changeData(UPDATE_TYPE.MINOR);
+        }
       });
   }
 
-  _setAddFormActions() {
+  _setFormActions() {
     let emoji = ``;
-    const commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
-    const emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
     let emojiName = ``;
 
     this._commentsComponent.setEmojiClickHandler((e) => {
@@ -65,17 +86,11 @@ export default class CommentsPresenter {
       const commentText = e.target.value;
 
       if (commentText === ``) {
-        commentInputElement.classList.remove(`error-animate`);
-        setTimeout(function () {
-          commentInputElement.classList.add(`error-animate`);
-        }, ERROR_ANIMATION_TIMEOUT);
+        showErrorAnimation(this._commentInputElement);
         return;
       }
       if (emoji === ``) {
-        emojisListElement.classList.remove(`error-animate`);
-        setTimeout(function () {
-          emojisListElement.classList.add(`error-animate`);
-        }, ERROR_ANIMATION_TIMEOUT);
+        showErrorAnimation(this._emojisListElement);
         return;
       }
 
@@ -83,27 +98,33 @@ export default class CommentsPresenter {
         commentText,
         date: new Date(),
         emoji: emojiName
-      }).then(this._handleCommentsUpdate());
+      }).then(this._handleCommentsUpdate())
+        .catch(() => {
+          showErrorAnimation(this._commentInputElement);
+          showErrorAnimation(this._emojisListElement);
+        });
     });
+  }
+
+  _handleCommentsUpdate() {
+    this._renderedComments = [];
+    this._setCommentsList({update: true});
   }
 
   _setDeleteClickHandlers() {
     for (let i = 0; i < this._renderedComments.length; i++) {
-      this._renderedComments[i].setDeleteClickHandler(() => {
+      this._renderedComments[i].setDeleteClickHandler((button) => {
+        button.textContent = LANG.DELETING;
+        button.setAttribute(`disabled`, `disabled`);
         this._api.deleteComment(this._filmComments[i].id)
           .then(() => {
             this._handleCommentsUpdate();
-          });
+          }).catch(() => {
+            showErrorAnimation(this._renderedComments[i].getElement());
+            button.textContent = LANG.DELETE;
+            button.removeAttribute(`disabled`);
+        });
       });
     }
-  }
-
-  _handleCommentsUpdate() {
-    const updatedCommentsComponent = new CommentsView(this._commentsModel.getComments());
-    replace(updatedCommentsComponent, this._commentsComponent);
-    this._commentsComponent = updatedCommentsComponent;
-    this._renderedComments = [];
-    this._setCommentsList();
-    this._changeData(UPDATE_TYPE.MINOR);
   }
 }

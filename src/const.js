@@ -69,5 +69,3 @@ export const STATISTICS_FILTERS = [
     value: `year`
   }
 ];
-
-export const DEFAULT_USER_NAME = `You`;
