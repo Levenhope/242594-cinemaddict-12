@@ -27,7 +27,7 @@ const handleNavigationEvent = (menuItem) => {
   switch (menuItem) {
     case `statistic`:
       filmListPresenter.destroy();
-      statisticComponent = new StatisticView(filmsModel.getFilms());
+      statisticComponent = new StatisticView(filmsModel);
       render(siteMainElement, statisticComponent);
       break;
     default:

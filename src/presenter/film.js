@@ -67,6 +67,9 @@ export default class FilmPresenter {
   _setHistoryToggleHandler() {
     this._filmComponent.setHistoryClickHandler(() => {
       this._film.isInHistory = !this._film.isInHistory;
+      if (this._film.isInHistory) {
+        this._film.watchingDate = new Date();
+      }
       this._api.updateFilm(this._film).then(() => {
         this._changeData(UPDATE_TYPE.MINOR);
       });

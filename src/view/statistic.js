@@ -1,10 +1,11 @@
 import SmartView from "./smart.js";
-import {getMostWatchedGenre, countWatchedFilmsInDateRange, getCurrentDate, getGenreStatistics} from "../utils/statistic.js";
+import {getMostWatchedGenre, getWatchedFilmsInDateRange, getWatchedFilmsDuration, getGenreStatistics} from "../utils/statistic.js";
 import moment from "moment";
 import Chart from "chart.js";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import {STATISTICS_FILTERS} from "../const.js";
 
-const renderGenresChart = (statisticCtx, films, dateFrom) => {
+const renderGenresChart = (statisticCtx, films) => {
   const BAR_HEIGHT = 50;
   const genreStatistics = getGenreStatistics(films);
 
@@ -69,17 +70,74 @@ const renderGenresChart = (statisticCtx, films, dateFrom) => {
 };
 
 export default class StatisticView extends SmartView {
-  constructor(films) {
+  constructor(filmsModel) {
     super();
 
+    this._watchedFilms = filmsModel.getFilms().filter((film) => film.isInHistory);
+
     this._data = {
-      films,
-      dateFrom: null,
-      dateTo: getCurrentDate()
+      watchedFilms: this._watchedFilms,
     };
+
+    this._currentFilter = `all-time`;
     this._genresChart = null;
-    this._dateChangeHandler = this._dateChangeHandler.bind(this);
-    this._setCharts();
+    this._periodChangeHandler = this._periodChangeHandler.bind(this);
+    this._setFilterChangeHandler = this._setFilterChangeHandler.bind(this);
+
+    this._setChart();
+    this._initFilterChangeHandler();
+  }
+
+  getTemplate() {
+    const {watchedFilms} = this._data;
+    console.log(watchedFilms);
+    return (
+      `<section class="statistic">
+        <p class="statistic__rank">
+          Your rank
+          <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+          <span class="statistic__rank-label">Sci-Fighter</span>
+        </p>
+    
+        <form class="statistic__filters">
+          <p class="statistic__filters-description">Show stats:</p>
+          ${STATISTICS_FILTERS.map((item) => `
+            <input
+              type="radio"
+              class="statistic__filters-input visually-hidden"
+              name="statistic-filter"
+              id="statistic-${item.value}"
+              value="${item.value}"
+              ${item.value === this._currentFilter ? `checked` : ``}
+            >
+            <label for="statistic-${item.value}" class="statistic__filters-label">${item.name}</label>
+          `).join(``)}
+        </form>
+    
+        <ul class="statistic__text-list">
+          <li class="statistic__text-item">
+            <h4 class="statistic__item-title">You watched</h4>
+            <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
+          </li>
+          <li class="statistic__text-item">
+            <h4 class="statistic__item-title">Total duration</h4>
+            <p class="statistic__item-text">
+              ${moment.duration(getWatchedFilmsDuration(watchedFilms), "m").hours()} <span class="statistic__item-description">h</span> 
+              ${moment.duration(getWatchedFilmsDuration(watchedFilms), "m").minutes()}<span class="statistic__item-description">m</span>
+            </p>
+          </li>
+          <li class="statistic__text-item">
+            <h4 class="statistic__item-title">Top genre</h4>
+            <p class="statistic__item-text">${getMostWatchedGenre(watchedFilms)}</p>
+          </li>
+        </ul>
+    
+        <div class="statistic__chart-wrap">
+          <canvas class="statistic__chart" width="1000"></canvas>
+        </div>
+    
+      </section>`
+    );
   }
 
   removeElement() {
@@ -91,80 +149,38 @@ export default class StatisticView extends SmartView {
   }
 
   restoreHandlers() {
-    this._setCharts();
+    this._setChart();
+    this._initFilterChangeHandler();
   }
 
-  _setCharts() {
+  _setChart() {
     if (this._genresChart !== null) {
       this._genresChart = null;
     }
+    const {watchedFilms} = this._data;
 
-    const {films, dateFrom} = this._data;
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-    this._genresChart = renderGenresChart(statisticCtx, films, dateFrom);
+    this._genresChart = renderGenresChart(statisticCtx, watchedFilms);
   }
 
-  _dateChangeHandler(dateFrom) {
-    if (!dateFrom) {
-      return;
-    }
-
+  _periodChangeHandler(watchedFilms) {
     this.updateData({
-      dateFrom
+      watchedFilms
     });
   }
 
-  getTemplate() {
-    const userFilms = this._data.films.filter((film) => film.isInHistory);
-    const userWatchedFilmsDuration = userFilms.reduce((total, item) => {return total + item.duration}, 0);
+  _initFilterChangeHandler() {
+    this._setFilterChangeHandler((filterItem) => {
+      this._currentFilter = filterItem.value;
+      this._periodChangeHandler(getWatchedFilmsInDateRange(this._watchedFilms, filterItem.value));
+    });
+  }
 
-    return (
-      `<section class="statistic">
-        <p class="statistic__rank">
-          Your rank
-          <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-          <span class="statistic__rank-label">Sci-Fighter</span>
-        </p>
-    
-        <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
-          <p class="statistic__filters-description">Show stats:</p>
-    
-          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
-          <label for="statistic-all-time" class="statistic__filters-label">All time</label>
-    
-          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
-          <label for="statistic-today" class="statistic__filters-label">Today</label>
-    
-          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
-          <label for="statistic-week" class="statistic__filters-label">Week</label>
-    
-          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
-          <label for="statistic-month" class="statistic__filters-label">Month</label>
-    
-          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
-          <label for="statistic-year" class="statistic__filters-label">Year</label>
-        </form>
-    
-        <ul class="statistic__text-list">
-          <li class="statistic__text-item">
-            <h4 class="statistic__item-title">You watched</h4>
-            <p class="statistic__item-text">${userFilms.length} <span class="statistic__item-description">movies</span></p>
-          </li>
-          <li class="statistic__text-item">
-            <h4 class="statistic__item-title">Total duration</h4>
-            <p class="statistic__item-text">${moment.duration(userWatchedFilmsDuration, "m").hours()} <span class="statistic__item-description">h</span> ${moment.duration(userWatchedFilmsDuration, "m").minutes()}<span class="statistic__item-description">m</span></p>
-          </li>
-          <li class="statistic__text-item">
-            <h4 class="statistic__item-title">Top genre</h4>
-            <p class="statistic__item-text">${getMostWatchedGenre(userFilms)}</p>
-          </li>
-        </ul>
-    
-        <div class="statistic__chart-wrap">
-          <canvas class="statistic__chart" width="1000"></canvas>
-        </div>
-    
-      </section>`
-    );
+  _setFilterChangeHandler(callback) {
+    for (let filterItem of this.getElement().querySelectorAll(`.statistic__filters-input`)) {
+      filterItem.addEventListener(`change`, function () {
+        callback(filterItem);
+      });
+    }
   }
 }

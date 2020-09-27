@@ -1,23 +1,21 @@
 import moment from "moment";
 
-export const getCurrentDate = () => {
-  const currentDate = new Date();
-  currentDate.setHours(23, 59, 59, 999);
-
-  return new Date(currentDate);
+export const getWatchedFilmsInDateRange = (films, period) => {
+  let dateFrom;
+  switch (period) {
+    case `all-time`:
+      return films;
+    case `today`:
+      dateFrom = moment().startOf('day');
+      return films.filter((film) => moment(film.watchingDate).isSameOrAfter(dateFrom));
+    default:
+      dateFrom = moment().subtract(1, period);
+      return films.filter((film) => moment(film.watchingDate).isSameOrAfter(dateFrom));
+  }
 };
 
-export const countWatchedFilmsInDateRange = (films, dateFrom = null) => {
-  return films.reduce((counter, film) => {
-    if (
-      (dateFrom === null || moment(film.watchingDate).isSameOrAfter(dateFrom)) ||
-      moment(film.watchingDate).isSameOrBefore(getCurrentDate())
-    ) {
-      return counter + 1;
-    } else {
-      return counter;
-    }
-  }, 0);
+export const getWatchedFilmsDuration = (films) => {
+  return films.reduce((total, item) => {return total + item.duration}, 0);
 };
 
 export const getMostWatchedGenre = (films) => {
