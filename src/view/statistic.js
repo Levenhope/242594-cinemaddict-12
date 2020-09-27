@@ -2,7 +2,7 @@ import moment from "moment";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import SmartView from "./smart.js";
-import {getMostWatchedGenre, getWatchedFilmsInDateRange, getWatchedFilmsDuration, getGenreStatistics} from "../utils/statistic.js";
+import {getMostWatchedGenre, getWatchedFilmsInDateRange, getWatchedFilmsDuration, getGenreStatistics, getRatingTitle} from "../utils/statistic.js";
 import {STATISTICS_FILTERS} from "../const.js";
 import {Lang} from "../lang.js";
 
@@ -76,10 +76,12 @@ export default class StatisticView extends SmartView {
 
     this._watchedFilms = filmsModel.getFilms().filter((film) => film.isInHistory);
 
+
     this._data = {
-      watchedFilms: this._watchedFilms,
+      watchedFilms: this._watchedFilms
     };
 
+    this._rankTitle = ``;
     this._currentFilter = `all-time`;
     this._genresChart = null;
     this._periodChangeHandler = this._periodChangeHandler.bind(this);
@@ -96,7 +98,7 @@ export default class StatisticView extends SmartView {
         <p class="statistic__rank">
           ${Lang.YOUR_RANK}
           <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-          <span class="statistic__rank-label">${Lang.RANK_SCI_FIGHTER}</span>
+          <span class="statistic__rank-label">${this._rankTitle}</span>
         </p>
     
         <form class="statistic__filters" action="" method="get">
@@ -157,6 +159,8 @@ export default class StatisticView extends SmartView {
     if (this._genresChart !== null) {
       this._genresChart = null;
     }
+
+    this._rankTitle = getRatingTitle(this._watchedFilms.length);
     const {watchedFilms} = this._data;
 
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);

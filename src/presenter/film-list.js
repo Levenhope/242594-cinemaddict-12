@@ -12,11 +12,12 @@ import {sortByDate, sortByRating} from "../utils/sort.js";
 import {Lang} from "../lang.js";
 
 export default class FilmListPresenter {
-  constructor(parent, filmsModel, navigationModel, api) {
+  constructor(parent, filmsModel, navigationModel, api, profileComponent) {
     this._parent = parent;
     this._filmsModel = filmsModel;
     this._navigationModel = navigationModel;
     this._api = api;
+    this._profileComponent = profileComponent;
 
     this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;
     this._currentSortType = SortType.DEFAULT;
@@ -68,6 +69,8 @@ export default class FilmListPresenter {
     const categoryName = this._navigationModel.getFilter();
     const films = this._filmsModel.getFilms();
     const filteredFilms = filter[categoryName](films);
+
+    this._profileComponent.printRankTitle(films);
 
     if (this._defaultFilmList === null) {
       this._defaultFilmList = films;

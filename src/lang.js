@@ -30,8 +30,6 @@ export const Lang = {
   FILMS_STATS_MESSAGE: `movies inside`,
   ALL_MOVIES_TITLE: `All movies. Upcoming`,
   LOADING: `Loading...`,
-  YOUR_RANK: `Your rank`,
-  RANK_SCI_FIGHTER: `Sci-Fighter`,
   SHOW_STATS: `Show stats`,
   YOU_WATCHED: `You watched`,
   TOTAL_DURATION: `Total duration`,
@@ -44,4 +42,9 @@ export const Lang = {
   WEEK: `Week`,
   MONTH: `Month`,
   YEAR: `Year`,
+  YOUR_RANK: `Your rank`,
+  RANK_SCI_FIGHTER: `Sci-Fighter`,
+  RANK_NOVICE: `Novice`,
+  RANK_FAN: `Fan`,
+  RANK_MOVIE_BUFF: `Movie Buff`
 };

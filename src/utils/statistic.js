@@ -1,6 +1,7 @@
 import moment from "moment";
+import {Rank} from "../const.js";
 
-export const getWatchedFilmsInDateRange = (films, period) => {
+export const getWatchedFilmsInDateRange = (films, period = `all-time`) => {
   let dateFrom;
   switch (period) {
     case `all-time`:
@@ -50,4 +51,18 @@ export const getGenreStatistics = (films) => {
   });
 
   return genreStatistics;
+};
+
+export const getRatingTitle = (watchedFilmsNumber) => {
+  let rankTitle = ``;
+
+  if (watchedFilmsNumber > 0 && watchedFilmsNumber < 11) {
+    rankTitle = Rank.NOVICE;
+  } else if (watchedFilmsNumber > 10 && watchedFilmsNumber < 21) {
+    rankTitle = Rank.FAN;
+  } else if (watchedFilmsNumber > 20) {
+    rankTitle = Rank.MOVIE_BUFF;
+  }
+
+  return rankTitle;
 };

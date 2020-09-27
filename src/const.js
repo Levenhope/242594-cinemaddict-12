@@ -73,3 +73,9 @@ export const STATISTICS_FILTERS = [
     value: `year`
   }
 ];
+
+export const Rank = {
+  NOVICE: Lang.RANK_NOVICE,
+  FAN: Lang.RANK_FAN,
+  MOVIE_BUFF: Lang.RANK_MOVIE_BUFF
+};
