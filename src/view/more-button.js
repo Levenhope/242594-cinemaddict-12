@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {LANG} from "../lang.js";
+import {Lang} from "../lang.js";
 
 export default class MoreButtonView extends AbstractView {
   constructor() {
@@ -9,7 +9,7 @@ export default class MoreButtonView extends AbstractView {
 
   getTemplate() {
     return (
-      `<button class="films-list__show-more">${LANG.SHOW_MORE}</button>`
+      `<button class="films-list__show-more">${Lang.SHOW_MORE}</button>`
     );
   }
 

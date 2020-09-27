@@ -1,10 +1,10 @@
 import CommentsView from "../view/comments.js";
-import {render, replace} from "../utils/render.js";
-import CommentItemView from "../view/comment.js";
-import {EMOJIS, EMOJIS_DIRECTORY_PATH, UPDATE_TYPE, EMOJI_WIDTH, EMOJI_HEIGHT, RENDER_POSITION} from "../const.js";
+import CommentItemView from "../view/comment-item.js";
 import CommentsModel from "../model/comments.js";
-import {LANG} from "../lang.js";
+import {Emoji, EMOJI_DIRECTORY_PATH, UpdateType, EmojiImageSize, RenderPosition} from "../const.js";
+import {render, replace} from "../utils/render.js";
 import {showErrorAnimation} from "../utils/comment.js";
+import {Lang} from "../lang.js";
 
 export default class CommentsPresenter {
   constructor(film, api, parentModal, changeData) {
@@ -31,10 +31,11 @@ export default class CommentsPresenter {
   _setCommentsList({update = false} = {}) {
     this._api.getComments(this._film.id)
       .then((comments) => {
-        this._commentsModel.setComments(UPDATE_TYPE.MINOR, comments);
+        this._commentsModel.setComments(UpdateType.MINOR, comments);
       })
       .then(() => {
         if (update) {
+          this._renderedComments = [];
           this._film.comments = this._commentsModel.getComments().map((comment) => comment.id);
           const updatedCommentsComponent = new CommentsView(this._film.comments);
           replace(updatedCommentsComponent, this._commentsComponent);
@@ -64,26 +65,29 @@ export default class CommentsPresenter {
 
         if (update) {
           this._commentInputElement.removeAttribute(`disabled`);
-          this._changeData(UPDATE_TYPE.MINOR);
+          this._changeData(UpdateType.MINOR);
         }
+      }).catch(() => {
+        showErrorAnimation(this._commentInputElement);
+        showErrorAnimation(this._emojisListElement);
       });
   }
 
   _setFormActions() {
     let emoji = ``;
-    let emojiName = ``;
 
-    this._commentsComponent.setEmojiClickHandler((e) => {
+    this._commentsComponent.setEmojiClickHandler((label) => {
       const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
       chosenEmojiContainer.innerHTML = ``;
-      emojiName = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
-      emojiName = emojiName.substr(6, emojiName.length + 1);
-      emoji = EMOJIS_DIRECTORY_PATH + Object.entries(EMOJIS).filter((item) => item[0] === emojiName)[0][1];
-      chosenEmojiContainer.insertAdjacentHTML(RENDER_POSITION.BEFORE_END, `<img src="${emoji}" width="${EMOJI_WIDTH}" height="${EMOJI_HEIGHT}" alt="emoji-${emojiName}">`);
+      emoji = label.htmlFor ? label.htmlFor : label.parentElement.htmlFor;
+      emoji = emoji.substr(6, emoji.length + 1);
+      let emojiFile = EMOJI_DIRECTORY_PATH + Object.entries(Emoji).filter((emojiItem) => emojiItem[0] === emoji)[0][1];
+      chosenEmojiContainer.insertAdjacentHTML(RenderPosition.BEFORE_END, `<img src="${emojiFile}" width="${EmojiImageSize.BIG}" height="${EmojiImageSize.BIG}" alt="emoji-${emoji}">`);
     });
 
-    this._commentsComponent.setSubmitHandler((e) => {
-      const commentText = e.target.value;
+    this._commentsComponent.setSubmitHandler((commentInput) => {
+      commentInput.setAttribute(`disabled`, `disabled`);
+      const commentText = commentInput.value;
 
       if (commentText === ``) {
         showErrorAnimation(this._commentInputElement);
@@ -97,31 +101,31 @@ export default class CommentsPresenter {
       this._api.addComment(this._film.id, {
         commentText,
         date: new Date(),
-        emoji: emojiName
+        emoji
       }).then(this._handleCommentsUpdate())
         .catch(() => {
           showErrorAnimation(this._commentInputElement);
           showErrorAnimation(this._emojisListElement);
+          commentInput.removeAttribute(`disabled`, `disabled`);
         });
     });
   }
 
   _handleCommentsUpdate() {
-    this._renderedComments = [];
     this._setCommentsList({update: true});
   }
 
   _setDeleteClickHandlers() {
     for (let i = 0; i < this._renderedComments.length; i++) {
       this._renderedComments[i].setDeleteClickHandler((button) => {
-        button.textContent = LANG.DELETING;
+        button.textContent = Lang.DELETING;
         button.setAttribute(`disabled`, `disabled`);
         this._api.deleteComment(this._filmComments[i].id)
           .then(() => {
             this._handleCommentsUpdate();
           }).catch(() => {
             showErrorAnimation(this._renderedComments[i].getElement());
-            button.textContent = LANG.DELETE;
+            button.textContent = Lang.DELETE;
             button.removeAttribute(`disabled`);
           });
       });

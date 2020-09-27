@@ -1,7 +1,7 @@
-import AbstractView from "./abstract.js";
-import {LANG} from "../lang.js";
-import {RENDER_POSITION} from "../const.js";
 import moment from "moment";
+import AbstractView from "./abstract.js";
+import {RenderPosition} from "../const.js";
+import {Lang} from "../lang.js";
 
 export default class DetailModalView extends AbstractView {
   constructor(film) {
@@ -13,11 +13,11 @@ export default class DetailModalView extends AbstractView {
   getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
     return (
       `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
-      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${isInWatchlist ? LANG.ALREADY + ` ` + LANG.IN : LANG.ADD + ` ` + LANG.TO} ${LANG.WATCHLIST}</label>
+      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${isInWatchlist ? Lang.ALREADY + ` ` + Lang.IN : Lang.ADD + ` ` + Lang.TO} ${Lang.WATCHLIST}</label>
       <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
-      <label for="watched" class="film-details__control-label film-details__control-label--watched">${isInHistory ? LANG.ALREADY : LANG.ADD + ` ` + LANG.TO} ${LANG.WATCHED}</label>
+      <label for="watched" class="film-details__control-label film-details__control-label--watched">${isInHistory ? Lang.ALREADY : Lang.ADD + ` ` + Lang.TO} ${Lang.WATCHED}</label>
       <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
-      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${isInFavorites ? LANG.ALREADY + ` ` + LANG.IN : LANG.ADD + ` ` + LANG.TO} ${LANG.FAVORITES}</label>`
+      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${isInFavorites ? Lang.ALREADY + ` ` + Lang.IN : Lang.ADD + ` ` + Lang.TO} ${Lang.FAVORITES}</label>`
     );
   }
 
@@ -28,18 +28,18 @@ export default class DetailModalView extends AbstractView {
         <form class="film-details__inner" action="" method="get">
           <div class="form-details__top-container">
             <div class="film-details__close">
-              <button class="film-details__close-btn" type="button">${LANG.CLOSE}</button>
+              <button class="film-details__close-btn" type="button">${Lang.CLOSE}</button>
             </div>
             <div class="film-details__info-wrap">
               <div class="film-details__poster">
-                <img class="film-details__poster-img" src="${poster}" alt="">
+                <img class="film-details__poster-img" src="${poster}" alt="${title}">
                 <p class="film-details__age">${age}+</p>
               </div>
               <div class="film-details__info">
                 <div class="film-details__info-head">
                   <div class="film-details__title-wrap">
                     <h3 class="film-details__title">${title}</h3>
-                    <p class="film-details__title-original">${LANG.ORIGINAL_TITLE}: ${originalTitle}</p>
+                    <p class="film-details__title-original">${Lang.ORIGINAL_TITLE}: ${originalTitle}</p>
                   </div>
                   <div class="film-details__rating">
                     <p class="film-details__total-rating">${rating}</p>
@@ -47,34 +47,34 @@ export default class DetailModalView extends AbstractView {
                 </div>
                 <table class="film-details__table">
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.DIRECTOR}</td>
+                    <td class="film-details__term">${Lang.DIRECTOR}</td>
                     <td class="film-details__cell">${director}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.WRITERS}</td>
+                    <td class="film-details__term">${Lang.WRITERS}</td>
                     <td class="film-details__cell">${writers.join(`, `)}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.ACTORS}</td>
+                    <td class="film-details__term">${Lang.ACTORS}</td>
                     <td class="film-details__cell">${actors.join(`, `)}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.RELEASE_DATE}</td>
+                    <td class="film-details__term">${Lang.RELEASE_DATE}</td>
                     <td class="film-details__cell">${moment(date).format(`d MMMM YYYY`)}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.RUNTIME}</td>
+                    <td class="film-details__term">${Lang.RUNTIME}</td>
                     <td class="film-details__cell">
-                        ${moment.duration(duration, `m`).hours()}${LANG.HOURS_SHORT}
-                        ${moment.duration(duration, `m`).minutes()}${LANG.MINUTES_SHORT}
+                        ${moment.duration(duration, `m`).hours()}${Lang.HOURS_SHORT}
+                        ${moment.duration(duration, `m`).minutes()}${Lang.MINUTES_SHORT}
                     </td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.COUNTRY}</td>
+                    <td class="film-details__term">${Lang.COUNTRY}</td>
                     <td class="film-details__cell">${country}</td>
                   </tr>
                   <tr class="film-details__row">
-                    <td class="film-details__term">${LANG.GENRES}</td>
+                    <td class="film-details__term">${genres.length < 2 ? Lang.GENRE : Lang.GENRES}</td>
                     <td class="film-details__cell">
                       ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``)}
                     </td>
@@ -96,11 +96,11 @@ export default class DetailModalView extends AbstractView {
     );
   }
 
-  updateControlsSection(...properties) {
+  updateControlsSection(...userFilmProperties) {
     this._controlsSection = this.getElement().querySelector(`.film-details__controls`);
     if (this._controlsSection) {
       this._controlsSection.innerHTML = ``;
-      this._controlsSection.insertAdjacentHTML(RENDER_POSITION.BEFORE_END, this.getControlsTemplate(...properties));
+      this._controlsSection.insertAdjacentHTML(RenderPosition.BEFORE_END, this.getControlsTemplate(...userFilmProperties));
     }
   }
 

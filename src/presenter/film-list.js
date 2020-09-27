@@ -1,15 +1,15 @@
 import FilmPresenter from "./film.js";
-import FilmListView from "../view/list.js";
+import FilmListView from "../view/film-list.js";
 import MoreButtonView from "../view/more-button.js";
 import EmptyListView from "../view/empty-list.js";
 import LoadingView from "../view/loading.js";
 import SortView from "../view/sort.js";
+import FilmListsContainerView from "../view/film-lists-container.js";
+import {FILMS_NUMBER_PER_STEP, UpdateType, SortType} from "../const.js";
 import {render, remove} from "../utils/render.js";
-import {FILMS_NUMBER_PER_STEP, UPDATE_TYPE, SORT_TYPE} from "../const.js";
-import {LANG} from "../lang.js";
 import {filter} from "../utils/filter.js";
-import {sortDate, sortRating} from "../utils/sort.js";
-import FilmListsContainerView from "../view/lists-container";
+import {sortByDate, sortByRating} from "../utils/sort.js";
+import {Lang} from "../lang.js";
 
 export default class FilmListPresenter {
   constructor(parent, filmsModel, navigationModel, api) {
@@ -19,8 +19,8 @@ export default class FilmListPresenter {
     this._api = api;
 
     this._renderedFilmsCount = FILMS_NUMBER_PER_STEP;
-    this._currentSortType = SORT_TYPE.DEFAULT;
-    this._mainFilmListComponent = new FilmListView(false, LANG.ALL_MOVIES_TITLE);
+    this._currentSortType = SortType.DEFAULT;
+    this._mainFilmListComponent = new FilmListView(false, Lang.ALL_MOVIES_TITLE);
     this._moreButtonComponent = new MoreButtonView();
     this._emptyListComponent = new EmptyListView();
     this._loadingComponent = new LoadingView();
@@ -74,11 +74,11 @@ export default class FilmListPresenter {
     }
 
     switch (this._currentSortType) {
-      case SORT_TYPE.DATE:
-        return filteredFilms.slice().sort(sortDate);
-      case SORT_TYPE.RATING:
-        return filteredFilms.slice().sort(sortRating);
-      case SORT_TYPE.DEFAULT:
+      case SortType.DATE:
+        return filteredFilms.slice().sort(sortByDate);
+      case SortType.RATING:
+        return filteredFilms.slice().sort(sortByRating);
+      case SortType.DEFAULT:
         return filter[categoryName](this._defaultFilmList);
     }
 
@@ -162,7 +162,7 @@ export default class FilmListPresenter {
     }
 
     if (resetSortType) {
-      this._currentSortType = SORT_TYPE.DEFAULT;
+      this._currentSortType = SortType.DEFAULT;
     }
   }
 
@@ -172,18 +172,18 @@ export default class FilmListPresenter {
 
   _handleModelEvent(updateType) {
     switch (updateType) {
-      case UPDATE_TYPE.INIT:
+      case UpdateType.INIT:
         this._isLoading = false;
         this._clearBoard();
         this._renderFilmList();
         this._navigationModel.updateCounters();
         break;
-      case UPDATE_TYPE.MINOR:
+      case UpdateType.MINOR:
         this._clearBoard();
         this._renderFilmList();
         this._navigationModel.updateCounters();
         break;
-      case UPDATE_TYPE.MAJOR:
+      case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
         this._renderFilmList();
         break;

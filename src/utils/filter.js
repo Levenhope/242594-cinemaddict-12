@@ -1,8 +1,8 @@
-import {CATEGORIES} from "../const";
+import {Category} from "../const.js";
 
 export const filter = {
-  [CATEGORIES.ALL]: (films) => films,
-  [CATEGORIES.WATCHLIST]: (films) => films.filter((film) => film.isInWatchlist),
-  [CATEGORIES.HISTORY]: (films) => films.filter((film) => film.isInHistory),
-  [CATEGORIES.FAVORITES]: (films) => films.filter((film) => film.isInFavorites)
+  [Category.ALL]: (films) => films,
+  [Category.WATCHLIST]: (films) => films.filter((film) => film.isInWatchlist),
+  [Category.HISTORY]: (films) => films.filter((film) => film.isInHistory),
+  [Category.FAVORITES]: (films) => films.filter((film) => film.isInFavorites)
 };

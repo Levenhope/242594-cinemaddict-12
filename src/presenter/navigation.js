@@ -1,7 +1,6 @@
 import NavigationView from "../view/navigation.js";
 import {render, replace, remove} from "../utils/render.js";
-import {UPDATE_TYPE} from "../const.js";
-import {RENDER_POSITION} from "../const";
+import {UpdateType, RenderPosition} from "../const.js";
 
 export default class NavigationPresenter {
   constructor(parent, navigationModel, filmsModel, handleNavigationEvent) {
@@ -31,7 +30,7 @@ export default class NavigationPresenter {
     this._navigationComponent.setStatisticButtonClickHandler(this._handleStatisticButtonClick);
 
     if (prevNavigationComponent === null) {
-      render(this._parent, this._navigationComponent, RENDER_POSITION.AFTER_BEGIN);
+      render(this._parent, this._navigationComponent, RenderPosition.AFTER_BEGIN);
       return;
     }
 
@@ -39,12 +38,12 @@ export default class NavigationPresenter {
     remove(prevNavigationComponent);
   }
 
-  _generateNavigation(films, filmsMap) {
-    return Object.entries(filmsMap).map(([id, params]) => {
+  _generateNavigation(films, filmsNavigationMap) {
+    return Object.entries(filmsNavigationMap).map(([id, navigationItemParams]) => {
       return {
         id,
-        title: params.itemTitle,
-        number: params.countEntries(films),
+        title: navigationItemParams.itemTitle,
+        number: navigationItemParams.countEntries(films),
       };
     });
   }
@@ -59,7 +58,7 @@ export default class NavigationPresenter {
     }
 
     this._handleNavigationEvent(filter);
-    this._navigationModel.setFilter(UPDATE_TYPE.MAJOR, filter);
+    this._navigationModel.setFilter(UpdateType.MAJOR, filter);
   }
 
   _handleStatisticButtonClick(statistic) {

@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {LANG} from "../lang.js";
+import {Lang} from "../lang.js";
 
 export default class NavigationView extends AbstractView {
   constructor(navigationItems, currentFilterType) {
@@ -14,7 +14,7 @@ export default class NavigationView extends AbstractView {
         <div class="main-navigation__items">
           ${this._navigationItems.map((navItem) => this._getNavigationItemTemplate(navItem, navItem.id === this._currentFilter)).join(``)}
         </div>
-        <a href="#stats" data-nav="statistic" class="main-navigation__additional">${LANG.STATS}</a>
+        <a href="#stats" data-nav="statistic" class="main-navigation__additional">${Lang.STATS}</a>
       </nav>`
     );
   }

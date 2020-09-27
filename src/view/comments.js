@@ -1,6 +1,6 @@
 import AbstractView from "./abstract.js";
-import {LANG} from "../lang.js";
-import {EMOJIS, EMOJIS_DIRECTORY_PATH, EMOJI_WIDTH_SMALL, EMOJI_HEIGHT_SMALL} from "../const.js";
+import {Lang} from "../lang.js";
+import {Emoji, EMOJI_DIRECTORY_PATH, EmojiImageSize} from "../const.js";
 
 export default class CommentsView extends AbstractView {
   constructor(comments) {
@@ -11,20 +11,20 @@ export default class CommentsView extends AbstractView {
   getTemplate() {
     return (
       `<section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">${LANG.COMMENTS} <span class="film-details__comments-count">${this._commentCount}</span></h3>
+        <h3 class="film-details__comments-title">${Lang.COMMENTS} <span class="film-details__comments-count">${this._commentCount}</span></h3>
         <ul class="film-details__comments-list">
           
         </ul>
         <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label"></div>
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="${LANG.COMMENT_INPUT_PLACEHOLDER}" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="${Lang.COMMENT_INPUT_PLACEHOLDER}" name="comment"></textarea>
           </label>
           <div class="film-details__emoji-list">
-            ${Object.entries(EMOJIS).reduce((accumulator, [emojiName, fileName]) => accumulator + `
+            ${Object.entries(Emoji).reduce((emojiInputs, [emojiName, fileName]) => emojiInputs + `
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiName}" value="${emojiName}">
               <label class="film-details__emoji-label" for="emoji-${emojiName}">
-                <img src="${EMOJIS_DIRECTORY_PATH}${fileName}" width="${EMOJI_WIDTH_SMALL}" height="${EMOJI_HEIGHT_SMALL}" alt="emoji-${emojiName}">
+                <img src="${EMOJI_DIRECTORY_PATH}${fileName}" width="${EmojiImageSize.SMALL}" height="${EmojiImageSize.SMALL}" alt="emoji-${emojiName}">
               </label>
             `, ``)}
           </div>
@@ -35,16 +35,17 @@ export default class CommentsView extends AbstractView {
 
   setEmojiClickHandler(callback) {
     for (let label of this.getElement().querySelectorAll(`.film-details__emoji-label`)) {
-      label.addEventListener(`click`, function (e) {
-        callback(e);
+      label.addEventListener(`click`, function () {
+        callback(label);
       });
     }
   }
 
   setSubmitHandler(callback) {
-    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`keydown`, function (e) {
+    const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
+    commentInput.addEventListener(`keydown`, function (e) {
       if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13 || e.keyCode === 10)) {
-        callback(e);
+        callback(commentInput);
       }
     });
   }

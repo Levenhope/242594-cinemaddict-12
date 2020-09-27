@@ -15,13 +15,13 @@ export const getWatchedFilmsInDateRange = (films, period) => {
 };
 
 export const getWatchedFilmsDuration = (films) => {
-  return films.reduce((total, item) => {
-    return total + item.duration;
+  return films.reduce((totalDuration, film) => {
+    return totalDuration + film.duration;
   }, 0);
 };
 
 export const getMostWatchedGenre = (films) => {
-  let genreStatistics = getGenreStatistics(films);
+  const genreStatistics = getGenreStatistics(films);
   let mostWatchedViews = 0;
   let mostWatchedGenre = ``;
 
@@ -38,8 +38,8 @@ export const getMostWatchedGenre = (films) => {
 export const getGenreStatistics = (films) => {
   let genreStatistics = {};
 
-  const userFilmsGenres = films.reduce((allGenres, item) => {
-    for (let genre of item.genres) {
+  const userFilmsGenres = films.reduce((allGenres, film) => {
+    for (let genre of film.genres) {
       allGenres.push(genre);
     }
     return allGenres;

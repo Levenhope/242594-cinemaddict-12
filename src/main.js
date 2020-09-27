@@ -1,14 +1,13 @@
 "use strict";
 
 import ProfileView from "./view/profile.js";
-import FilmListsContainerView from "./view/lists-container.js";
 import FooterStatisticView from "./view/footer-statistic.js";
 import StatisticView from "./view/statistic.js";
 import FilmListPresenter from "./presenter/film-list.js";
 import NavigationPresenter from "./presenter/navigation.js";
 import FilmsModel from "./model/films.js";
 import NavigationModel from "./model/navigation.js";
-import {AUTHORIZATION, END_POINT, UPDATE_TYPE} from "./const.js";
+import {AUTHORIZATION, END_POINT, UpdateType} from "./const.js";
 import {render, remove} from "./utils/render.js";
 import Api from "./api.js";
 
@@ -48,8 +47,8 @@ filmListPresenter.init();
 render(siteHeaderElement, new ProfileView());
 
 api.getFilms().then((films) => {
-  filmsModel.setFilms(UPDATE_TYPE.INIT, films);
+  filmsModel.setFilms(UpdateType.INIT, films);
   render(siteFooterStatsElement, new FooterStatisticView(films.length));
 }).catch(() => {
-  filmsModel.setFilms(UPDATE_TYPE.INIT, []);
+  filmsModel.setFilms(UpdateType.INIT, []);
 });

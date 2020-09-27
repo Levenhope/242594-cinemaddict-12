@@ -1,7 +1,7 @@
+import CommentsPresenter from "./comments.js";
 import DetailModalView from "../view/detail-modal.js";
 import {remove} from "../utils/render.js";
-import {UPDATE_TYPE} from "../const";
-import CommentsPresenter from "./comments";
+import {UpdateType} from "../const.js";
 
 export default class DetailModalPresenter {
   constructor(film, changeData, api) {
@@ -69,9 +69,9 @@ export default class DetailModalPresenter {
     });
   }
 
-  update(...properties) {
-    this._detailModalComponent.updateControlsSection(...properties);
+  update(...userFilmProperties) {
+    this._detailModalComponent.updateControlsSection(...userFilmProperties);
     this._initToggles();
-    this._changeData(UPDATE_TYPE.MINOR);
+    this._changeData(UpdateType.MINOR);
   }
 }

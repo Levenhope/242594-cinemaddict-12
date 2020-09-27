@@ -1,4 +1,4 @@
-export const LANG = {
+export const Lang = {
   CLOSE: `close`,
   ORIGINAL_TITLE: `Original`,
   DIRECTOR: `Director`,
@@ -7,6 +7,7 @@ export const LANG = {
   RELEASE_DATE: `Release Date`,
   RUNTIME: `Runtime`,
   COUNTRY: `Country`,
+  GENRE: `Genre`,
   GENRES: `Genres`,
   ADD: `Add`,
   TO: `to`,
@@ -45,5 +46,10 @@ export const LANG = {
   TOP_GENRE: `Top genre`,
   MOVIES: `movies`,
   HOURS_SHORT: `h`,
-  MINUTES_SHORT: `m`
+  MINUTES_SHORT: `m`,
+  ALL_TIME: `All time`,
+  TODAY: `Today`,
+  WEEK: `Week`,
+  MONTH: `Month`,
+  YEAR: `Year`,
 };
