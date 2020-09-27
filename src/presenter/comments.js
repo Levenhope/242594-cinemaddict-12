@@ -14,8 +14,9 @@ export default class CommentsPresenter {
 
     this._commentsModel = new CommentsModel();
     this._commentsContainer = this._parentModal.getElement().querySelector(`.form-details__bottom-container`);
+    this._commentsIdList = this._film.comments;
+    this._commentsComponent = new CommentsView(this._commentsIdList);
     this._commentsListElement = null;
-    this._commentsComponent = new CommentsView(this._film.comments);
     this._filmComments = null;
     this._renderedComments = [];
   }
@@ -89,10 +90,10 @@ export default class CommentsPresenter {
   _setDeleteClickHandlers() {
     for (let i = 0; i < this._renderedComments.length; i++) {
       this._renderedComments[i].setDeleteClickHandler(() => {
-        remove(this._renderedComments[i]);
-        this._filmComments.splice(i, 1);
-
-        this._handleCommentsUpdate();
+        this._api.deleteComment(this._filmComments[i].id)
+          .then(() => {
+            this._handleCommentsUpdate();
+          });
       });
     }
   }
@@ -101,6 +102,7 @@ export default class CommentsPresenter {
     const updatedCommentsComponent = new CommentsView(this._commentsModel.getComments());
     replace(updatedCommentsComponent, this._commentsComponent);
     this._commentsComponent = updatedCommentsComponent;
+    this._renderedComments = [];
     this._setCommentsList();
     this._changeData(UPDATE_TYPE.MINOR);
   }
