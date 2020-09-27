@@ -42,7 +42,6 @@ export default class FilmsModel extends Observer {
   }
 
   static adaptToServer(film) {
-    console.log(film);
     return Object.assign(
         film,
         {

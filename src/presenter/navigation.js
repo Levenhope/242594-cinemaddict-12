@@ -63,6 +63,7 @@ export default class NavigationPresenter {
   }
 
   _handleStatisticButtonClick(statistic) {
+    this._currentFilter = null;
     this._handleNavigationEvent(statistic);
   }
 }

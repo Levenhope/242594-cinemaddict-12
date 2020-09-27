@@ -4,6 +4,7 @@ import moment from "moment";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import {STATISTICS_FILTERS} from "../const.js";
+import {LANG} from "../lang.js";
 
 const renderGenresChart = (statisticCtx, films) => {
   const BAR_HEIGHT = 50;
@@ -30,8 +31,8 @@ const renderGenresChart = (statisticCtx, films) => {
             size: 20
           },
           color: `#ffffff`,
-          anchor: 'start',
-          align: 'start',
+          anchor: `start`,
+          align: `start`,
           offset: 40,
         }
       },
@@ -90,44 +91,43 @@ export default class StatisticView extends SmartView {
 
   getTemplate() {
     const {watchedFilms} = this._data;
-    console.log(watchedFilms);
     return (
       `<section class="statistic">
         <p class="statistic__rank">
-          Your rank
+          ${LANG.YOUR_RANK}
           <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-          <span class="statistic__rank-label">Sci-Fighter</span>
+          <span class="statistic__rank-label">${LANG.RANK_SCI_FIGHTER}</span>
         </p>
     
         <form class="statistic__filters">
-          <p class="statistic__filters-description">Show stats:</p>
-          ${STATISTICS_FILTERS.map((item) => `
-            <input
-              type="radio"
-              class="statistic__filters-input visually-hidden"
-              name="statistic-filter"
-              id="statistic-${item.value}"
-              value="${item.value}"
-              ${item.value === this._currentFilter ? `checked` : ``}
-            >
-            <label for="statistic-${item.value}" class="statistic__filters-label">${item.name}</label>
-          `).join(``)}
+          <p class="statistic__filters-description">${LANG.SHOW_STATS}:</p>
+            ${STATISTICS_FILTERS.map((item) => `
+              <input
+                type="radio"
+                class="statistic__filters-input visually-hidden"
+                name="statistic-filter"
+                id="statistic-${item.value}"
+                value="${item.value}"
+                ${item.value === this._currentFilter ? `checked` : ``}
+              >
+              <label for="statistic-${item.value}" class="statistic__filters-label">${item.name}</label>
+            `).join(``)}
         </form>
     
         <ul class="statistic__text-list">
           <li class="statistic__text-item">
-            <h4 class="statistic__item-title">You watched</h4>
-            <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
+            <h4 class="statistic__item-title">${LANG.YOU_WATCHED}</h4>
+            <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">${LANG.MOVIES}</span></p>
           </li>
           <li class="statistic__text-item">
-            <h4 class="statistic__item-title">Total duration</h4>
+            <h4 class="statistic__item-title">${LANG.TOTAL_DURATION}</h4>
             <p class="statistic__item-text">
-              ${moment.duration(getWatchedFilmsDuration(watchedFilms), "m").hours()} <span class="statistic__item-description">h</span> 
-              ${moment.duration(getWatchedFilmsDuration(watchedFilms), "m").minutes()}<span class="statistic__item-description">m</span>
+              ${moment.duration(getWatchedFilmsDuration(watchedFilms), `m`).hours()} <span class="statistic__item-description">${LANG.HOURS_SHORT}</span> 
+              ${moment.duration(getWatchedFilmsDuration(watchedFilms), `m`).minutes()}<span class="statistic__item-description">${LANG.MINUTES_SHORT}</span>
             </p>
           </li>
           <li class="statistic__text-item">
-            <h4 class="statistic__item-title">Top genre</h4>
+            <h4 class="statistic__item-title">${LANG.TOP_GENRE}</h4>
             <p class="statistic__item-text">${getMostWatchedGenre(watchedFilms)}</p>
           </li>
         </ul>

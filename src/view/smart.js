@@ -11,11 +11,7 @@ export default class SmartView extends Abstract {
       return;
     }
 
-    this._data = Object.assign(
-      {},
-      this._data,
-      update
-    );
+    this._data = Object.assign({}, this._data, update);
 
     if (justDataUpdating) {
       return;

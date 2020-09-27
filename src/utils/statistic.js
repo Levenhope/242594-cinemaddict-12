@@ -6,7 +6,7 @@ export const getWatchedFilmsInDateRange = (films, period) => {
     case `all-time`:
       return films;
     case `today`:
-      dateFrom = moment().startOf('day');
+      dateFrom = moment().startOf(`day`);
       return films.filter((film) => moment(film.watchingDate).isSameOrAfter(dateFrom));
     default:
       dateFrom = moment().subtract(1, period);
@@ -15,7 +15,9 @@ export const getWatchedFilmsInDateRange = (films, period) => {
 };
 
 export const getWatchedFilmsDuration = (films) => {
-  return films.reduce((total, item) => {return total + item.duration}, 0);
+  return films.reduce((total, item) => {
+    return total + item.duration;
+  }, 0);
 };
 
 export const getMostWatchedGenre = (films) => {
@@ -37,14 +39,14 @@ export const getGenreStatistics = (films) => {
   let genreStatistics = {};
 
   const userFilmsGenres = films.reduce((allGenres, item) => {
-    for(let genre of item.genres) {
+    for (let genre of item.genres) {
       allGenres.push(genre);
     }
     return allGenres;
   }, []);
 
-  userFilmsGenres.forEach((genre) => {
-    return genreStatistics[genre] = ( genreStatistics[genre] || 0 ) + 1;
+  userFilmsGenres.map((genre) => {
+    genreStatistics[genre] = (genreStatistics[genre] || 0) + 1;
   });
 
   return genreStatistics;
