@@ -49,11 +49,12 @@ export default class CommentsPresenter {
     let emoji = ``;
     const commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
     const emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
+    let emojiName = ``;
 
     this._commentsComponent.setEmojiClickHandler((e) => {
       const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
       chosenEmojiContainer.innerHTML = ``;
-      let emojiName = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
+      emojiName = e.target.htmlFor ? e.target.htmlFor : e.target.parentElement.htmlFor;
       emojiName = emojiName.substr(6, emojiName.length + 1);
       emoji = EMOJIS_DIRECTORY_PATH + Object.entries(EMOJIS).filter((item) => item[0] === emojiName)[0][1];
       chosenEmojiContainer.insertAdjacentHTML(RENDER_POSITION.BEFORE_END, `<img src="${emoji}" width="${EMOJI_WIDTH}" height="${EMOJI_HEIGHT}" alt="emoji-${emojiName}">`);
@@ -77,14 +78,11 @@ export default class CommentsPresenter {
         return;
       }
 
-      this._filmComments.push({
-        name: DEFAULT_USER_NAME,
-        date: new Date(),
+      this._api.addComment(this._film.id, {
         commentText,
-        emoji
-      });
-
-      this._handleCommentsUpdate();
+        date: new Date(),
+        emoji: emojiName
+      }).then(this._handleCommentsUpdate());
     });
   }
 
@@ -100,8 +98,7 @@ export default class CommentsPresenter {
   }
 
   _handleCommentsUpdate() {
-    this._film.comments = this._filmComments;
-    const updatedCommentsComponent = new CommentsView(this._film.comments);
+    const updatedCommentsComponent = new CommentsView(this._commentsModel.getComments());
     replace(updatedCommentsComponent, this._commentsComponent);
     this._commentsComponent = updatedCommentsComponent;
     this._setCommentsList();

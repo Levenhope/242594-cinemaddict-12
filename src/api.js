@@ -1,13 +1,14 @@
 import FilmsModel from "./model/films.js";
 import CommentsModel from "./model/comments.js";
-import {UPDATE_TYPE} from "./const";
 
-const Method = {
+const METHOD = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`
 };
 
-const SuccessHTTPStatusRange = {
+const SUCCESS_HTTPS_STATUS_RANGE = {
   MIN: 200,
   MAX: 299
 };
@@ -33,7 +34,7 @@ export default class Api {
   updateFilm(film) {
     return this._load({
       uri: `movies/${film.id}`,
-      method: Method.PUT,
+      method: METHOD.PUT,
       body: JSON.stringify(FilmsModel.adaptToServer(film)),
       headers: new Headers({"Content-Type": `application/json`})
     })
@@ -41,9 +42,27 @@ export default class Api {
       .then(FilmsModel.adaptToClient);
   }
 
+  addComment(filmId, comment) {
+    return this._load({
+      uri: `comments/${filmId}`,
+      method: METHOD.POST,
+      body: JSON.stringify(CommentsModel.adaptCommentToServer(comment)),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(Api.toJSON)
+      .then(CommentsModel.adaptToClient);
+  }
+
+  deleteComment(commentId) {
+    return this._load({
+      uri: `comments/${commentId}`,
+      method: METHOD.DELETE
+    });
+  }
+
   _load({
           uri,
-          method = Method.GET,
+          method = METHOD.GET,
           body = null,
           headers = new Headers()
         }) {
@@ -59,8 +78,8 @@ export default class Api {
 
   static checkStatus(response) {
     if (
-      response.status < SuccessHTTPStatusRange.MIN &&
-      response.status > SuccessHTTPStatusRange.MAX
+      response.status < SUCCESS_HTTPS_STATUS_RANGE.MIN &&
+      response.status > SUCCESS_HTTPS_STATUS_RANGE.MAX
     ) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
