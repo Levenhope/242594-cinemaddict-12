@@ -22,19 +22,19 @@ export default class NavigationModel extends Observer {
         }
       },
       [Category.WATCHLIST]: {
-        itemTitle: Lang.WATCHLIST_CAP,
+        itemTitle: Lang.WATCHLIST,
         countEntries(films) {
           return films.filter((film) => film.isInWatchlist).length;
         }
       },
       [Category.HISTORY]: {
-        itemTitle: Lang.HISTORY_CAP,
+        itemTitle: Lang.HISTORY,
         countEntries(films) {
           return films.filter((film) => film.isInHistory).length;
         }
       },
       [Category.FAVORITES]: {
-        itemTitle: Lang.FAVORITES_CAP,
+        itemTitle: Lang.FAVORITES,
         countEntries(films) {
           return films.filter((film) => film.isInFavorites).length;
         }

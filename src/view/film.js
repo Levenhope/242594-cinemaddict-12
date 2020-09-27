@@ -12,9 +12,9 @@ export default class FilmView extends AbstractView {
 
   getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
     return (
-      `<button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchlist ? `film-card__controls-item--active` : ``}">${Lang.ADD} ${Lang.TO} ${Lang.WATCHLIST}</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInHistory ? `film-card__controls-item--active` : ``}">${Lang.MARK} ${Lang.AS} ${Lang.WATCHED}</button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavorites ? `film-card__controls-item--active` : ``}">${Lang.MARK} ${Lang.AS} ${Lang.FAVORITES}</button>`
+      `<button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchlist ? `film-card__controls-item--active` : ``}">${Lang.ADD_TO_WATCHLIST}</button>
+      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInHistory ? `film-card__controls-item--active` : ``}">${Lang.ALREADY_WATCHED}</button>
+      <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavorites ? `film-card__controls-item--active` : ``}">${Lang.ADD_TO_FAVORITES}</button>`
     );
   }
 

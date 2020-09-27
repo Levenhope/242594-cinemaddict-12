@@ -13,11 +13,11 @@ export default class DetailModalView extends AbstractView {
   getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
     return (
       `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
-      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${isInWatchlist ? Lang.ALREADY + ` ` + Lang.IN : Lang.ADD + ` ` + Lang.TO} ${Lang.WATCHLIST}</label>
+      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${Lang.ADD_TO_WATCHLIST}</label>
       <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
-      <label for="watched" class="film-details__control-label film-details__control-label--watched">${isInHistory ? Lang.ALREADY : Lang.ADD + ` ` + Lang.TO} ${Lang.WATCHED}</label>
+      <label for="watched" class="film-details__control-label film-details__control-label--watched">${Lang.ALREADY_WATCHED}</label>
       <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
-      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${isInFavorites ? Lang.ALREADY + ` ` + Lang.IN : Lang.ADD + ` ` + Lang.TO} ${Lang.FAVORITES}</label>`
+      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${Lang.ADD_TO_FAVORITES}</label>`
     );
   }
 
