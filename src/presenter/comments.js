@@ -123,7 +123,7 @@ export default class CommentsPresenter {
             showErrorAnimation(this._renderedComments[i].getElement());
             button.textContent = LANG.DELETE;
             button.removeAttribute(`disabled`);
-        });
+          });
       });
     }
   }

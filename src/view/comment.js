@@ -31,9 +31,10 @@ export default class CommentItemView extends AbstractView {
   }
 
   setDeleteClickHandler(callback) {
-    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, function(e) {
+    const deleteButton = this.getElement().querySelector(`.film-details__comment-delete`);
+    deleteButton.addEventListener(`click`, function (e) {
       e.preventDefault();
-      callback(this);
+      callback(deleteButton);
     });
   }
 }
