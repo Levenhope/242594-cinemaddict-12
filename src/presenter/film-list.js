@@ -34,7 +34,6 @@ export default class FilmListPresenter {
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleEscKeyDownEvent = this._handleEscKeyDownEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
@@ -47,8 +46,6 @@ export default class FilmListPresenter {
     this._navigationModel.addObserver(this._handleModelEvent);
 
     this._renderFilmList();
-
-    document.addEventListener(`keydown`, this._handleEscKeyDownEvent);
   }
 
   destroy() {
@@ -61,8 +58,6 @@ export default class FilmListPresenter {
 
     this._filmsModel.removeObserver(this._handleModelEvent);
     this._navigationModel.removeObserver(this._handleModelEvent);
-
-    document.removeEventListener(`keydown`, this._handleEscKeyDownEvent);
   }
 
   _getFilms() {
@@ -190,13 +185,6 @@ export default class FilmListPresenter {
         this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
         this._renderFilmList();
         break;
-    }
-  }
-
-  _handleEscKeyDownEvent(e) {
-    if (e.key === `Escape` || e.key === `Esc`) {
-      e.preventDefault();
-      this._handleModeChange();
     }
   }
 

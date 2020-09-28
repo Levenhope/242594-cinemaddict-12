@@ -1,6 +1,6 @@
 import moment from "moment";
 import AbstractView from "./abstract.js";
-import {RenderPosition} from "../const.js";
+import {renderTemplate, removeInnerElements} from "../utils/render.js";
 import {Lang} from "../lang.js";
 
 export default class FilmView extends AbstractView {
@@ -8,14 +8,6 @@ export default class FilmView extends AbstractView {
     super();
     this._film = film;
     this._callback = {};
-  }
-
-  getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
-    return (
-      `<button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchlist ? `film-card__controls-item--active` : ``}">${Lang.ADD_TO_WATCHLIST}</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInHistory ? `film-card__controls-item--active` : ``}">${Lang.ALREADY_WATCHED}</button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavorites ? `film-card__controls-item--active` : ``}">${Lang.ADD_TO_FAVORITES}</button>`
-    );
   }
 
   getTemplate() {
@@ -36,24 +28,31 @@ export default class FilmView extends AbstractView {
           <p class="film-card__description">${description.length > 140 ? description.substring(0, 140) + `...` : description}</p>
           <a class="film-card__comments">${comments.length} ${Lang.COMMENTS}</a>
           <div class="film-card__controls">
-            ${this.getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
+            ${this._getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
           </div>
       </article>`
     );
   }
 
-  updateControlsSection(...userFilmProperties) {
-    this._controlsSection = this.getElement().querySelector(`.film-card__controls`);
-    if (this._controlsSection) {
-      this._controlsSection.innerHTML = ``;
-      this._controlsSection.insertAdjacentHTML(RenderPosition.BEFORE_END, this.getControlsTemplate(...userFilmProperties));
-    }
+  _getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
+    return (
+      `<button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${isInWatchlist ? `film-card__controls-item--active` : ``}">${Lang.ADD_TO_WATCHLIST}</button>
+      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isInHistory ? `film-card__controls-item--active` : ``}">${Lang.ALREADY_WATCHED}</button>
+      <button class="film-card__controls-item button film-card__controls-item--favorite ${isInFavorites ? `film-card__controls-item--active` : ``}">${Lang.ADD_TO_FAVORITES}</button>`
+    );
   }
 
-  restoreHandlers() {
+  _restoreHandlers() {
     this.setFavoriteClickHandler(this._callback.favorites);
     this.setHistoryClickHandler(this._callback.history);
     this.setWatchlistClickHandler(this._callback.watchlist);
+  }
+
+  updateControlsSection(...userFilmProperties) {
+    const controlsSection = this.getElement().querySelector(`.film-card__controls`);
+    removeInnerElements(controlsSection);
+    renderTemplate(controlsSection, this._getControlsTemplate(...userFilmProperties));
+    this._restoreHandlers();
   }
 
   setInnerElementsClickHandler(callback) {

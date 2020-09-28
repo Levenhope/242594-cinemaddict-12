@@ -1,24 +1,13 @@
 import moment from "moment";
 import AbstractView from "./abstract.js";
-import {RenderPosition} from "../const.js";
+import {removeInnerElements, renderTemplate} from "../utils/render.js";
 import {Lang} from "../lang.js";
 
 export default class DetailModalView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
-    this._controlsSection = null;
-  }
-
-  getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
-    return (
-      `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
-      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${Lang.ADD_TO_WATCHLIST}</label>
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
-      <label for="watched" class="film-details__control-label film-details__control-label--watched">${Lang.ALREADY_WATCHED}</label>
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
-      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${Lang.ADD_TO_FAVORITES}</label>`
-    );
+    this._callback = {};
   }
 
   getTemplate() {
@@ -86,7 +75,7 @@ export default class DetailModalView extends AbstractView {
               </div>
             </div>
             <section class="film-details__controls">
-              ${this.getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
+              ${this._getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
             </section>
           </div>
           <div class="form-details__bottom-container">
@@ -96,12 +85,28 @@ export default class DetailModalView extends AbstractView {
     );
   }
 
+  _getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
+    return (
+      `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
+      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${Lang.ADD_TO_WATCHLIST}</label>
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
+      <label for="watched" class="film-details__control-label film-details__control-label--watched">${Lang.ALREADY_WATCHED}</label>
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
+      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${Lang.ADD_TO_FAVORITES}</label>`
+    );
+  }
+
+  _restoreHandlers() {
+    this.setFavoriteClickHandler(this._callback.favorites);
+    this.setHistoryClickHandler(this._callback.history);
+    this.setWatchlistClickHandler(this._callback.watchlist);
+  }
+
   updateControlsSection(...userFilmProperties) {
-    this._controlsSection = this.getElement().querySelector(`.film-details__controls`);
-    if (this._controlsSection) {
-      this._controlsSection.innerHTML = ``;
-      this._controlsSection.insertAdjacentHTML(RenderPosition.BEFORE_END, this.getControlsTemplate(...userFilmProperties));
-    }
+    const controlsSection = this.getElement().querySelector(`.film-details__controls`);
+    removeInnerElements(controlsSection);
+    renderTemplate(controlsSection, this._getControlsTemplate(...userFilmProperties));
+    this._restoreHandlers();
   }
 
   setCloseButtonClickHandler(callback) {
@@ -111,18 +116,21 @@ export default class DetailModalView extends AbstractView {
   }
 
   setFavoriteClickHandler(callback) {
+    this._callback.favorites = callback;
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setHistoryClickHandler(callback) {
+    this._callback.history = callback;
     this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, function () {
       callback();
     });
   }
 
   setWatchlistClickHandler(callback) {
+    this._callback.watchlist = callback;
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, function () {
       callback();
     });

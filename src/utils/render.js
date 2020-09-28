@@ -20,6 +20,20 @@ export const render = (container, element, place = RenderPosition.BEFORE_END) =>
   }
 };
 
+export const renderTemplate = (container, template, place = RenderPosition.BEFORE_END) => {
+  if (container instanceof AbstractView) {
+    container = container.getElement();
+  }
+
+  container.insertAdjacentHTML(place, template);
+};
+
+export const removeInnerElements = (parent) => {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+};
+
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;

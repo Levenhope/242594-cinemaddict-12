@@ -2,7 +2,7 @@ import CommentsView from "../view/comments.js";
 import CommentItemView from "../view/comment-item.js";
 import CommentsModel from "../model/comments.js";
 import {Emoji, EMOJI_DIRECTORY_PATH, UpdateType, EmojiImageSize, RenderPosition} from "../const.js";
-import {render, replace} from "../utils/render.js";
+import {render, replace, removeInnerElements} from "../utils/render.js";
 import {showErrorAnimation} from "../utils/comment.js";
 import {Lang} from "../lang.js";
 
@@ -14,10 +14,8 @@ export default class CommentsPresenter {
     this._changeData = changeData;
 
     this._commentsModel = new CommentsModel();
-    this._commentsContainer = this._parentModal.getElement().querySelector(`.form-details__bottom-container`);
     this._commentsIdList = this._film.comments;
-    this._commentsComponent = new CommentsView(this._commentsIdList);
-    this._commentsListElement = null;
+    this._commentsComponent = null;
     this._filmComments = null;
     this._commentInputElement = null;
     this._emojisListElement = null;
@@ -28,6 +26,10 @@ export default class CommentsPresenter {
     this._setCommentsList();
   }
 
+  destroy() {
+    remove(this._commentsComponent);
+  }
+
   _setCommentsList({update = false} = {}) {
     this._api.getComments(this._film.id)
       .then((comments) => {
@@ -35,36 +37,19 @@ export default class CommentsPresenter {
       })
       .then(() => {
         if (update) {
-          this._renderedComments = [];
-          this._film.comments = this._commentsModel.getComments().map((comment) => comment.id);
-          const updatedCommentsComponent = new CommentsView(this._film.comments);
-          replace(updatedCommentsComponent, this._commentsComponent);
-          this._commentsComponent = updatedCommentsComponent;
+          this._updateComments();
         } else {
-          render(this._commentsContainer, this._commentsComponent);
-        }
-
-        this._commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
-        this._emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
-        this._commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
-
-        if (update) {
-          this._commentInputElement.setAttribute(`disabled`, `disabled`);
+          const commentsContainer = this._parentModal.getElement().querySelector(`.form-details__bottom-container`);
+          this._commentsComponent = new CommentsView(this._commentsIdList);
+          render(commentsContainer, this._commentsComponent);
         }
 
         this._filmComments = this._commentsModel.getComments();
       }).then(() => {
-        for (let i = 0; i < this._filmComments.length; i++) {
-          const commentItemComponent = new CommentItemView(this._filmComments[i]);
-          render(this._commentsListElement, commentItemComponent);
-          this._renderedComments[i] = commentItemComponent;
-        }
-
-        this._setDeleteClickHandlers();
-        this._setFormActions();
+        this._renderComments();
+        this._initCommentForm();
 
         if (update) {
-          this._commentInputElement.removeAttribute(`disabled`);
           this._changeData(UpdateType.MINOR);
         }
       }).catch(() => {
@@ -73,12 +58,24 @@ export default class CommentsPresenter {
       });
   }
 
-  _setFormActions() {
+  _renderComments() {
+    const commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
+    for (let i = 0; i < this._filmComments.length; i++) {
+      const commentItemComponent = new CommentItemView(this._filmComments[i]);
+      render(commentsListElement, commentItemComponent);
+      this._renderedComments[i] = commentItemComponent;
+    }
+    this._setDeleteClickHandlers();
+  }
+
+  _initCommentForm() {
+    this._commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
+    this._emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
     let emoji = ``;
 
     this._commentsComponent.setEmojiClickHandler((label) => {
       const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
-      chosenEmojiContainer.innerHTML = ``;
+      removeInnerElements(chosenEmojiContainer);
       emoji = label.htmlFor ? label.htmlFor : label.parentElement.htmlFor;
       emoji = emoji.substr(6, emoji.length + 1);
       let emojiFile = EMOJI_DIRECTORY_PATH + Object.entries(Emoji).filter((emojiItem) => emojiItem[0] === emoji)[0][1];
@@ -91,10 +88,12 @@ export default class CommentsPresenter {
 
       if (commentText === ``) {
         showErrorAnimation(this._commentInputElement);
+        commentInput.removeAttribute(`disabled`, `disabled`);
         return;
       }
       if (emoji === ``) {
         showErrorAnimation(this._emojisListElement);
+        commentInput.removeAttribute(`disabled`, `disabled`);
         return;
       }
 
@@ -102,7 +101,10 @@ export default class CommentsPresenter {
         commentText,
         date: new Date(),
         emoji
-      }).then(this._handleCommentsUpdate())
+      }).then(() => {
+          this._setCommentsList({update: true});
+          commentInput.removeAttribute(`disabled`, `disabled`);
+        })
         .catch(() => {
           showErrorAnimation(this._commentInputElement);
           showErrorAnimation(this._emojisListElement);
@@ -111,8 +113,12 @@ export default class CommentsPresenter {
     });
   }
 
-  _handleCommentsUpdate() {
-    this._setCommentsList({update: true});
+  _updateComments() {
+    this._renderedComments = [];
+    this._film.comments = this._commentsModel.getComments().map((comment) => comment.id);
+    const updatedCommentsComponent = new CommentsView(this._film.comments);
+    replace(updatedCommentsComponent, this._commentsComponent);
+    this._commentsComponent = updatedCommentsComponent;
   }
 
   _setDeleteClickHandlers() {
@@ -122,7 +128,7 @@ export default class CommentsPresenter {
         button.setAttribute(`disabled`, `disabled`);
         this._api.deleteComment(this._filmComments[i].id)
           .then(() => {
-            this._handleCommentsUpdate();
+            this._setCommentsList({update: true});
           }).catch(() => {
             showErrorAnimation(this._renderedComments[i].getElement());
             button.textContent = Lang.DELETE;

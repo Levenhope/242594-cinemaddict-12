@@ -12,15 +12,13 @@ export default class FilmPresenter {
     this._api = api;
 
     this._filmComponent = new FilmView(this._film);
-    this._detailModalPresenter = new DetailModalPresenter(this._film, this._changeData, this._api);
+    this._detailModalPresenter = new DetailModalPresenter(this._film, this._filmComponent, this._changeData, this._api, this._changeMode);
     this._mode = ScreenMode.DEFAULT;
   }
 
   init() {
-    this._detailModalPresenter.init(this._filmComponent);
-    this.setInnerToggles();
-
     render(this._parent.getElement().querySelector(`.films-list__container`), this._filmComponent);
+    this._setInnerToggles();
   }
 
   destroy() {
@@ -28,16 +26,13 @@ export default class FilmPresenter {
   }
 
   hideModal() {
-    this._detailModalPresenter.hide();
+    this._detailModalPresenter.destroy();
     this._mode = ScreenMode.DEFAULT;
   }
 
-  setInnerToggles() {
+  _setInnerToggles() {
     this._filmComponent.setInnerElementsClickHandler(() => {
-      this._changeMode();
-      this._detailModalPresenter = new DetailModalPresenter(this._film, this._changeData, this._api);
-      this._detailModalPresenter.init(this._filmComponent);
-      this._detailModalPresenter.show();
+      this._detailModalPresenter.init();
       this._mode = ScreenMode.MODAL;
     });
 
@@ -51,6 +46,7 @@ export default class FilmPresenter {
       this._film.isInWatchlist = !this._film.isInWatchlist;
       this._api.updateFilm(this._film).then(() => {
         this._changeData(UpdateType.MINOR);
+        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       });
     });
   }
@@ -60,6 +56,7 @@ export default class FilmPresenter {
       this._film.isInFavorites = !this._film.isInFavorites;
       this._api.updateFilm(this._film).then(() => {
         this._changeData(UpdateType.MINOR);
+        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       });
     });
   }
@@ -72,6 +69,7 @@ export default class FilmPresenter {
       }
       this._api.updateFilm(this._film).then(() => {
         this._changeData(UpdateType.MINOR);
+        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       });
     });
   }
