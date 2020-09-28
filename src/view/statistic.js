@@ -166,11 +166,11 @@ export default class StatisticView extends SmartView {
   }
 
   _setFilterChangeHandler(callback) {
-    for (let filterItem of this.getElement().querySelectorAll(`.statistic__filters-input`)) {
+    this.getElement().querySelectorAll(`.statistic__filters-input`).forEach((filterItem) => {
       filterItem.addEventListener(`change`, function () {
         callback(filterItem);
       });
-    }
+    });
   }
 
   _initFilterChangeHandler() {

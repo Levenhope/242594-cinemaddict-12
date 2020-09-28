@@ -74,7 +74,7 @@ export default class CommentsPresenter {
       removeInnerElements(chosenEmojiContainer);
       emoji = label.htmlFor ? label.htmlFor : label.parentElement.htmlFor;
       emoji = emoji.substr(6, emoji.length + 1);
-      let emojiFile = EMOJI_DIRECTORY_PATH + Object.entries(Emoji).filter((emojiItem) => emojiItem[0] === emoji)[0][1];
+      const emojiFile = EMOJI_DIRECTORY_PATH + Object.entries(Emoji).filter((emojiItem) => emojiItem[0] === emoji)[0][1];
       chosenEmojiContainer.insertAdjacentHTML(RenderPosition.BEFORE_END, `<img src="${emojiFile}" width="${EmojiImageSize.BIG}" height="${EmojiImageSize.BIG}" alt="emoji-${emoji}">`);
     });
 

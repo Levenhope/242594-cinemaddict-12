@@ -14,21 +14,21 @@ export default class SortView extends AbstractView {
   }
 
   updateSortView(currentSortType) {
-    for (let button of this.getElement().querySelectorAll(`.sort__button`)) {
+    this.getElement().querySelectorAll(`.sort__button`).forEach((button) => {
       if (button.dataset.sortType === currentSortType) {
         button.classList.add(`sort__button--active`);
       } else {
         button.classList.remove(`sort__button--active`);
       }
-    }
+    });
   }
 
   setSortTypeChangeHandler(callback) {
-    for (let button of this.getElement().querySelectorAll(`.sort__button`)) {
+    this.getElement().querySelectorAll(`.sort__button`).forEach((button) => {
       button.addEventListener(`click`, function (e) {
         e.preventDefault();
         callback(button.dataset.sortType);
       });
-    }
+    });
   }
 }

@@ -34,11 +34,11 @@ export default class CommentsView extends AbstractView {
   }
 
   setEmojiClickHandler(callback) {
-    for (let label of this.getElement().querySelectorAll(`.film-details__emoji-label`)) {
+    this.getElement().querySelectorAll(`.film-details__emoji-label`).forEach((label) => {
       label.addEventListener(`click`, function () {
         callback(label);
       });
-    }
+    });
   }
 
   setSubmitHandler(callback) {

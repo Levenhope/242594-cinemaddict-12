@@ -32,21 +32,19 @@ export default class NavigationView extends AbstractView {
   setFilterTypeChangeHandler(callback) {
     const statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
     const commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
-    for (let navItem of commonItems) {
+    commonItems.forEach((navItem) => {
       navItem.addEventListener(`click`, function () {
         statisticButton.classList.remove(`main-navigation__item--active`);
         callback(navItem.getAttribute(`data-nav`));
       });
-    }
+    });
   }
 
   setStatisticButtonClickHandler(callback) {
     const statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
     const commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
     statisticButton.addEventListener(`click`, function () {
-      for (let navItem of commonItems) {
-        navItem.classList.remove(`main-navigation__item--active`);
-      }
+      commonItems.forEach((navItem) => navItem.classList.remove(`main-navigation__item--active`));
       statisticButton.classList.add(`main-navigation__item--active`);
       callback(statisticButton.getAttribute(`data-nav`));
     });

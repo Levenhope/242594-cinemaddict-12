@@ -56,12 +56,12 @@ export default class FilmView extends AbstractView {
   }
 
   setInnerElementsClickHandler(callback) {
-    for (let clickableElement of this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)) {
+    this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`).forEach((clickableElement) => {
       clickableElement.addEventListener(`click`, function (e) {
         e.preventDefault();
         callback();
       });
-    }
+    });
   }
 
   setFavoriteClickHandler(callback) {
