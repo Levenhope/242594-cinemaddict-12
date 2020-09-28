@@ -26,10 +26,6 @@ export default class CommentsPresenter {
     this._setCommentsList();
   }
 
-  destroy() {
-    remove(this._commentsComponent);
-  }
-
   _setCommentsList({update = false} = {}) {
     this._api.getComments(this._film.id)
       .then((comments) => {
@@ -102,14 +98,13 @@ export default class CommentsPresenter {
         date: new Date(),
         emoji
       }).then(() => {
-          this._setCommentsList({update: true});
-          commentInput.removeAttribute(`disabled`, `disabled`);
-        })
-        .catch(() => {
-          showErrorAnimation(this._commentInputElement);
-          showErrorAnimation(this._emojisListElement);
-          commentInput.removeAttribute(`disabled`, `disabled`);
-        });
+        this._setCommentsList({update: true});
+        commentInput.removeAttribute(`disabled`, `disabled`);
+      }).catch(() => {
+        showErrorAnimation(this._commentInputElement);
+        showErrorAnimation(this._emojisListElement);
+        commentInput.removeAttribute(`disabled`, `disabled`);
+      });
     });
   }
 
