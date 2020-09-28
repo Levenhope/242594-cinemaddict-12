@@ -51,7 +51,7 @@ export const RenderPosition = {
   BEFORE_END: `beforeend`
 };
 
-export const StatisticsFilter = [
+export const StatisticsFilters = [
   {
     name: Lang.ALL_TIME,
     value: `all-time`

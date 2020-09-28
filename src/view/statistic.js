@@ -3,7 +3,7 @@ import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import SmartView from "./smart.js";
 import {getMostWatchedGenre, getWatchedFilmsInDateRange, getWatchedFilmsDuration, getGenreStatistics, getRatingTitle} from "../utils/statistic.js";
-import {StatisticsFilter} from "../const.js";
+import {StatisticsFilters} from "../const.js";
 import {Lang} from "../lang.js";
 
 const renderGenresChart = (statisticCtx, films) => {
@@ -101,7 +101,7 @@ export default class StatisticView extends SmartView {
     
         <form class="statistic__filters" action="" method="get">
           <p class="statistic__filters-description">${Lang.SHOW_STATS}:</p>
-            ${StatisticsFilter.map((filter) => `
+            ${StatisticsFilters.map((filter) => `
               <input
                 type="radio"
                 class="statistic__filters-input visually-hidden"
