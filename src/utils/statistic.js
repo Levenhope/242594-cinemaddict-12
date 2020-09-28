@@ -29,7 +29,7 @@ export const getMostWatchedGenre = (films) => {
 };
 
 export const getGenreStatistics = (films) => {
-  let genreStatistics = {};
+  const genreStatistics = {};
 
   films.reduce((allGenres, film) => {
     allGenres.push(...film.genres);
