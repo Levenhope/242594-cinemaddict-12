@@ -44,7 +44,7 @@ export default class CommentsView extends AbstractView {
   setSubmitHandler(callback) {
     const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
     commentInput.addEventListener(`keydown`, function (e) {
-      if ((e.ctrlKey || e.metaKey) && (e.enter || e.keyCode === 13 || e.keyCode === 10)) {
+      if ((e.ctrlKey || e.metaKey || e.keyCode === 17) && (e.enter || e.keyCode === 13 || e.keyCode === 10)) {
         callback(commentInput);
       }
     });
