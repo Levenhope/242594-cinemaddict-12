@@ -3,10 +3,6 @@ import {Lang} from "../lang.js";
 import {SortType} from "../const.js";
 
 export default class SortView extends AbstractView {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return (
       `<ul class="sort">

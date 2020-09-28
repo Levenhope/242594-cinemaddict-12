@@ -76,7 +76,6 @@ export default class StatisticView extends SmartView {
 
     this._watchedFilms = filmsModel.getFilms().filter((film) => film.isInHistory);
 
-
     this._data = {
       watchedFilms: this._watchedFilms
     };
@@ -84,8 +83,7 @@ export default class StatisticView extends SmartView {
     this._rankTitle = ``;
     this._currentFilter = `all-time`;
     this._genresChart = null;
-    this._periodChangeHandler = this._periodChangeHandler.bind(this);
-    this._setFilterChangeHandler = this._setFilterChangeHandler.bind(this);
+    this._handlePeriodChange = this._handlePeriodChange.bind(this);
 
     this._setChart();
     this._initFilterChangeHandler();
@@ -167,24 +165,24 @@ export default class StatisticView extends SmartView {
     this._genresChart = renderGenresChart(statisticCtx, watchedFilms);
   }
 
-  _periodChangeHandler(watchedFilms) {
-    this.updateData({
-      watchedFilms
-    });
-  }
-
-  _initFilterChangeHandler() {
-    this._setFilterChangeHandler((filterItem) => {
-      this._currentFilter = filterItem.value;
-      this._periodChangeHandler(getWatchedFilmsInDateRange(this._watchedFilms, filterItem.value));
-    });
-  }
-
   _setFilterChangeHandler(callback) {
     for (let filterItem of this.getElement().querySelectorAll(`.statistic__filters-input`)) {
       filterItem.addEventListener(`change`, function () {
         callback(filterItem);
       });
     }
+  }
+
+  _initFilterChangeHandler() {
+    this._setFilterChangeHandler((filterItem) => {
+      this._currentFilter = filterItem.value;
+      this._handlePeriodChange(getWatchedFilmsInDateRange(this._watchedFilms, filterItem.value));
+    });
+  }
+
+  _handlePeriodChange(watchedFilms) {
+    this.updateData({
+      watchedFilms
+    });
   }
 }
