@@ -12,7 +12,7 @@ export default class FilmPresenter {
     this._api = api;
 
     this._filmComponent = new FilmView(this._film);
-    this._detailModalPresenter = new DetailModalPresenter(this._film, this._filmComponent, this._changeData, this._api, this._changeMode);
+    this._detailModalPresenter = new DetailModalPresenter(this._film, this._filmComponent, this._changeData, this._api);
     this._mode = ScreenMode.DEFAULT;
   }
 
@@ -32,6 +32,7 @@ export default class FilmPresenter {
 
   _setInnerToggles() {
     this._filmComponent.setInnerElementsClickHandler(() => {
+      this._changeMode();
       this._detailModalPresenter.init();
       this._mode = ScreenMode.MODAL;
     });

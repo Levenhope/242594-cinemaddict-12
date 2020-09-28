@@ -185,6 +185,9 @@ export default class FilmListPresenter {
         this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
         this._renderFilmList();
         break;
+      case UpdateType.SORT:
+        this._clearBoard({resetRenderedFilmsCount: true});
+        this._renderFilmList();
     }
   }
 
@@ -194,7 +197,6 @@ export default class FilmListPresenter {
     }
     this._currentSortType = sortType;
     this._sortComponent.updateSortView(sortType);
-    this._clearBoard();
-    this._renderFilmList();
+    this._handleModelEvent(UpdateType.SORT);
   }
 }

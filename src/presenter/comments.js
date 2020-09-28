@@ -3,7 +3,7 @@ import CommentItemView from "../view/comment-item.js";
 import CommentsModel from "../model/comments.js";
 import {Emoji, EMOJI_DIRECTORY_PATH, UpdateType, EmojiImageSize, RenderPosition} from "../const.js";
 import {render, replace, removeInnerElements} from "../utils/render.js";
-import {showErrorAnimation} from "../utils/comment.js";
+import {showErrorAnimation} from "../utils/helpers.js";
 import {Lang} from "../lang.js";
 
 export default class CommentsPresenter {

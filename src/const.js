@@ -30,7 +30,8 @@ export const UpdateType = {
   NAVIGATION: `NAVIGATION`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
-  INIT: `INIT`
+  INIT: `INIT`,
+  SORT: `SORT`
 };
 
 export const SortType = {

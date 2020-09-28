@@ -4,12 +4,11 @@ import {render, remove} from "../utils/render.js";
 import {UpdateType} from "../const.js";
 
 export default class DetailModalPresenter {
-  constructor(film, filmComponent, changeData, api, changeMode) {
+  constructor(film, filmComponent, changeData, api) {
     this._film = film;
     this._filmComponent = filmComponent;
     this._changeData = changeData;
     this._api = api;
-    this._changeMode = changeMode;
 
     this._detailModalContainer = document.querySelector(`body`);
     this._detailModalComponent = new DetailModalView(this._film);

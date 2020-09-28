@@ -1,7 +1,7 @@
 import he from "he";
 import AbstractView from "./abstract.js";
 import {EMOJI_DIRECTORY_PATH, Emoji, EmojiImageSize} from "../const.js";
-import {getHumanizedTimestamp} from "../utils/comment.js";
+import {getHumanizedTimestamp} from "../utils/helpers.js";
 import {Lang} from "../lang.js";
 
 export default class CommentItemView extends AbstractView {

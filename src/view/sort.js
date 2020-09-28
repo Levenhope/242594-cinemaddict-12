@@ -3,6 +3,12 @@ import {Lang} from "../lang.js";
 import {SortType} from "../const.js";
 
 export default class SortView extends AbstractView {
+  constructor() {
+    super();
+
+    this._sortButtons = this.getElement().querySelectorAll(`.sort__button`);
+  }
+
   getTemplate() {
     return (
       `<ul class="sort">
@@ -14,7 +20,7 @@ export default class SortView extends AbstractView {
   }
 
   updateSortView(currentSortType) {
-    this.getElement().querySelectorAll(`.sort__button`).forEach((button) => {
+    this._sortButtons.forEach((button) => {
       if (button.dataset.sortType === currentSortType) {
         button.classList.add(`sort__button--active`);
       } else {
@@ -24,7 +30,7 @@ export default class SortView extends AbstractView {
   }
 
   setSortTypeChangeHandler(callback) {
-    this.getElement().querySelectorAll(`.sort__button`).forEach((button) => {
+    this._sortButtons.forEach((button) => {
       button.addEventListener(`click`, function (e) {
         e.preventDefault();
         callback(button.dataset.sortType);
