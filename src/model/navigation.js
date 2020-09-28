@@ -1,12 +1,11 @@
 import Observer from "../utils/observer.js";
-import {CATEGORIES} from "../const.js";
-import {LANG} from "../lang";
-import {UPDATE_TYPE} from "../const";
+import {Category, UpdateType} from "../const.js";
+import {Lang} from "../lang.js";
 
 export default class NavigationModel extends Observer {
   constructor() {
     super();
-    this._activeCategory = CATEGORIES.ALL;
+    this._activeCategory = Category.ALL;
   }
 
   setFilter(updateType, category) {
@@ -16,26 +15,26 @@ export default class NavigationModel extends Observer {
 
   getCounters() {
     const navigationMap = {
-      [CATEGORIES.ALL]: {
-        itemTitle: LANG.ALL_MOVIES,
+      [Category.ALL]: {
+        itemTitle: Lang.ALL_MOVIES,
         countEntries(films) {
           return films.length;
         }
       },
-      [CATEGORIES.WATCHLIST]: {
-        itemTitle: LANG.WATCHLIST_CAP,
+      [Category.WATCHLIST]: {
+        itemTitle: Lang.WATCHLIST,
         countEntries(films) {
           return films.filter((film) => film.isInWatchlist).length;
         }
       },
-      [CATEGORIES.HISTORY]: {
-        itemTitle: LANG.HISTORY_CAP,
+      [Category.HISTORY]: {
+        itemTitle: Lang.HISTORY,
         countEntries(films) {
           return films.filter((film) => film.isInHistory).length;
         }
       },
-      [CATEGORIES.FAVORITES]: {
-        itemTitle: LANG.FAVORITES_CAP,
+      [Category.FAVORITES]: {
+        itemTitle: Lang.FAVORITES,
         countEntries(films) {
           return films.filter((film) => film.isInFavorites).length;
         }
@@ -50,6 +49,6 @@ export default class NavigationModel extends Observer {
   }
 
   updateCounters() {
-    this._notify(UPDATE_TYPE.NAVIGATION);
+    this._notify(UpdateType.NAVIGATION);
   }
 }

@@ -27,8 +27,6 @@ export default class CommentsModel extends Observer {
 
   static adaptCommentToServer(comment) {
     return {
-      id: comment.id,
-      author: comment.name,
       date: comment.date.toISOString(),
       comment: comment.commentText,
       emotion: comment.emoji

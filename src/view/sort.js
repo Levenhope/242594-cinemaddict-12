@@ -1,18 +1,14 @@
 import AbstractView from "./abstract.js";
-import {LANG} from "../lang.js";
-import {SORT_TYPE} from "../const.js";
+import {Lang} from "../lang.js";
+import {SortType} from "../const.js";
 
 export default class SortView extends AbstractView {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return (
       `<ul class="sort">
-        <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SORT_TYPE.DEFAULT}">${LANG.SORT_BY} ${LANG.DEFAULT}</a></li>
-        <li><a href="#" class="sort__button" data-sort-type="${SORT_TYPE.DATE}">${LANG.SORT_BY} ${LANG.DATE}</a></li>
-        <li><a href="#" class="sort__button" data-sort-type="${SORT_TYPE.RATING}">${LANG.SORT_BY} ${LANG.RATING}</a></li>
+        <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">${Lang.SORT_BY} ${Lang.DEFAULT}</a></li>
+        <li><a href="#" class="sort__button" data-sort-type="${SortType.DATE}">${Lang.SORT_BY} ${Lang.DATE}</a></li>
+        <li><a href="#" class="sort__button" data-sort-type="${SortType.RATING}">${Lang.SORT_BY} ${Lang.RATING}</a></li>
       </ul>`
     );
   }

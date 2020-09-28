@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {LANG} from "../lang.js";
+import {Lang} from "../lang.js";
 
 export default class FooterStatisticView extends AbstractView {
   constructor(number) {
@@ -9,7 +9,7 @@ export default class FooterStatisticView extends AbstractView {
 
   getTemplate() {
     return (
-      `<p>${this._number} ${LANG.FILMS_STATS_MESSAGE}</p>`
+      `<p>${this._number} ${Lang.FILMS_STATS_MESSAGE}</p>`
     );
   }
 }

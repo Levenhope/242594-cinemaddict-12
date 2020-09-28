@@ -1,7 +1,7 @@
-export const sortDate = (a, b) => {
+export const sortByDate = (a, b) => {
   return b.date.getTime() - a.date.getTime();
 };
 
-export const sortRating = (a, b) => {
+export const sortByRating = (a, b) => {
   return b.rating - a.rating;
 };

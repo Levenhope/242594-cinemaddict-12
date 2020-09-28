@@ -1,7 +1,7 @@
-import FilmView from "../view/film.js";
 import DetailModalPresenter from "./detail-modal.js";
+import FilmView from "../view/film.js";
 import {render, remove} from "../utils/render.js";
-import {UPDATE_TYPE, MODE} from "../const.js";
+import {UpdateType, ScreenMode} from "../const.js";
 
 export default class FilmPresenter {
   constructor(film, parent, changeMode, changeData, api) {
@@ -12,15 +12,13 @@ export default class FilmPresenter {
     this._api = api;
 
     this._filmComponent = new FilmView(this._film);
-    this._detailModalPresenter = new DetailModalPresenter(this._film, this._changeData, this._api);
-    this._mode = MODE.DEFAULT;
+    this._detailModalPresenter = new DetailModalPresenter(this._film, this._filmComponent, this._changeData, this._api, this._changeMode);
+    this._mode = ScreenMode.DEFAULT;
   }
 
   init() {
-    this._detailModalPresenter.init(this._filmComponent);
-    this.setInnerToggles();
-
     render(this._parent.getElement().querySelector(`.films-list__container`), this._filmComponent);
+    this._setInnerToggles();
   }
 
   destroy() {
@@ -28,17 +26,14 @@ export default class FilmPresenter {
   }
 
   hideModal() {
-    this._detailModalPresenter.hide();
-    this._mode = MODE.DEFAULT;
+    this._detailModalPresenter.destroy();
+    this._mode = ScreenMode.DEFAULT;
   }
 
-  setInnerToggles() {
+  _setInnerToggles() {
     this._filmComponent.setInnerElementsClickHandler(() => {
-      this._changeMode();
-      this._detailModalPresenter = new DetailModalPresenter(this._film, this._changeData, this._api);
-      this._detailModalPresenter.init(this._filmComponent);
-      this._detailModalPresenter.show();
-      this._mode = MODE.MODAL;
+      this._detailModalPresenter.init();
+      this._mode = ScreenMode.MODAL;
     });
 
     this._setWatchlistToggleHandler();
@@ -50,7 +45,8 @@ export default class FilmPresenter {
     this._filmComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
       this._api.updateFilm(this._film).then(() => {
-        this._changeData(UPDATE_TYPE.MINOR);
+        this._changeData(UpdateType.MINOR);
+        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       });
     });
   }
@@ -59,7 +55,8 @@ export default class FilmPresenter {
     this._filmComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
       this._api.updateFilm(this._film).then(() => {
-        this._changeData(UPDATE_TYPE.MINOR);
+        this._changeData(UpdateType.MINOR);
+        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       });
     });
   }
@@ -71,7 +68,8 @@ export default class FilmPresenter {
         this._film.watchingDate = new Date();
       }
       this._api.updateFilm(this._film).then(() => {
-        this._changeData(UPDATE_TYPE.MINOR);
+        this._changeData(UpdateType.MINOR);
+        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
       });
     });
   }

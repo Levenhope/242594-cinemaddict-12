@@ -1,73 +1,81 @@
+import {Lang} from "./lang.js";
+
 export const AUTHORIZATION = `Basic dfhsdkjfhsdf74r3`;
 export const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 export const FILMS_NUMBER_PER_STEP = 5;
+
 export const ERROR_ANIMATION_TIMEOUT = 10;
-export const EMOJI_WIDTH = 55;
-export const EMOJI_HEIGHT = 55;
-export const EMOJI_WIDTH_SMALL = 30;
-export const EMOJI_HEIGHT_SMALL = 30;
 
-export const EMOJIS_DIRECTORY_PATH = `./images/emoji/`;
+export const EMOJI_DIRECTORY_PATH = `./images/emoji/`;
 
-export const EMOJIS = {
+export const EmojiImageSize = {
+  SMALL: 30,
+  BIG: 55
+};
+
+export const Emoji = {
   angry: `angry.png`,
   puke: `puke.png`,
   sleeping: `sleeping.png`,
   smile: `smile.png`
 };
 
-export const MODE = {
+export const ScreenMode = {
   DEFAULT: `DEFAULT`,
   MODAL: `MODAL`
 };
 
-export const UPDATE_TYPE = {
+export const UpdateType = {
   NAVIGATION: `NAVIGATION`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
   INIT: `INIT`
 };
 
-export const SORT_TYPE = {
+export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
   RATING: `rating`
 };
 
-export const CATEGORIES = {
+export const Category = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
 };
 
-export const RENDER_POSITION = {
+export const RenderPosition = {
   AFTER_BEGIN: `afterbegin`,
   BEFORE_END: `beforeend`
 };
 
 export const STATISTICS_FILTERS = [
   {
-    name: `All time`,
+    name: Lang.ALL_TIME,
     value: `all-time`
   },
   {
-    name: `Today`,
+    name: Lang.TODAY,
     value: `today`
   },
   {
-    name: `Week`,
+    name: Lang.WEEK,
     value: `week`
   },
   {
-    name: `Month`,
+    name: Lang.MONTH,
     value: `month`
   },
   {
-    name: `Year`,
+    name: Lang.YEAR,
     value: `year`
   }
 ];
 
-export const DEFAULT_USER_NAME = `You`;
+export const Rank = {
+  NOVICE: Lang.RANK_NOVICE,
+  FAN: Lang.RANK_FAN,
+  MOVIE_BUFF: Lang.RANK_MOVIE_BUFF
+};

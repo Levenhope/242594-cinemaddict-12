@@ -1,6 +1,7 @@
 import moment from "moment";
+import {Rank} from "../const.js";
 
-export const getWatchedFilmsInDateRange = (films, period) => {
+export const getWatchedFilmsInDateRange = (films, period = `all-time`) => {
   let dateFrom;
   switch (period) {
     case `all-time`:
@@ -15,13 +16,13 @@ export const getWatchedFilmsInDateRange = (films, period) => {
 };
 
 export const getWatchedFilmsDuration = (films) => {
-  return films.reduce((total, item) => {
-    return total + item.duration;
+  return films.reduce((totalDuration, film) => {
+    return totalDuration + film.duration;
   }, 0);
 };
 
 export const getMostWatchedGenre = (films) => {
-  let genreStatistics = getGenreStatistics(films);
+  const genreStatistics = getGenreStatistics(films);
   let mostWatchedViews = 0;
   let mostWatchedGenre = ``;
 
@@ -38,8 +39,8 @@ export const getMostWatchedGenre = (films) => {
 export const getGenreStatistics = (films) => {
   let genreStatistics = {};
 
-  const userFilmsGenres = films.reduce((allGenres, item) => {
-    for (let genre of item.genres) {
+  const userFilmsGenres = films.reduce((allGenres, film) => {
+    for (let genre of film.genres) {
       allGenres.push(genre);
     }
     return allGenres;
@@ -50,4 +51,18 @@ export const getGenreStatistics = (films) => {
   });
 
   return genreStatistics;
+};
+
+export const getRatingTitle = (watchedFilmsNumber) => {
+  let rankTitle = ``;
+
+  if (watchedFilmsNumber > 0 && watchedFilmsNumber < 11) {
+    rankTitle = Rank.NOVICE;
+  } else if (watchedFilmsNumber > 10 && watchedFilmsNumber < 21) {
+    rankTitle = Rank.FAN;
+  } else if (watchedFilmsNumber > 20) {
+    rankTitle = Rank.MOVIE_BUFF;
+  }
+
+  return rankTitle;
 };
