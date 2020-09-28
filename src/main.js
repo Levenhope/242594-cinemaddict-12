@@ -1,5 +1,3 @@
-"use strict";
-
 import FooterStatisticView from "./view/footer-statistic.js";
 import StatisticView from "./view/statistic.js";
 import FilmListPresenter from "./presenter/film-list.js";
@@ -32,7 +30,7 @@ const handleNavigationEvent = (menuItem) => {
       render(siteMainElement, statisticComponent);
       break;
     default:
-      if(statisticComponent !== null) {
+      if (statisticComponent !== null) {
         remove(statisticComponent);
         statisticComponent = null;
         filmListPresenter.init();

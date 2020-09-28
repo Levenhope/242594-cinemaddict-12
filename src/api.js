@@ -60,18 +60,10 @@ export default class Api {
     });
   }
 
-  _load({
-          uri,
-          method = Method.GET,
-          body = null,
-          headers = new Headers()
-        }) {
+  _load({uri, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
 
-    return fetch(
-      `${this._endPoint}/${uri}`,
-      {method, body, headers}
-    )
+    return fetch(`${this._endPoint}/${uri}`, {method, body, headers})
       .then(Api.checkStatus)
       .catch(Api.catchError);
   }
