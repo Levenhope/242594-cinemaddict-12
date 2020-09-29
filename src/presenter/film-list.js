@@ -10,6 +10,7 @@ import {render, remove} from "../utils/render.js";
 import {filter} from "../utils/filter.js";
 import {sortByDate, sortByRating} from "../utils/sort.js";
 import {Lang} from "../lang.js";
+import {ScreenMode} from "../const";
 
 export default class FilmListPresenter {
   constructor(parent, filmsModel, navigationModel, api, profileComponent) {
@@ -165,7 +166,11 @@ export default class FilmListPresenter {
   }
 
   _handleModeChange() {
-    Object.values(this._filmPresenter).forEach((presenter) => presenter.hideModal());
+    Object.values(this._filmPresenter).forEach((presenter) => {
+      if (presenter.mode === ScreenMode.MODAL) {
+        presenter.hideModal()
+      }
+    });
   }
 
   _handleModelEvent(updateType) {

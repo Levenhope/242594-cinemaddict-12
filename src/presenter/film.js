@@ -11,9 +11,9 @@ export default class FilmPresenter {
     this._changeData = changeData;
     this._api = api;
 
+    this.mode = ScreenMode.DEFAULT;
     this._filmComponent = new FilmView(this._film);
     this._detailModalPresenter = new DetailModalPresenter(this._film, this._filmComponent, this._changeData, this._api);
-    this._mode = ScreenMode.DEFAULT;
   }
 
   init() {
@@ -27,14 +27,14 @@ export default class FilmPresenter {
 
   hideModal() {
     this._detailModalPresenter.destroy();
-    this._mode = ScreenMode.DEFAULT;
+    this.mode = ScreenMode.DEFAULT;
   }
 
   _setInnerToggles() {
     this._filmComponent.setInnerElementsClickHandler(() => {
       this._changeMode();
       this._detailModalPresenter.init();
-      this._mode = ScreenMode.MODAL;
+      this.mode = ScreenMode.MODAL;
     });
 
     this._setWatchlistToggleHandler();

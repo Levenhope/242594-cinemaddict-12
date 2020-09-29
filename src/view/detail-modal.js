@@ -1,21 +1,26 @@
 import moment from "moment";
 import AbstractView from "./abstract.js";
-import {removeInnerElements, renderTemplate} from "../utils/render.js";
 import {Lang} from "../lang.js";
 
 export default class DetailModalView extends AbstractView {
-  constructor(sourceFilm) {
+  constructor(film) {
     super();
-    this._sourceFilm = sourceFilm;
+    this._film = film;
+
+    this._closeButton = this.getElement().querySelector(`.film-details__close-btn`);
+    this._watchlistToggle = this.getElement().querySelector(`input#watchlist`);
+    this._historyToggle = this.getElement().querySelector(`input#watched`);
+    this._favoriteToggle = this.getElement().querySelector(`input#favorite`);
 
     this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._historyClickHandler = this._historyClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this.updateControlsSection = this.updateControlsSection.bind(this);
   }
 
   getTemplate() {
-    const {poster, title, originalTitle, rating, date, duration, genres, description, director, writers, actors, country, age, isInWatchlist, isInHistory, isInFavorites} = this._sourceFilm;
+    const {poster, title, originalTitle, rating, date, duration, genres, description, director, writers, actors, country, age, isInWatchlist, isInHistory, isInFavorites} = this._film;
     return (
       `<section class="film-details">
         <form class="film-details__inner" action="" method="get">
@@ -79,7 +84,12 @@ export default class DetailModalView extends AbstractView {
               </div>
             </div>
             <section class="film-details__controls">
-              ${this._getControlsTemplate(isInWatchlist, isInHistory, isInFavorites)}
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
+              <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${Lang.ADD_TO_WATCHLIST}</label>
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
+              <label for="watched" class="film-details__control-label film-details__control-label--watched">${Lang.ALREADY_WATCHED}</label>
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
+              <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${Lang.ADD_TO_FAVORITES}</label>
             </section>
           </div>
           <div class="form-details__bottom-container">
@@ -89,75 +99,64 @@ export default class DetailModalView extends AbstractView {
     );
   }
 
-  _getControlsTemplate(isInWatchlist, isInHistory, isInFavorites) {
-    return (
-      `<input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isInWatchlist ? `checked` : ``}>
-      <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">${Lang.ADD_TO_WATCHLIST}</label>
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isInHistory ? `checked` : ``}>
-      <label for="watched" class="film-details__control-label film-details__control-label--watched">${Lang.ALREADY_WATCHED}</label>
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isInFavorites ? `checked` : ``}>
-      <label for="favorite" class="film-details__control-label film-details__control-label--favorite">${Lang.ADD_TO_FAVORITES}</label>`
-    );
+  updateControlsSection(isInWatchlist, isInHistory, isInFavorites) {
+    this._watchlistToggle.checked = isInWatchlist;
+    this._watchlistToggle.disabled = false;
+
+    this._historyToggle.checked = isInHistory;
+    this._historyToggle.disabled = false;
+
+    this._favoriteToggle.checked = isInFavorites;
+    this._favoriteToggle.disabled = false;
   }
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favorites();
+    this._favoriteToggle.disabled = true;
   }
 
   _historyClickHandler(evt) {
     evt.preventDefault();
     this._callback.history();
+    this._historyToggle.disabled = true;
   }
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
     this._callback.watchlist();
+    this._watchlistToggle.disabled = true;
   }
 
   _closeButtonClickHandler(evt) {
     evt.preventDefault();
     this._callback.closeButton();
-    this.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, this._closeButtonClickHandler);
   }
 
   setCloseButtonClickHandler(callback) {
     this._callback.closeButton = callback;
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
+    this._closeButton.addEventListener(`click`, this._closeButtonClickHandler);
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favorites = callback;
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+    this._favoriteToggle.addEventListener(`click`, this._favoriteClickHandler);
   }
 
   setHistoryClickHandler(callback) {
     this._callback.history = callback;
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._historyClickHandler);
+    this._historyToggle.addEventListener(`click`, this._historyClickHandler);
   }
 
   setWatchlistClickHandler(callback) {
     this._callback.watchlist = callback;
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+    this._watchlistToggle.addEventListener(`click`, this._watchlistClickHandler);
   }
 
-  _removeClickHandlers() {
-    this.getElement().querySelector(`.film-details__control-label--favorite`).removeEventListener(`click`, this._favoriteClickHandler);
-    this.getElement().querySelector(`.film-details__control-label--watched`).removeEventListener(`click`, this._historyClickHandler);
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).removeEventListener(`click`, this._watchlistClickHandler);
-  }
-
-  _restoreHandlers() {
-    this.setFavoriteClickHandler(this._callback.favorites);
-    this.setHistoryClickHandler(this._callback.history);
-    this.setWatchlistClickHandler(this._callback.watchlist);
-  }
-
-  updateControlsSection(...userFilmProperties) {
-    const controlsSection = this.getElement().querySelector(`.film-details__controls`);
-    this._removeClickHandlers();
-    removeInnerElements(controlsSection);
-    renderTemplate(controlsSection, this._getControlsTemplate(...userFilmProperties));
-    this._restoreHandlers();
+  removeClickHandlers() {
+    this._closeButton.removeEventListener(`click`, this._closeButtonClickHandler);
+    this._favoriteToggle.removeEventListener(`click`, this._favoriteClickHandler);
+    this._historyToggle.removeEventListener(`click`, this._historyClickHandler);
+    this._watchlistToggle.removeEventListener(`click`, this._watchlistClickHandler);
   }
 }

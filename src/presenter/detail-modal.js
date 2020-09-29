@@ -24,20 +24,20 @@ export default class DetailModalPresenter {
   init() {
     render(this._detailModalContainer, this._detailModalComponent);
     this._commentsPresenter.init();
-    this._initCloseHandler();
-    this._initToggleHandlers();
+    this._initClickHandlers();
     document.addEventListener(`keydown`, this._handleEscKeyDownEvent);
   }
 
   destroy() {
+    this._detailModalComponent.removeClickHandlers();
     remove(this._detailModalComponent);
     document.removeEventListener(`keydown`, this._handleEscKeyDownEvent);
+    this._changeData(UpdateType.MINOR);
   }
 
   _updateInterface(...userFilmProperties) {
     this._detailModalComponent.updateControlsSection(...userFilmProperties);
     this._filmComponent.updateControlsSection(...userFilmProperties);
-    this._changeData(UpdateType.MINOR);
   }
 
   _updateApiFilm() {
@@ -65,11 +65,8 @@ export default class DetailModalPresenter {
     this._updateApiFilm();
   }
 
-  _initCloseHandler() {
+  _initClickHandlers() {
     this._detailModalComponent.setCloseButtonClickHandler(this._closeHandler);
-  }
-
-  _initToggleHandlers() {
     this._detailModalComponent.setWatchlistClickHandler(this._watchlistToggleHandler);
     this._detailModalComponent.setFavoriteClickHandler(this._favoriteToggleHandler);
     this._detailModalComponent.setHistoryClickHandler(this._historyToggleHandler);

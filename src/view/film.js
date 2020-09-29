@@ -7,7 +7,6 @@ export default class FilmView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
-    this._callback = {};
   }
 
   getTemplate() {
