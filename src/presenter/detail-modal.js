@@ -15,13 +15,17 @@ export default class DetailModalPresenter {
     this._commentsPresenter = new CommentsPresenter(this._film, this._api, this._detailModalComponent, this._changeData);
 
     this._handleEscKeyDownEvent = this._handleEscKeyDownEvent.bind(this);
+    this._watchlistToggleHandler = this._watchlistToggleHandler.bind(this);
+    this._favoriteToggleHandler = this._favoriteToggleHandler.bind(this);
+    this._historyToggleHandler = this._historyToggleHandler.bind(this);
+    this._closeHandler = this._closeHandler.bind(this);
   }
 
   init() {
     render(this._detailModalContainer, this._detailModalComponent);
     this._commentsPresenter.init();
     this._initCloseHandler();
-    this._initToggles();
+    this._initToggleHandlers();
     document.addEventListener(`keydown`, this._handleEscKeyDownEvent);
   }
 
@@ -30,49 +34,45 @@ export default class DetailModalPresenter {
     document.removeEventListener(`keydown`, this._handleEscKeyDownEvent);
   }
 
-  _update(...userFilmProperties) {
+  _updateInterface(...userFilmProperties) {
     this._detailModalComponent.updateControlsSection(...userFilmProperties);
     this._filmComponent.updateControlsSection(...userFilmProperties);
     this._changeData(UpdateType.MINOR);
   }
 
+  _updateApiFilm() {
+    this._api.updateFilm(this._film).then(() => {
+      this._updateInterface(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+    });
+  }
+
+  _closeHandler() {
+    this.destroy();
+  }
+
+  _watchlistToggleHandler() {
+    this._film.isInWatchlist = !this._film.isInWatchlist;
+    this._updateApiFilm();
+  }
+
+  _favoriteToggleHandler() {
+    this._film.isInFavorites = !this._film.isInFavorites;
+    this._updateApiFilm();
+  }
+
+  _historyToggleHandler() {
+    this._film.isInHistory = !this._film.isInHistory;
+    this._updateApiFilm();
+  }
+
   _initCloseHandler() {
-    this._detailModalComponent.setCloseButtonClickHandler(() => {
-      this.destroy();
-    });
+    this._detailModalComponent.setCloseButtonClickHandler(this._closeHandler);
   }
 
-  _initToggles() {
-    this._setWatchlistToggleHandler();
-    this._setFavoriteToggleHandler();
-    this._setHistoryToggleHandler();
-  }
-
-  _setWatchlistToggleHandler() {
-    this._detailModalComponent.setWatchlistClickHandler(() => {
-      this._film.isInWatchlist = !this._film.isInWatchlist;
-      this._api.updateFilm(this._film).then(() => {
-        this._update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
-      });
-    });
-  }
-
-  _setFavoriteToggleHandler() {
-    this._detailModalComponent.setFavoriteClickHandler(() => {
-      this._film.isInFavorites = !this._film.isInFavorites;
-      this._api.updateFilm(this._film).then(() => {
-        this._update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
-      });
-    });
-  }
-
-  _setHistoryToggleHandler() {
-    this._detailModalComponent.setHistoryClickHandler(() => {
-      this._film.isInHistory = !this._film.isInHistory;
-      this._api.updateFilm(this._film).then(() => {
-        this._update(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
-      });
-    });
+  _initToggleHandlers() {
+    this._detailModalComponent.setWatchlistClickHandler(this._watchlistToggleHandler);
+    this._detailModalComponent.setFavoriteClickHandler(this._favoriteToggleHandler);
+    this._detailModalComponent.setHistoryClickHandler(this._historyToggleHandler);
   }
 
   _handleEscKeyDownEvent(e) {

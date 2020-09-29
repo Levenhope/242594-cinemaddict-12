@@ -4,14 +4,18 @@ import {removeInnerElements, renderTemplate} from "../utils/render.js";
 import {Lang} from "../lang.js";
 
 export default class DetailModalView extends AbstractView {
-  constructor(film) {
+  constructor(sourceFilm) {
     super();
-    this._film = film;
-    this._callback = {};
+    this._sourceFilm = sourceFilm;
+
+    this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._historyClickHandler = this._historyClickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
   }
 
   getTemplate() {
-    const {poster, title, originalTitle, rating, date, duration, genres, description, director, writers, actors, country, age, isInWatchlist, isInHistory, isInFavorites} = this._film;
+    const {poster, title, originalTitle, rating, date, duration, genres, description, director, writers, actors, country, age, isInWatchlist, isInHistory, isInFavorites} = this._sourceFilm;
     return (
       `<section class="film-details">
         <form class="film-details__inner" action="" method="get">
@@ -96,6 +100,53 @@ export default class DetailModalView extends AbstractView {
     );
   }
 
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favorites();
+  }
+
+  _historyClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.history();
+  }
+
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchlist();
+  }
+
+  _closeButtonClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.closeButton();
+    this.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, this._closeButtonClickHandler);
+  }
+
+  setCloseButtonClickHandler(callback) {
+    this._callback.closeButton = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeButtonClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favorites = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  setHistoryClickHandler(callback) {
+    this._callback.history = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._historyClickHandler);
+  }
+
+  setWatchlistClickHandler(callback) {
+    this._callback.watchlist = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchlistClickHandler);
+  }
+
+  _removeClickHandlers() {
+    this.getElement().querySelector(`.film-details__control-label--favorite`).removeEventListener(`click`, this._favoriteClickHandler);
+    this.getElement().querySelector(`.film-details__control-label--watched`).removeEventListener(`click`, this._historyClickHandler);
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).removeEventListener(`click`, this._watchlistClickHandler);
+  }
+
   _restoreHandlers() {
     this.setFavoriteClickHandler(this._callback.favorites);
     this.setHistoryClickHandler(this._callback.history);
@@ -104,35 +155,9 @@ export default class DetailModalView extends AbstractView {
 
   updateControlsSection(...userFilmProperties) {
     const controlsSection = this.getElement().querySelector(`.film-details__controls`);
+    this._removeClickHandlers();
     removeInnerElements(controlsSection);
     renderTemplate(controlsSection, this._getControlsTemplate(...userFilmProperties));
     this._restoreHandlers();
-  }
-
-  setCloseButtonClickHandler(callback) {
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, function () {
-      callback();
-    });
-  }
-
-  setFavoriteClickHandler(callback) {
-    this._callback.favorites = callback;
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, function () {
-      callback();
-    });
-  }
-
-  setHistoryClickHandler(callback) {
-    this._callback.history = callback;
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, function () {
-      callback();
-    });
-  }
-
-  setWatchlistClickHandler(callback) {
-    this._callback.watchlist = callback;
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, function () {
-      callback();
-    });
   }
 }
