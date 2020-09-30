@@ -21,11 +21,11 @@ export default class MoreButtonView extends AbstractView {
 
   setMoreButtonClickHandler(callback) {
     this._callback.moreButtonClick = callback;
-    this.getElement().addEventListener(`click`, this._clickHandler);
+    this.getElement().addEventListener(`click`, this._moreButtonClickHandler);
   }
 
   removeEventHandler() {
-    this.getElement().removeEventListener(`click`, this._clickHandler);
+    this.getElement().removeEventListener(`click`, this._moreButtonClickHandler);
   }
 }
 
