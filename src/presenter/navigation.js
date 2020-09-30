@@ -31,11 +31,11 @@ export default class NavigationPresenter {
 
     if (prevNavigationComponent === null) {
       render(this._parent, this._navigationComponent, RenderPosition.AFTER_BEGIN);
-      return;
+    } else {
+      replace(this._navigationComponent, prevNavigationComponent);
+      prevNavigationComponent.removeEventHandlers();
+      remove(prevNavigationComponent);
     }
-
-    replace(this._navigationComponent, prevNavigationComponent);
-    remove(prevNavigationComponent);
   }
 
   _generateNavigation(films, filmsNavigationMap) {

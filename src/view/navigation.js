@@ -6,21 +6,27 @@ export default class NavigationView extends AbstractView {
     super();
     this._navigationItems = navigationItems;
     this._currentFilter = currentFilterType;
+
+    this._statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
+    this._commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
+
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this._statisticButtonClickHandler = this._statisticButtonClickHandler.bind(this);
   }
 
   getTemplate() {
     return (
       `<nav class="main-navigation">
         <div class="main-navigation__items">
-          ${this._navigationItems.map((navItem) => this._getNavigationItemTemplate(navItem, navItem.id === this._currentFilter)).join(``)}
+          ${this._navigationItems.map((navigationItem) => this._getNavigationItemTemplate(navigationItem, navigationItem.id === this._currentFilter)).join(``)}
         </div>
         <a href="#stats" data-target="statistic" class="main-navigation__additional">${Lang.STATS}</a>
       </nav>`
     );
   }
 
-  _getNavigationItemTemplate(navigation, isActive) {
-    const {title, number, id} = navigation;
+  _getNavigationItemTemplate(navigationItem, isActive) {
+    const {title, number, id} = navigationItem;
     return (
       `<a href="#${id}" data-target="${id}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">
       ${title}
@@ -29,24 +35,29 @@ export default class NavigationView extends AbstractView {
     );
   }
 
+  _filterTypeChangeHandler(e) {
+    this._statisticButton.classList.remove(`main-navigation__item--active`);
+    this._callback.filterType(e.target.closest(`.main-navigation__item`).dataset.target);
+  }
+
+  _statisticButtonClickHandler() {
+    this._commonItems.forEach((navigationItem) => navigationItem.classList.remove(`main-navigation__item--active`));
+    this._statisticButton.classList.add(`main-navigation__item--active`);
+    this._callback.statistic(this._statisticButton.dataset.target);
+  }
+
   setFilterTypeChangeHandler(callback) {
-    const statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
-    const commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
-    commonItems.forEach((navigationItem) => {
-      navigationItem.addEventListener(`click`, function () {
-        statisticButton.classList.remove(`main-navigation__item--active`);
-        callback(navigationItem.dataset.target);
-      });
-    });
+    this._callback.filterType = callback;
+    this._commonItems.forEach((navigationItem) => navigationItem.addEventListener(`click`, this._filterTypeChangeHandler));
   }
 
   setStatisticButtonClickHandler(callback) {
-    const statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
-    const commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
-    statisticButton.addEventListener(`click`, function () {
-      commonItems.forEach((navigationItem) => navigationItem.classList.remove(`main-navigation__item--active`));
-      statisticButton.classList.add(`main-navigation__item--active`);
-      callback(statisticButton.dataset.target);
-    });
+    this._callback.statistic = callback;
+    this._statisticButton.addEventListener(`click`, this._statisticButtonClickHandler);
+  }
+
+  removeEventHandlers() {
+    this._commonItems.forEach((navigationItem) => navigationItem.removeEventListener(`click`, this._filterTypeChangeHandler));
+    this._statisticButton.removeEventListener(`click`, this._statisticButtonClickHandler);
   }
 }
