@@ -7,6 +7,16 @@ export default class FilmView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+
+    this._clickableElements = this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`);
+    this._favoriteButton = null;
+    this._historyButton = null;
+    this._watchlistButton = null;
+
+    this._innerElementsClickHandler = this._innerElementsClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._historyClickHandler = this._historyClickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -41,46 +51,69 @@ export default class FilmView extends AbstractView {
     );
   }
 
-  _restoreHandlers() {
-    this.setFavoriteClickHandler(this._callback.favorites);
-    this.setHistoryClickHandler(this._callback.history);
-    this.setWatchlistClickHandler(this._callback.watchlist);
+  _innerElementsClickHandler(e) {
+    e.preventDefault();
+    this._callback.innerElements();
   }
 
-  updateControlsSection(...userFilmProperties) {
-    const controlsSection = this.getElement().querySelector(`.film-card__controls`);
-    removeInnerElements(controlsSection);
-    renderTemplate(controlsSection, this._getControlsTemplate(...userFilmProperties));
-    this._restoreHandlers();
+  _favoriteClickHandler() {
+    this._callback.favorites();
+  }
+
+  _historyClickHandler() {
+    this._callback.history();
+  }
+
+  _watchlistClickHandler() {
+    this._callback.watchlist();
   }
 
   setInnerElementsClickHandler(callback) {
-    this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`).forEach((clickableElement) => {
-      clickableElement.addEventListener(`click`, function (e) {
-        e.preventDefault();
-        callback();
-      });
+    this._callback.innerElements = callback;
+    this._clickableElements.forEach((clickableElement) => {
+      clickableElement.addEventListener(`click`, this._innerElementsClickHandler);
     });
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favorites = callback;
-    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, function () {
-      callback();
-    });
+    this._favoriteButton = this.getElement().querySelector(`.film-card__controls-item--favorite`);
+    this._favoriteButton.addEventListener(`click`, this._favoriteClickHandler);
   }
 
   setHistoryClickHandler(callback) {
     this._callback.history = callback;
-    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, function () {
-      callback();
-    });
+    this._historyButton = this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`);
+    this._historyButton.addEventListener(`click`, this._historyClickHandler);
   }
 
   setWatchlistClickHandler(callback) {
     this._callback.watchlist = callback;
-    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, function () {
-      callback();
+    this._watchlistButton = this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`);
+    this._watchlistButton.addEventListener(`click`, this._watchlistClickHandler);
+  }
+
+  _restoreHandlers() {
+    this.setWatchlistClickHandler(this._callback.innerElements);
+    this.setFavoriteClickHandler(this._callback.favorites);
+    this.setHistoryClickHandler(this._callback.history);
+    this.setWatchlistClickHandler(this._callback.watchlist);
+  }
+
+  removeEventHandlers() {
+    this._clickableElements.forEach((clickableElement) => {
+      clickableElement.removeEventListener(`click`, this._innerElementsClickHandler);
     });
+    this._favoriteButton.addEventListener(`click`, this._favoriteClickHandler);
+    this._historyButton.addEventListener(`click`, this._historyClickHandler);
+    this._watchlistButton.addEventListener(`click`, this._watchlistClickHandler);
+  }
+
+  updateControlsSection(...userFilmProperties) {
+    const controlsSection = this.getElement().querySelector(`.film-card__controls`);
+    this.removeEventHandlers();
+    removeInnerElements(controlsSection);
+    renderTemplate(controlsSection, this._getControlsTemplate(...userFilmProperties));
+    this._restoreHandlers();
   }
 }

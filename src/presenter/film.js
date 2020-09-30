@@ -22,6 +22,7 @@ export default class FilmPresenter {
   }
 
   destroy() {
+    this._filmComponent.removeEventHandlers();
     remove(this._filmComponent);
   }
 
@@ -42,23 +43,24 @@ export default class FilmPresenter {
     this._setHistoryToggleHandler();
   }
 
+  _updateApiFilm() {
+    this._api.updateFilm(this._film).then(() => {
+      this._changeData(UpdateType.MINOR);
+      this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
+    });
+  }
+
   _setWatchlistToggleHandler() {
     this._filmComponent.setWatchlistClickHandler(() => {
       this._film.isInWatchlist = !this._film.isInWatchlist;
-      this._api.updateFilm(this._film).then(() => {
-        this._changeData(UpdateType.MINOR);
-        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
-      });
+      this._updateApiFilm();
     });
   }
 
   _setFavoriteToggleHandler() {
     this._filmComponent.setFavoriteClickHandler(() => {
       this._film.isInFavorites = !this._film.isInFavorites;
-      this._api.updateFilm(this._film).then(() => {
-        this._changeData(UpdateType.MINOR);
-        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
-      });
+      this._updateApiFilm();
     });
   }
 
@@ -68,10 +70,7 @@ export default class FilmPresenter {
       if (this._film.isInHistory) {
         this._film.watchingDate = new Date();
       }
-      this._api.updateFilm(this._film).then(() => {
-        this._changeData(UpdateType.MINOR);
-        this._filmComponent.updateControlsSection(this._film.isInWatchlist, this._film.isInHistory, this._film.isInFavorites);
-      });
+      this._updateApiFilm();
     });
   }
 }
