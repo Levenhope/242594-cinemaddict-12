@@ -1,8 +1,8 @@
 import CommentsView from "../view/comments.js";
 import CommentItemView from "../view/comment-item.js";
 import CommentsModel from "../model/comments.js";
-import {Emoji, EMOJI_DIRECTORY_PATH, UpdateType, EmojiImageSize, RenderPosition} from "../const.js";
-import {render, replace, removeInnerElements} from "../utils/render.js";
+import {Emoji, EMOJI_DIRECTORY_PATH, UpdateType, EmojiImageSize} from "../const.js";
+import {render, replace, remove, renderTemplate, removeInnerElements} from "../utils/render.js";
 import {showErrorAnimation} from "../utils/helpers.js";
 import {Lang} from "../lang.js";
 
@@ -20,10 +20,21 @@ export default class CommentsPresenter {
     this._commentInputElement = null;
     this._emojisListElement = null;
     this._renderedComments = [];
+    this._chosenEmoji = null;
+
+    this._submitHandler = this._submitHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
   init() {
     this._setCommentsList();
+  }
+
+  destroy() {
+    this._commentsComponent.removeEventHandlers();
+    this._removeDeleteClickHandlers();
+    remove(this._commentsComponent);
   }
 
   _setCommentsList({update = false} = {}) {
@@ -58,57 +69,16 @@ export default class CommentsPresenter {
     const commentsListElement = this._parentModal.getElement().querySelector(`.film-details__comments-list`);
     for (let i = 0; i < this._filmComments.length; i++) {
       const commentItemComponent = new CommentItemView(this._filmComments[i]);
+
       render(commentsListElement, commentItemComponent);
       this._renderedComments[i] = commentItemComponent;
     }
     this._setDeleteClickHandlers();
   }
 
-  _initCommentForm() {
-    this._commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
-    this._emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
-    let emoji = ``;
-
-    this._commentsComponent.setEmojiClickHandler((label) => {
-      const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
-      removeInnerElements(chosenEmojiContainer);
-      emoji = label.htmlFor ? label.htmlFor : label.parentElement.htmlFor;
-      emoji = emoji.substr(6, emoji.length + 1);
-      const emojiFile = EMOJI_DIRECTORY_PATH + Object.entries(Emoji).filter((emojiItem) => emojiItem[0] === emoji)[0][1];
-      chosenEmojiContainer.insertAdjacentHTML(RenderPosition.BEFORE_END, `<img src="${emojiFile}" width="${EmojiImageSize.BIG}" height="${EmojiImageSize.BIG}" alt="emoji-${emoji}">`);
-    });
-
-    this._commentsComponent.setSubmitHandler((commentInput) => {
-      commentInput.setAttribute(`disabled`, `disabled`);
-      const commentText = commentInput.value;
-
-      if (commentText === ``) {
-        showErrorAnimation(this._commentInputElement);
-        commentInput.removeAttribute(`disabled`, `disabled`);
-        return;
-      }
-      if (emoji === ``) {
-        showErrorAnimation(this._emojisListElement);
-        commentInput.removeAttribute(`disabled`, `disabled`);
-        return;
-      }
-
-      this._api.addComment(this._film.id, {
-        commentText,
-        date: new Date(),
-        emoji
-      }).then(() => {
-        this._setCommentsList({update: true});
-        commentInput.removeAttribute(`disabled`, `disabled`);
-      }).catch(() => {
-        showErrorAnimation(this._commentInputElement);
-        showErrorAnimation(this._emojisListElement);
-        commentInput.removeAttribute(`disabled`, `disabled`);
-      });
-    });
-  }
-
   _updateComments() {
+    this._commentsComponent.removeEventHandlers();
+    this._removeDeleteClickHandlers();
     this._renderedComments = [];
     this._film.comments = this._commentsModel.getComments().map((comment) => comment.id);
     const updatedCommentsComponent = new CommentsView(this._film.comments);
@@ -116,20 +86,72 @@ export default class CommentsPresenter {
     this._commentsComponent = updatedCommentsComponent;
   }
 
+  _initCommentForm() {
+    this._commentInputElement = this._commentsComponent.getElement().querySelector(`.film-details__comment-input`);
+    this._emojisListElement = this._commentsComponent.getElement().querySelector(`.film-details__emoji-list`);
+
+    this._commentsComponent.setEmojiClickHandler(this._emojiClickHandler);
+    this._commentsComponent.setSubmitHandler(this._submitHandler);
+  }
+
+  _removeDeleteClickHandlers() {
+    this._renderedComments.forEach((comment) => comment.removeEventHandlers());
+  }
+
   _setDeleteClickHandlers() {
-    for (let i = 0; i < this._renderedComments.length; i++) {
-      this._renderedComments[i].setDeleteClickHandler((button) => {
-        button.textContent = Lang.DELETING;
-        button.setAttribute(`disabled`, `disabled`);
-        this._api.deleteComment(this._filmComments[i].id)
-          .then(() => {
-            this._setCommentsList({update: true});
-          }).catch(() => {
-            showErrorAnimation(this._renderedComments[i].getElement());
-            button.textContent = Lang.DELETE;
-            button.removeAttribute(`disabled`);
-          });
-      });
+    this._renderedComments.forEach((comment) => comment.setDeleteClickHandler(this._deleteClickHandler));
+  }
+
+  _emojiClickHandler(emojiItem) {
+    this._chosenEmoji = emojiItem.value;
+    const chosenEmojiContainer = this._commentsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
+    const emojiFile = EMOJI_DIRECTORY_PATH + Object.entries(Emoji).filter((emojiFileName) => emojiFileName[0] === this._chosenEmoji)[0][1];
+
+    removeInnerElements(chosenEmojiContainer);
+    renderTemplate(chosenEmojiContainer, `<img src="${emojiFile}" width="${EmojiImageSize.BIG}" height="${EmojiImageSize.BIG}" alt="emoji-${this._chosenEmoji}">`);
+  }
+
+  _submitHandler(commentInput) {
+    commentInput.disabled = true;
+    const commentText = commentInput.value;
+
+    if (commentText === ``) {
+      showErrorAnimation(this._commentInputElement);
+      commentInput.disabled = false;
+      return;
     }
+    if (this._chosenEmoji === null) {
+      showErrorAnimation(this._emojisListElement);
+      commentInput.disabled = false;
+      return;
+    }
+
+    this._api.addComment(this._film.id, {
+      commentText,
+      date: new Date(),
+      emoji: this._chosenEmoji
+    }).then(() => {
+      this._setCommentsList({update: true});
+      commentInput.disabled = false;
+      this._chosenEmoji = null;
+    }).catch(() => {
+      showErrorAnimation(this._commentInputElement);
+      showErrorAnimation(this._emojisListElement);
+      commentInput.disabled = false;
+    });
+  }
+
+  _deleteClickHandler(button) {
+    const commentToDelete = button.closest(`.film-details__comment`);
+    button.textContent = Lang.DELETING;
+    button.disabled = true;
+    this._api.deleteComment(commentToDelete.id)
+      .then(() => {
+        this._setCommentsList({update: true});
+      }).catch(() => {
+        showErrorAnimation(commentToDelete);
+        button.textContent = Lang.DELETE;
+        button.disabled = false;
+      });
   }
 }

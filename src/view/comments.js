@@ -6,6 +6,12 @@ export default class CommentsView extends AbstractView {
   constructor(comments) {
     super();
     this._commentCount = comments.length;
+
+    this._emojiItems = this.getElement().querySelectorAll(`.film-details__emoji-item`);
+    this._commentInput = this.getElement().querySelector(`.film-details__comment-input`);
+
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
   }
 
   getTemplate() {
@@ -33,20 +39,32 @@ export default class CommentsView extends AbstractView {
     );
   }
 
+  _emojiClickHandler(e) {
+    this._callback.emoji(e.target);
+  }
+
+  _submitHandler(e) {
+    if ((e.ctrlKey || e.metaKey || e.keyCode === 17) && (e.enter || e.keyCode === 13 || e.keyCode === 10)) {
+      this._callback.submit(e.target);
+    }
+  }
+
   setEmojiClickHandler(callback) {
-    this.getElement().querySelectorAll(`.film-details__emoji-label`).forEach((label) => {
-      label.addEventListener(`click`, function () {
-        callback(label);
-      });
+    this._callback.emoji = callback;
+    this._emojiItems.forEach((emojiItem) => {
+      emojiItem.addEventListener(`click`, this._emojiClickHandler);
     });
   }
 
   setSubmitHandler(callback) {
-    const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
-    commentInput.addEventListener(`keydown`, function (e) {
-      if ((e.ctrlKey || e.metaKey || e.keyCode === 17) && (e.enter || e.keyCode === 13 || e.keyCode === 10)) {
-        callback(commentInput);
-      }
+    this._callback.submit = callback;
+    this._commentInput.addEventListener(`keydown`, this._submitHandler);
+  }
+
+  removeEventHandlers() {
+    this._emojiItems.forEach((emojiItem) => {
+      emojiItem.removeEventListener(`click`, this._emojiClickHandler);
     });
+    this._commentInput.removeEventListener(`keydown`, this._submitHandler);
   }
 }

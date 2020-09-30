@@ -8,6 +8,10 @@ export default class CommentItemView extends AbstractView {
   constructor(comment) {
     super();
     this._comment = comment;
+
+    this._deleteButton = this.getElement().querySelector(`.film-details__comment-delete`);
+
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -29,11 +33,17 @@ export default class CommentItemView extends AbstractView {
     );
   }
 
+  _deleteClickHandler(e) {
+    e.preventDefault();
+    this._callback.delete(e.target);
+  }
+
   setDeleteClickHandler(callback) {
-    const deleteButton = this.getElement().querySelector(`.film-details__comment-delete`);
-    deleteButton.addEventListener(`click`, function (e) {
-      e.preventDefault();
-      callback(deleteButton);
-    });
+    this._callback.delete = callback;
+    this._deleteButton.addEventListener(`click`, this._deleteClickHandler);
+  }
+
+  removeEventHandlers() {
+    this._deleteButton.addEventListener(`click`, this._deleteClickHandler);
   }
 }

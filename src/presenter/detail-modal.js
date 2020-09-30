@@ -29,7 +29,8 @@ export default class DetailModalPresenter {
   }
 
   destroy() {
-    this._detailModalComponent.removeClickHandlers();
+    this._commentsPresenter.destroy();
+    this._detailModalComponent.removeEventHandlers();
     remove(this._detailModalComponent);
     document.removeEventListener(`keydown`, this._handleEscKeyDownEvent);
     this._changeData(UpdateType.MINOR);

@@ -14,7 +14,7 @@ export default class NavigationView extends AbstractView {
         <div class="main-navigation__items">
           ${this._navigationItems.map((navItem) => this._getNavigationItemTemplate(navItem, navItem.id === this._currentFilter)).join(``)}
         </div>
-        <a href="#stats" data-nav="statistic" class="main-navigation__additional">${Lang.STATS}</a>
+        <a href="#stats" data-target="statistic" class="main-navigation__additional">${Lang.STATS}</a>
       </nav>`
     );
   }
@@ -22,7 +22,7 @@ export default class NavigationView extends AbstractView {
   _getNavigationItemTemplate(navigation, isActive) {
     const {title, number, id} = navigation;
     return (
-      `<a href="#${id}" data-nav="${id}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">
+      `<a href="#${id}" data-target="${id}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">
       ${title}
       ${number !== 0 && id !== `all` ? `<span class="main-navigation__item-count">${number}</span>` : ``}
     </a>`
@@ -32,10 +32,10 @@ export default class NavigationView extends AbstractView {
   setFilterTypeChangeHandler(callback) {
     const statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
     const commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
-    commonItems.forEach((navItem) => {
-      navItem.addEventListener(`click`, function () {
+    commonItems.forEach((navigationItem) => {
+      navigationItem.addEventListener(`click`, function () {
         statisticButton.classList.remove(`main-navigation__item--active`);
-        callback(navItem.getAttribute(`data-nav`));
+        callback(navigationItem.dataset.target);
       });
     });
   }
@@ -44,9 +44,9 @@ export default class NavigationView extends AbstractView {
     const statisticButton = this.getElement().querySelector(`.main-navigation__additional`);
     const commonItems = this.getElement().querySelectorAll(`.main-navigation__item`);
     statisticButton.addEventListener(`click`, function () {
-      commonItems.forEach((navItem) => navItem.classList.remove(`main-navigation__item--active`));
+      commonItems.forEach((navigationItem) => navigationItem.classList.remove(`main-navigation__item--active`));
       statisticButton.classList.add(`main-navigation__item--active`);
-      callback(statisticButton.getAttribute(`data-nav`));
+      callback(statisticButton.dataset.target);
     });
   }
 }

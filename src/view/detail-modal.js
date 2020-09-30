@@ -153,7 +153,7 @@ export default class DetailModalView extends AbstractView {
     this._watchlistToggle.addEventListener(`click`, this._watchlistClickHandler);
   }
 
-  removeClickHandlers() {
+  removeEventHandlers() {
     this._closeButton.removeEventListener(`click`, this._closeButtonClickHandler);
     this._favoriteToggle.removeEventListener(`click`, this._favoriteClickHandler);
     this._historyToggle.removeEventListener(`click`, this._historyClickHandler);
