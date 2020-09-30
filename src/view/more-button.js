@@ -5,7 +5,7 @@ export default class MoreButtonView extends AbstractView {
   constructor() {
     super();
 
-    this._clickHandler = this._clickHandler.bind(this);
+    this._moreButtonClickHandler = this._moreButtonClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -14,7 +14,7 @@ export default class MoreButtonView extends AbstractView {
     );
   }
 
-  _clickHandler(e) {
+  _moreButtonClickHandler(e) {
     e.preventDefault();
     this._callback.moreButtonClick();
   }
