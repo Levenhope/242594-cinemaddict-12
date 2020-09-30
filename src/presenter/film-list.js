@@ -52,6 +52,9 @@ export default class FilmListPresenter {
   destroy() {
     this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
 
+    this._moreButtonComponent.removeEventHandler();
+    this._sortComponent.removeEventHandlers();
+
     remove(this._mainFilmListComponent);
     remove(this._moreButtonComponent);
     remove(this._sortComponent);
@@ -104,7 +107,7 @@ export default class FilmListPresenter {
   _renderMoreButton() {
     render(this._mainFilmListComponent, this._moreButtonComponent);
 
-    this._moreButtonComponent.setClickHandler(() => {
+    this._moreButtonComponent.setMoreButtonClickHandler(() => {
       const filmsCount = this._getFilms().length;
       const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_NUMBER_PER_STEP);
       const films = this._getFilms().slice(this._renderedFilmsCount, newRenderedFilmsCount);
@@ -168,7 +171,7 @@ export default class FilmListPresenter {
   _handleModeChange() {
     Object.values(this._filmPresenter).forEach((presenter) => {
       if (presenter.mode === ScreenMode.MODAL) {
-        presenter.hideModal()
+        presenter.hideModal();
       }
     });
   }

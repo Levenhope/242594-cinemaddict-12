@@ -7,6 +7,8 @@ export default class SortView extends AbstractView {
     super();
 
     this._sortButtons = this.getElement().querySelectorAll(`.sort__button`);
+
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
@@ -29,12 +31,21 @@ export default class SortView extends AbstractView {
     });
   }
 
+  _sortTypeChangeHandler(e) {
+    e.preventDefault();
+    this._callback.sortTypeChange(e.target.dataset.sortType);
+  }
+
   setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
     this._sortButtons.forEach((button) => {
-      button.addEventListener(`click`, function (e) {
-        e.preventDefault();
-        callback(button.dataset.sortType);
-      });
+      button.addEventListener(`click`, this._sortTypeChangeHandler);
+    });
+  }
+
+  removeEventHandlers() {
+    this._sortButtons.forEach((button) => {
+      button.removeEventListener(`click`, this._sortTypeChangeHandler);
     });
   }
 }
