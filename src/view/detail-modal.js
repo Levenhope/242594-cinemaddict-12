@@ -110,26 +110,26 @@ export default class DetailModalView extends AbstractView {
     this._favoriteToggle.disabled = false;
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
+  _favoriteClickHandler(e) {
+    e.preventDefault();
     this._callback.favorites();
     this._favoriteToggle.disabled = true;
   }
 
-  _historyClickHandler(evt) {
-    evt.preventDefault();
+  _historyClickHandler(e) {
+    e.preventDefault();
     this._callback.history();
     this._historyToggle.disabled = true;
   }
 
-  _watchlistClickHandler(evt) {
-    evt.preventDefault();
+  _watchlistClickHandler(e) {
+    e.preventDefault();
     this._callback.watchlist();
     this._watchlistToggle.disabled = true;
   }
 
-  _closeButtonClickHandler(evt) {
-    evt.preventDefault();
+  _closeButtonClickHandler(e) {
+    e.preventDefault();
     this._callback.closeButton();
   }
 

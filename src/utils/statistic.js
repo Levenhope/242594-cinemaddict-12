@@ -21,6 +21,10 @@ export const getWatchedFilmsDuration = (films) => {
 };
 
 export const getMostWatchedGenre = (films) => {
+  if (films.length < 1) {
+    return ``;
+  }
+
   const genreStatistics = getGenreStatistics(films);
 
   return Object.keys(genreStatistics).reduce((mostWatchedGenre, genre) =>

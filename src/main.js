@@ -31,6 +31,7 @@ const handleNavigationEvent = (menuItem) => {
       break;
     default:
       if (statisticComponent !== null) {
+        statisticComponent.removeEventHandlers();
         remove(statisticComponent);
         statisticComponent = null;
         filmListPresenter.init();

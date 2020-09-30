@@ -83,10 +83,12 @@ export default class StatisticView extends SmartView {
     this._rankTitle = ``;
     this._currentFilter = `all-time`;
     this._genresChart = null;
-    this._handlePeriodChange = this._handlePeriodChange.bind(this);
+    this._filters = null;
+
+    this._filterChangeHandler = this._filterChangeHandler.bind(this);
 
     this._setChart();
-    this._initFilterChangeHandler();
+    this._setFilterChangeHandler();
   }
 
   getTemplate() {
@@ -113,7 +115,6 @@ export default class StatisticView extends SmartView {
               <label for="statistic-${filter.value}" class="statistic__filters-label">${filter.name}</label>
             `).join(``)}
         </form>
-    
         <ul class="statistic__text-list">
           <li class="statistic__text-item">
             <h4 class="statistic__item-title">${Lang.YOU_WATCHED}</h4>
@@ -150,7 +151,7 @@ export default class StatisticView extends SmartView {
 
   restoreHandlers() {
     this._setChart();
-    this._initFilterChangeHandler();
+    this._setFilterChangeHandler();
   }
 
   _setChart() {
@@ -163,26 +164,30 @@ export default class StatisticView extends SmartView {
 
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
     this._genresChart = renderGenresChart(statisticCtx, watchedFilms);
+    this._filters = this.getElement().querySelectorAll(`.statistic__filters-input`);
   }
 
-  _setFilterChangeHandler(callback) {
-    this.getElement().querySelectorAll(`.statistic__filters-input`).forEach((filterItem) => {
-      filterItem.addEventListener(`change`, function () {
-        callback(filterItem);
-      });
-    });
+  _filterChangeHandler(e) {
+    const filterItem = e.target;
+    this._currentFilter = filterItem.value;
+    this._handlePeriodChange(getWatchedFilmsInDateRange(this._watchedFilms, filterItem.value));
   }
 
-  _initFilterChangeHandler() {
-    this._setFilterChangeHandler((filterItem) => {
-      this._currentFilter = filterItem.value;
-      this._handlePeriodChange(getWatchedFilmsInDateRange(this._watchedFilms, filterItem.value));
+  _setFilterChangeHandler() {
+    this._filters.forEach((filterInput) => {
+      filterInput.addEventListener(`change`, this._filterChangeHandler);
     });
   }
 
   _handlePeriodChange(watchedFilms) {
     this.updateData({
       watchedFilms
+    });
+  }
+
+  removeEventHandlers() {
+    this._filters.forEach((filterInput) => {
+      filterInput.removeEventListener(`change`, this._filterChangeHandler);
     });
   }
 }
